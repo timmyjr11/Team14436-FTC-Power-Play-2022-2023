@@ -1,11 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-@Autonomous
+
+@TeleOp
 public class robot extends LinearOpMode {
     DcMotor frontLeft;
     DcMotor frontRight;
@@ -13,7 +13,7 @@ public class robot extends LinearOpMode {
     DcMotor backRight;
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
@@ -25,11 +25,27 @@ public class robot extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive()) {
-            frontLeft.setPower(1);
-            frontRight.setPower(1);
-            backLeft.setPower(1);
-            backRight.setPower(1);
+            frontLeft.setPower(-gamepad1.left_stick_y);
+            frontRight.setPower(-gamepad1.left_stick_y);
+            backLeft.setPower(-gamepad1.left_stick_y);
+            backRight.setPower(-gamepad1.left_stick_y);
+
+            frontLeft.setPower(gamepad1.right_stick_x);
+            frontRight.setPower(-gamepad1.right_stick_x);
+            backLeft.setPower(gamepad1.right_stick_x);
+            backRight.setPower(-gamepad1.right_stick_x);
+            theGenreOfTim();
         }
+    }
+
+    private void theGenreOfTim(){
+        telemetry.addLine("Ello");
+        telemetry.addData("anything", frontLeft.getPower());
+        telemetry.addData("rob",frontRight.getPower());
+        telemetry.addData("tim is a LOSER",backLeft.getPower());
+        telemetry.addData("tim is a poopy head",backRight.getPower());
+        telemetry.update();
 
     }
+
 }
