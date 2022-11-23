@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
 public class firstRobotTest extends LinearOpMode {
@@ -12,6 +13,8 @@ public class firstRobotTest extends LinearOpMode {
     DcMotorEx frontLeft;
     DcMotorEx backRight;
     DcMotorEx backLeft;
+    DcMotorEx blueLift;
+    DcMotorEx blackLift;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -19,9 +22,15 @@ public class firstRobotTest extends LinearOpMode {
         frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
         backLeft = hardwareMap.get(DcMotorEx.class,"backLeft");
         backRight = hardwareMap.get(DcMotorEx.class, "backRight");
+        blackLift = hardwareMap.get(DcMotorEx.class, "blackLift");
+        blueLift = hardwareMap.get(DcMotorEx.class, "blueLift");
+
+        blueLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        blackLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        blueLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -32,6 +41,17 @@ public class firstRobotTest extends LinearOpMode {
 
         while(opModeIsActive() && !isStopRequested()) {
             setPower(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+
+            if (gamepad1.dpad_up) {
+                blackLift.setPower(0.5);
+                blueLift.setPower(0.5);
+            } else if (gamepad1.dpad_down) {
+                blackLift.setPower(-0.5);
+                blueLift.setPower(-0.5);
+            } else {
+                blueLift.setPower(0);
+                blackLift.setPower(0);
+            }
         }
     }
 
