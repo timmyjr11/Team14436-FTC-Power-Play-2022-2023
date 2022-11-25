@@ -19,6 +19,9 @@ public class liftTest extends LinearOpMode {
         blueLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         blackLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        blueLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        blackLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
         blueLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
