@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,6 +12,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import java.util.ArrayList;
 
+@Config
 @TeleOp
 public class firstRobotTest extends LinearOpMode {
     DcMotorEx frontRight;
@@ -20,14 +24,18 @@ public class firstRobotTest extends LinearOpMode {
     Servo blueServo;
     Servo blackServo;
 
-    // Track width:
-    // Wheel Radius:
+    int lowerLimit = 0;
+    public static int upperLimit = 0;
 
     double power;
 
     ArrayList<Boolean> booleanArray = new ArrayList<>();
     int booleanIncrementer = 0;
     boolean a1Pressed;
+
+    FtcDashboard dashboard = FtcDashboard.getInstance();
+
+    ConfigPos.gripperPos gripper = ConfigPos.gripperPos.open;
 
 
     @Override
@@ -58,18 +66,21 @@ public class firstRobotTest extends LinearOpMode {
 
         blueServo.setDirection(Servo.Direction.REVERSE);
 
+        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
+
         blueServo.setPosition(0);
         blackServo.setPosition(0);
+
 
         waitForStart();
 
         while(opModeIsActive() && !isStopRequested()) {
             setPower(gamepad1.left_stick_x,-gamepad1.left_stick_y, gamepad1.right_stick_x);
 
-            if (gamepad1.dpad_up) {
+            if (gamepad1.dpad_up && blackLift.getCurrentPosition() < upperLimit && blueLift.getCurrentPosition() < upperLimit) {
                 blackLift.setPower(1);
                 blueLift.setPower(1);
-            } else if (gamepad1.dpad_down) {
+            } else if (gamepad1.dpad_down && blueLift.getCurrentPosition() > lowerLimit && blackLift.getCurrentPosition() > lowerLimit) {
                 blackLift.setPower(-1);
                 blueLift.setPower(-1);
             } else {
@@ -78,12 +89,14 @@ public class firstRobotTest extends LinearOpMode {
             }
 
             if (a1Pressed) {
-                if (blackServo.getPosition() == 0 && blueServo.getPosition() == 0) {
+                if (gripper == ConfigPos.gripperPos.open) {
                     blueServo.setPosition(0.75);
                     blackServo.setPosition(0.75);
-                } else if (blackServo.getPosition() == 0.75 && blueServo.getPosition() == 0.75) {
+                    gripper = ConfigPos.gripperPos.closed;
+                } else if (gripper == ConfigPos.gripperPos.closed) {
                     blueServo.setPosition(0);
                     blackServo.setPosition(0);
+                    gripper = ConfigPos.gripperPos.open;
                 }
             }
             a1Pressed = ifPressed(gamepad1.a);
