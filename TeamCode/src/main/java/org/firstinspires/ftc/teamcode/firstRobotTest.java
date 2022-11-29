@@ -25,7 +25,7 @@ public class firstRobotTest extends LinearOpMode {
     Servo blackServo;
 
     int lowerLimit = 0;
-    public static int upperLimit = 0;
+    int upperLimit = 4000;
 
     double power;
 
@@ -56,9 +56,11 @@ public class firstRobotTest extends LinearOpMode {
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         blackLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        blueLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        blackLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         blueLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         blackLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRight.setMode((DcMotor.RunMode.RUN_WITHOUT_ENCODER));
@@ -78,11 +80,11 @@ public class firstRobotTest extends LinearOpMode {
             setPower(gamepad1.left_stick_x,-gamepad1.left_stick_y, gamepad1.right_stick_x);
 
             if (gamepad1.dpad_up && blackLift.getCurrentPosition() < upperLimit && blueLift.getCurrentPosition() < upperLimit) {
-                blackLift.setPower(1);
-                blueLift.setPower(1);
+                blackLift.setPower(0.5);
+                blueLift.setPower(0.5);
             } else if (gamepad1.dpad_down && blueLift.getCurrentPosition() > lowerLimit && blackLift.getCurrentPosition() > lowerLimit) {
-                blackLift.setPower(-1);
-                blueLift.setPower(-1);
+                blackLift.setPower(-0.5);
+                blueLift.setPower(-0.5);
             } else {
                 blueLift.setPower(0);
                 blackLift.setPower(0);
@@ -99,7 +101,14 @@ public class firstRobotTest extends LinearOpMode {
                     gripper = ConfigPos.gripperPos.open;
                 }
             }
+            telemetry.addData("Blue lift: ", blueLift.getCurrentPosition());
+            telemetry.addData("Blue Power: ", blueLift.getCurrentPosition());
+            telemetry.addData("Black lift: ", blackLift.getCurrentPosition());
+            telemetry.addData("Black lift", blackLift.getPower());
+            telemetry.addData("Upper limit: ", upperLimit);
+            telemetry.update();
             a1Pressed = ifPressed(gamepad1.a);
+            booleanIncrementer = 0;
         }
     }
 
@@ -122,14 +131,6 @@ public class firstRobotTest extends LinearOpMode {
         frontRight.setPower(frontRightPower * power);
         backLeft.setPower(backLeftPower * power);
         backRight.setPower(backRightPower * power);
-
-        telemetry.addData("Front Right", frontRightPower);
-        telemetry.addData("Front Left", frontLeftPower);
-        telemetry.addData("Back Left", backLeftPower);
-        telemetry.addData("Back Right", backRightPower);
-        telemetry.addData("X", x);
-        telemetry.addData("y", y);
-        telemetry.addData("rot", rot);
         telemetry.update();
 
 
