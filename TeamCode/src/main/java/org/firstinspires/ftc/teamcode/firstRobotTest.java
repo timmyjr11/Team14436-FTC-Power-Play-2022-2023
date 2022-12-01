@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -40,6 +41,7 @@ public class firstRobotTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        PhotonCore.enable();
         frontLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
         backLeft = hardwareMap.get(DcMotorEx.class,"backLeft");
@@ -101,11 +103,9 @@ public class firstRobotTest extends LinearOpMode {
                     gripper = ConfigPos.gripperPos.open;
                 }
             }
-            telemetry.addData("Blue lift: ", blueLift.getCurrentPosition());
-            telemetry.addData("Blue Power: ", blueLift.getCurrentPosition());
-            telemetry.addData("Black lift: ", blackLift.getCurrentPosition());
-            telemetry.addData("Black lift", blackLift.getPower());
-            telemetry.addData("Upper limit: ", upperLimit);
+            telemetry.addData("Arming State: ", PhotonCore.CONTROL_HUB.getArmingState());
+            telemetry.addData("Bulk Caching Mode", PhotonCore.CONTROL_HUB.getBulkCachingMode());
+            telemetry.addData("Blinker pattern length", PhotonCore.CONTROL_HUB.getBlinkerPatternMaxLength());
             telemetry.update();
             a1Pressed = ifPressed(gamepad1.a);
             booleanIncrementer = 0;
