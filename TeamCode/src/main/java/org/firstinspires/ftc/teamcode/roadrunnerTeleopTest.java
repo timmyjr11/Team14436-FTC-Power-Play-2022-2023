@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.teamcode.drive.PoseStorage;
+import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 import java.util.ArrayList;
@@ -44,8 +44,6 @@ public class roadrunnerTeleopTest extends LinearOpMode {
 
         d.blueLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         d.blackLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        d.blackLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
         d.blueLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         d.blackLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

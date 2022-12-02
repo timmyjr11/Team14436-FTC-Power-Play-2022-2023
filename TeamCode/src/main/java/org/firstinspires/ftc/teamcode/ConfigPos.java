@@ -5,4 +5,10 @@ public class ConfigPos {
         closed,
         open
     }
+
+    public enum side {
+        left,
+        right,
+        tbd
+    }
 }
