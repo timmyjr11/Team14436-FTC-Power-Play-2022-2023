@@ -17,7 +17,7 @@ import java.util.ArrayList;
 @Config
 @TeleOp
 @Disabled
-public class firstRobotTest extends LinearOpMode {
+public class photonTest extends LinearOpMode {
     DcMotorEx frontRight;
     DcMotorEx frontLeft;
     DcMotorEx backRight;
@@ -105,9 +105,11 @@ public class firstRobotTest extends LinearOpMode {
                     gripper = ConfigPos.gripperPos.open;
                 }
             }
-            telemetry.addData("Arming State: ", PhotonCore.CONTROL_HUB.getArmingState());
-            telemetry.addData("Bulk Caching Mode", PhotonCore.CONTROL_HUB.getBulkCachingMode());
-            telemetry.addData("Blinker pattern length", PhotonCore.CONTROL_HUB.getBlinkerPatternMaxLength());
+            telemetry.addData("Blue lift: ", blueLift.getCurrentPosition());
+            telemetry.addData("Blue Power: ", blueLift.getCurrentPosition());
+            telemetry.addData("Black lift: ", blackLift.getCurrentPosition());
+            telemetry.addData("Black lift", blackLift.getPower());
+            telemetry.addData("Upper limit: ", upperLimit);
             telemetry.update();
             a1Pressed = ifPressed(gamepad1.a);
             booleanIncrementer = 0;

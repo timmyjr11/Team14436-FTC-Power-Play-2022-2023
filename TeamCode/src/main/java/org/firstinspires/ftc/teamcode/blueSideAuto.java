@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Bitmap;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -12,7 +14,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Autonomous
-public class redsideAuto extends LinearOpMode {
+public class blueSideAuto extends LinearOpMode {
     private final FtcDashboard dashboard = FtcDashboard.getInstance();
     SampleMecanumDrive d;
     ConfigPos.side side = ConfigPos.side.tbd;
@@ -39,11 +41,11 @@ public class redsideAuto extends LinearOpMode {
         telemetry.update();
         while (true) {
             if (gamepad1.dpad_left) {
-                d.setPoseEstimate(PoseStorage.leftAutoRed);
+                d.setPoseEstimate(PoseStorage.leftAutoBlue);
                 side = ConfigPos.side.left;
                 break;
             } else if (gamepad1.dpad_right) {
-                d.setPoseEstimate(PoseStorage.rightAutoRed);
+                d.setPoseEstimate(PoseStorage.rightAutoBlue);
                 side = ConfigPos.side.right;
                 break;
             }
@@ -55,52 +57,14 @@ public class redsideAuto extends LinearOpMode {
         telemetry.addLine("Somebody once told me the world was gonna roll me, that I ain't the sharpest tool in the shed. - Abraham Lincoln");
         telemetry.update();
 
-            TrajectorySequence redSideRight = d.trajectorySequenceBuilder(d.getPoseEstimate())
-                    .UNSTABLE_addTemporalMarkerOffset(-1, () -> {
-                        d.blueServo.setPosition(1);
-                        d.blackServo.setPosition(1);
-                    })
-                    .waitSeconds(0.3)
-                    .strafeTo(new Vector2d(9, -60))
-                    .lineToLinearHeading(new Pose2d(9, -10, Math.toRadians(90)))
-                    .UNSTABLE_addTemporalMarkerOffset(-3, () -> {
-                        d.blackLift.setTargetPosition(4000);
-                        d.blueLift.setTargetPosition(4000);
-                        d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                        d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                        d.blackLift.setPower(0.8);
-                        d.blueLift.setPower(0.8);
-                    })
-                    .turn(Math.toRadians(-35))
-                    .forward(8.5)
-                    .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                        d.blueServo.setPosition(0);
-                        d.blackServo.setPosition(0);
-                    })
-                    .waitSeconds(1)
-                    .back(8.5)
-                    .turn(Math.toRadians(35))
-                    .lineToLinearHeading(new Pose2d(9, -60, Math.toRadians(90)))
-                    .UNSTABLE_addTemporalMarkerOffset(-2.5, () -> {
-                        d.blackLift.setTargetPosition(0);
-                        d.blueLift.setTargetPosition(0);
-                        d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                        d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                        d.blackLift.setPower(0.8);
-                        d.blueLift.setPower(0.8);
-                    })
-                    .turn(Math.toRadians(90))
-                    .build();
-
-
-        TrajectorySequence redSideLeft = d.trajectorySequenceBuilder(d.getPoseEstimate())
+        TrajectorySequence blueSideLeft = d.trajectorySequenceBuilder(d.getPoseEstimate())
                 .UNSTABLE_addTemporalMarkerOffset(-1, () -> {
                     d.blueServo.setPosition(1);
                     d.blackServo.setPosition(1);
                 })
                 .waitSeconds(0.3)
-                .strafeTo(new Vector2d(-4, -60))
-                .lineToLinearHeading(new Pose2d(-4, -10, Math.toRadians(90)))
+                .strafeTo(new Vector2d(9, 60))
+                .lineToLinearHeading(new Pose2d(9, 10, Math.toRadians(270)))
                 .UNSTABLE_addTemporalMarkerOffset(-3, () -> {
                     d.blackLift.setTargetPosition(4000);
                     d.blueLift.setTargetPosition(4000);
@@ -109,17 +73,17 @@ public class redsideAuto extends LinearOpMode {
                     d.blackLift.setPower(0.8);
                     d.blueLift.setPower(0.8);
                 })
-                .turn(Math.toRadians(47))
-                .forward(6.75)
+                .turn(Math.toRadians(43))
+                .forward(8)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     d.blueServo.setPosition(0);
                     d.blackServo.setPosition(0);
                 })
                 .waitSeconds(1)
-                .back(6.75)
-                .turn(Math.toRadians(-47))
-                .lineToLinearHeading(new Pose2d(-4, -60, Math.toRadians(90)))
-                .UNSTABLE_addTemporalMarkerOffset(-2.5, () -> {
+                .back(8)
+                .turn(Math.toRadians(-43))
+                .lineToLinearHeading(new Pose2d(9, 60, Math.toRadians(270)))
+                .UNSTABLE_addTemporalMarkerOffset(-1, () -> {
                     d.blackLift.setTargetPosition(0);
                     d.blueLift.setTargetPosition(0);
                     d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -127,7 +91,42 @@ public class redsideAuto extends LinearOpMode {
                     d.blackLift.setPower(0.8);
                     d.blueLift.setPower(0.8);
                 })
-                .turn(Math.toRadians(-90))
+                .build();
+
+        TrajectorySequence blueSideRight = d.trajectorySequenceBuilder(d.getPoseEstimate())
+                .UNSTABLE_addTemporalMarkerOffset(-1, () -> {
+                    d.blueServo.setPosition(1);
+                    d.blackServo.setPosition(1);
+                })
+                .waitSeconds(0.3)
+                .strafeTo(new Vector2d(-4, 60))
+                .lineToLinearHeading(new Pose2d(-4, 10, Math.toRadians(270)))
+                .UNSTABLE_addTemporalMarkerOffset(-3, () -> {
+                    d.blackLift.setTargetPosition(4000);
+                    d.blueLift.setTargetPosition(4000);
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setPower(0.8);
+                    d.blueLift.setPower(0.8);
+                })
+                .turn(Math.toRadians(-40))
+                .forward(5)
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    d.blueServo.setPosition(0);
+                    d.blackServo.setPosition(0);
+                })
+                .waitSeconds(1)
+                .back(5)
+                .turn(Math.toRadians(40))
+                .lineToLinearHeading(new Pose2d(-4, 60, Math.toRadians(270)))
+                .UNSTABLE_addTemporalMarkerOffset(-1, () -> {
+                    d.blackLift.setTargetPosition(0);
+                    d.blueLift.setTargetPosition(0);
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setPower(0.8);
+                    d.blueLift.setPower(0.8);
+                })
                 .build();
 
         telemetry.clearAll();
@@ -140,6 +139,7 @@ public class redsideAuto extends LinearOpMode {
         }
 
         telemetry.addLine("If there is anything wrong please restart!");
+
         telemetry.update();
 
         if(isStopRequested()) {
@@ -149,9 +149,11 @@ public class redsideAuto extends LinearOpMode {
         waitForStart();
 
         if(side == ConfigPos.side.left) {
-            d.followTrajectorySequence(redSideLeft);
+            d.followTrajectorySequence(blueSideLeft);
         } else if (side == ConfigPos.side.right) {
-            d.followTrajectorySequence(redSideRight);
+            d.followTrajectorySequence(blueSideRight);
         }
+
+
     }
 }

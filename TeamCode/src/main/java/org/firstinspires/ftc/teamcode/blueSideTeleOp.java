@@ -6,7 +6,6 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -19,8 +18,7 @@ import java.util.ArrayList;
 
 @Config
 @TeleOp
-@Disabled
-public class roadrunnerTeleopTest extends LinearOpMode {
+public class blueSideTeleOp extends LinearOpMode {
     SampleMecanumDrive d;
 
     int lowerLimit = 0;
@@ -32,6 +30,7 @@ public class roadrunnerTeleopTest extends LinearOpMode {
     ArrayList<Boolean> booleanArray = new ArrayList<>();
     int booleanIncrementer = 0;
     boolean a2Pressed;
+    boolean y2Pressed;
 
     FtcDashboard dashboard = FtcDashboard.getInstance();
 
@@ -41,6 +40,8 @@ public class roadrunnerTeleopTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         PhotonCore.enable();
+        PhotonCore.experimental.setMaximumParallelCommands(6);
+        PhotonCore.disable();
         d = new SampleMecanumDrive(hardwareMap);
         d.setPoseEstimate(PoseStorage.telePowerRed);
 
@@ -91,11 +92,20 @@ public class roadrunnerTeleopTest extends LinearOpMode {
                     gripper = ConfigPos.gripperPos.open;
                 }
             }
+
+            if (y2Pressed) {
+                d.blackLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                d.blueLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                d.blueLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                d.blueLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            }
+
             telemetry.addData("Arming State: ", PhotonCore.CONTROL_HUB.getArmingState());
             telemetry.addData("Bulk Caching Mode", PhotonCore.CONTROL_HUB.getBulkCachingMode());
             telemetry.addData("Blinker pattern length", PhotonCore.CONTROL_HUB.getBlinkerPatternMaxLength());
             telemetry.update();
             a2Pressed = ifPressed(gamepad2.a);
+            y2Pressed = ifPressed(gamepad2.y);
             booleanIncrementer = 0;
         }
     }

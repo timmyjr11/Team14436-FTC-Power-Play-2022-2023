@@ -14,18 +14,21 @@ public class MeepMeepTesting {
                 .setColorScheme(new ColorSchemeRedDark())
                 .setConstraints(60, 30, Math.toRadians(275), Math.toRadians(60), 16.965)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(36.25, -62.5, Math.toRadians(90)))
-                                .strafeTo(new Vector2d(12, -62.5))
-                                .lineToLinearHeading(new Pose2d(12, -12, Math.toRadians(45)))
-                                .lineToLinearHeading(new Pose2d(12, -62, Math.toRadians(90)))
-                                .lineToLinearHeading(new Pose2d(60, -62, Math.toRadians(90)))
+                        drive.trajectorySequenceBuilder(new Pose2d(40, 60, Math.toRadians(270)))
+                                .strafeTo(new Vector2d(12, 60))
+                                .lineToLinearHeading(new Pose2d(12, 12, Math.toRadians(315)))
+                                .lineToLinearHeading(new Pose2d(12, 60, Math.toRadians(270)))
+                                .lineToLinearHeading(new Pose2d(60, 60, Math.toRadians(270)))
                                 .build()
                 );
+
+        //RoadRunnerBotEntity forwardBot = new DefaultBotBuilder(meepMeep)
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
                 .addEntity(myFirstBot)
+
                 .start();
 
     }
