@@ -42,7 +42,7 @@ public class roadrunnerTeleopTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         PhotonCore.enable();
         d = new SampleMecanumDrive(hardwareMap);
-        d.setPoseEstimate(PoseStorage.telePowerRed);
+        //d.setPoseEstimate(PoseStorage.telePowerRed);
 
         d.blueLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         d.blackLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

@@ -11,4 +11,9 @@ public class ConfigPos {
         right,
         tbd
     }
+
+    public enum override {
+        yes,
+        no
+    }
 }

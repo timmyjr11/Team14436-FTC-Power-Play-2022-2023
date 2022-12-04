@@ -61,7 +61,7 @@ public class redsideAuto extends LinearOpMode {
                         d.blackServo.setPosition(1);
                     })
                     .waitSeconds(0.3)
-                    .strafeTo(new Vector2d(9, -60))
+                    .strafeTo(new Vector2d(9, -59))
                     .lineToLinearHeading(new Pose2d(9, -10, Math.toRadians(90)))
                     .UNSTABLE_addTemporalMarkerOffset(-3, () -> {
                         d.blackLift.setTargetPosition(4000);
@@ -71,7 +71,7 @@ public class redsideAuto extends LinearOpMode {
                         d.blackLift.setPower(0.8);
                         d.blueLift.setPower(0.8);
                     })
-                    .turn(Math.toRadians(-35))
+                    .turn(Math.toRadians(-40))
                     .forward(8.5)
                     .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                         d.blueServo.setPosition(0);
@@ -79,7 +79,7 @@ public class redsideAuto extends LinearOpMode {
                     })
                     .waitSeconds(1)
                     .back(8.5)
-                    .turn(Math.toRadians(35))
+                    .turn(Math.toRadians(40))
                     .lineToLinearHeading(new Pose2d(9, -60, Math.toRadians(90)))
                     .UNSTABLE_addTemporalMarkerOffset(-2.5, () -> {
                         d.blackLift.setTargetPosition(0);
@@ -99,7 +99,7 @@ public class redsideAuto extends LinearOpMode {
                     d.blackServo.setPosition(1);
                 })
                 .waitSeconds(0.3)
-                .strafeTo(new Vector2d(-4, -60))
+                .strafeTo(new Vector2d(-4, -59))
                 .lineToLinearHeading(new Pose2d(-4, -10, Math.toRadians(90)))
                 .UNSTABLE_addTemporalMarkerOffset(-3, () -> {
                     d.blackLift.setTargetPosition(4000);
@@ -110,13 +110,13 @@ public class redsideAuto extends LinearOpMode {
                     d.blueLift.setPower(0.8);
                 })
                 .turn(Math.toRadians(47))
-                .forward(6.75)
+                .forward(7)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     d.blueServo.setPosition(0);
                     d.blackServo.setPosition(0);
                 })
                 .waitSeconds(1)
-                .back(6.75)
+                .back(7)
                 .turn(Math.toRadians(-47))
                 .lineToLinearHeading(new Pose2d(-4, -60, Math.toRadians(90)))
                 .UNSTABLE_addTemporalMarkerOffset(-2.5, () -> {

@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -17,6 +18,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import java.util.ArrayList;
 
 @Config
+@Disabled
 @TeleOp
 public class redSideTeleOp extends LinearOpMode {
     SampleMecanumDrive d;
@@ -43,8 +45,7 @@ public class redSideTeleOp extends LinearOpMode {
         PhotonCore.experimental.setMaximumParallelCommands(6);
         PhotonCore.disable();
         d = new SampleMecanumDrive(hardwareMap);
-        d.setPoseEstimate(PoseStorage.telePowerRed);
-
+//
         d.blueLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         d.blackLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 

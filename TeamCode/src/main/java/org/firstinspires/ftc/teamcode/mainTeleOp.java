@@ -9,16 +9,14 @@ import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 import java.util.ArrayList;
 
 @Config
 @TeleOp
-public class blueSideTeleOp extends LinearOpMode {
+public class mainTeleOp extends LinearOpMode {
     SampleMecanumDrive d;
 
     int lowerLimit = 0;
@@ -31,10 +29,13 @@ public class blueSideTeleOp extends LinearOpMode {
     int booleanIncrementer = 0;
     boolean a2Pressed;
     boolean y2Pressed;
+    boolean a1Pressed;
 
     FtcDashboard dashboard = FtcDashboard.getInstance();
 
     ConfigPos.gripperPos gripper = ConfigPos.gripperPos.open;
+    ConfigPos.side pos = ConfigPos.side.tbd;
+    ConfigPos.override over = ConfigPos.override.no;
 
 
     @Override
@@ -43,7 +44,6 @@ public class blueSideTeleOp extends LinearOpMode {
         PhotonCore.experimental.setMaximumParallelCommands(6);
         PhotonCore.disable();
         d = new SampleMecanumDrive(hardwareMap);
-        d.setPoseEstimate(PoseStorage.telePowerRed);
 
         d.blueLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         d.blackLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -56,11 +56,31 @@ public class blueSideTeleOp extends LinearOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
+
+        telemetry.addLine("Pick a side, left or right");
+        telemetry.update();
+        while (true) {
+            if (gamepad1.dpad_left) {
+                d.setPoseEstimate(PoseStorage.telePowerLeft);
+                pos = ConfigPos.side.left;
+                break;
+            } else if (gamepad1.dpad_right) {
+                d.setPoseEstimate(PoseStorage.telePowerRight);
+                pos = ConfigPos.side.right;
+                break;
+            }
+        }
+        telemetry.clear();
+        telemetry.addLine("Side selected!");
+        if(pos == ConfigPos.side.right) {
+            telemetry.addLine("Right Side!");
+        } else if (pos == ConfigPos.side.left) {
+            telemetry.addLine("Left Side");
+        }
+        telemetry.update();
+        waitForStart();
         d.blueServo.setPosition(0);
         d.blackServo.setPosition(0);
-
-
-        waitForStart();
 
         while(opModeIsActive() && !isStopRequested()) {
             drive();
@@ -70,15 +90,21 @@ public class blueSideTeleOp extends LinearOpMode {
                 liftPower = 1;
             }
 
-            if (gamepad2.dpad_up && d.blackLift.getCurrentPosition() < upperLimit && d.blueLift.getCurrentPosition() < upperLimit) {
+            if (gamepad2.left_trigger > 0.5) {
+                over = ConfigPos.override.yes;
+            } else {
+                over = ConfigPos.override.no;
+            }
+
+            if ((gamepad2.dpad_up && over == ConfigPos.override.yes) || (gamepad2.dpad_up && d.blackLift.getCurrentPosition() < upperLimit && d.blueLift.getCurrentPosition() < upperLimit)) {
                 d.blackLift.setPower(1 * liftPower);
                 d.blueLift.setPower(1 * liftPower);
-            } else if (gamepad2.dpad_down && d.blueLift.getCurrentPosition() > lowerLimit && d.blackLift.getCurrentPosition() > lowerLimit) {
+            } else if ((gamepad2.dpad_down && over == ConfigPos.override.yes) || (gamepad2.dpad_down && d.blueLift.getCurrentPosition() > lowerLimit && d.blackLift.getCurrentPosition() > lowerLimit)) {
                 d.blackLift.setPower(-1);
                 d.blueLift.setPower(-1);
             } else {
-                d.blueLift.setPower(0);
-                d.blackLift.setPower(0);
+                d.blueLift.setPower(0.05);
+                d.blackLift.setPower(0.05);
             }
 
             if (a2Pressed) {
@@ -100,12 +126,21 @@ public class blueSideTeleOp extends LinearOpMode {
                 d.blueLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             }
 
+            if (a1Pressed) {
+                if (pos == ConfigPos.side.left) {
+                    d.setPoseEstimate(PoseStorage.telePowerLeft);
+                } else if (pos == ConfigPos.side.right) {
+                    d.setPoseEstimate(PoseStorage.telePowerRight);
+                }
+            }
+
             telemetry.addData("Arming State: ", PhotonCore.CONTROL_HUB.getArmingState());
             telemetry.addData("Bulk Caching Mode", PhotonCore.CONTROL_HUB.getBulkCachingMode());
             telemetry.addData("Blinker pattern length", PhotonCore.CONTROL_HUB.getBlinkerPatternMaxLength());
             telemetry.update();
             a2Pressed = ifPressed(gamepad2.a);
             y2Pressed = ifPressed(gamepad2.y);
+            a1Pressed = ifPressed(gamepad1.a);
             booleanIncrementer = 0;
         }
     }

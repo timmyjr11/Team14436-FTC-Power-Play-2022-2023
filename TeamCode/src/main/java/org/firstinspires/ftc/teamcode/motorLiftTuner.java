@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 
 @Config
 @TeleOp
+@Disabled
 public class motorLiftTuner extends LinearOpMode {
     FtcDashboard dashboard = FtcDashboard.getInstance();
 
@@ -49,7 +51,8 @@ public class motorLiftTuner extends LinearOpMode {
 
         while(opModeIsActive() && !isStopRequested()) {
             blueLift.setPower(bluePower);
-            blackLift.setPower(blackPower);
+            blackLift.setPower(bluePower);
+            //.05
         }
     }
 }

@@ -43,7 +43,6 @@ public class parallelThreadsTest extends LinearOpMode {
         PhotonCore.enable();
         PhotonCore.experimental.setMaximumParallelCommands(6);
         d = new SampleMecanumDrive(hardwareMap);
-        d.setPoseEstimate(PoseStorage.telePowerRed);
 
         d.blueLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         d.blackLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
