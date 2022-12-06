@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Autonomous
-public class redsideAuto extends LinearOpMode {
+public class MainAuto extends LinearOpMode {
     private final FtcDashboard dashboard = FtcDashboard.getInstance();
     SampleMecanumDrive d;
     ConfigPos.side side = ConfigPos.side.tbd;

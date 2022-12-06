@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 @Config
 @TeleOp
-public class mainTeleOp extends LinearOpMode {
+public class MainTeleOp extends LinearOpMode {
     SampleMecanumDrive d;
 
     int lowerLimit = 0;

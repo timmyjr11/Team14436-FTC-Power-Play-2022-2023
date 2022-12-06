@@ -14,11 +14,25 @@ public class MeepMeepTesting {
                 .setColorScheme(new ColorSchemeRedDark())
                 .setConstraints(60, 30, Math.toRadians(275), Math.toRadians(60), 16.965)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(40, 60, Math.toRadians(270)))
-                                .strafeTo(new Vector2d(12, 60))
-                                .lineToLinearHeading(new Pose2d(12, 12, Math.toRadians(315)))
-                                .lineToLinearHeading(new Pose2d(12, 60, Math.toRadians(270)))
-                                .lineToLinearHeading(new Pose2d(60, 60, Math.toRadians(270)))
+                        drive.trajectorySequenceBuilder(new Pose2d(-36.25, -62.5, Math.toRadians(90)))
+                                .UNSTABLE_addTemporalMarkerOffset(-1, () -> {
+                                })
+                                .waitSeconds(0.3)
+                                .strafeTo(new Vector2d(-4, -59))
+                                .lineToLinearHeading(new Pose2d(-4, -10, Math.toRadians(90)))
+                                .UNSTABLE_addTemporalMarkerOffset(-3, () -> {
+                                })
+                                .turn(Math.toRadians(47))
+                                .forward(7)
+                                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                                })
+                                .waitSeconds(1)
+                                .back(7)
+                                .turn(Math.toRadians(-47))
+                                .lineToLinearHeading(new Pose2d(-4, -60, Math.toRadians(90)))
+                                .UNSTABLE_addTemporalMarkerOffset(-2.5, () -> {
+                                })
+                                .turn(Math.toRadians(-90))
                                 .build()
                 );
 
