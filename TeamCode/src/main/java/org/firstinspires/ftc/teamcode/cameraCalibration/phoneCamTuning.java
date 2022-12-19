@@ -20,7 +20,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera2;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-@Config
+@Disabled
 @Autonomous
 public class phoneCamTuning extends LinearOpMode {
 

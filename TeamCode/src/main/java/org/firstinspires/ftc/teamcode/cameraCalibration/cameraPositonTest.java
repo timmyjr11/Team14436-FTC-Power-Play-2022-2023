@@ -1,140 +1,179 @@
 package org.firstinspires.ftc.teamcode.cameraCalibration;
 
+import android.annotation.SuppressLint;
+
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.core.Point;
-import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvInternalCamera2;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-@Disabled
+@Config
 @Autonomous
 public class cameraPositonTest extends LinearOpMode {
-    OpenCvCamera blueCam;
-    OpenCvCamera blackCam;
+    OpenCvCamera phoneCam;
 
-    private final FtcDashboard dash = FtcDashboard.getInstance();
+    private static colors color = colors.None;
+
 
     public static int rectX = 0;
     public static int rectY = 0;
-    public  static int rectHeight = 0;
+    public static int rectHeight = 0;
     public static int rectWidth = 0;
 
-    public static double lowerH = 0;
-    public static double lowerS = 0;
-    public static  double lowerV = 0;
+    public static double lowerGreenH = 45;
+    public static double lowerGreenS = 100;
+    public static double lowerGreenV = 50;
 
-    public static double upperH = 180;
-    public static double upperS = 255;
-    public static double upperV = 255;
+    public static double lowerYellowH = 20;
+    public static double lowerYellowS = 100;
+    public static double lowerYellowV = 50;
+
+    public static double lowerPurpleH = 135;
+    public static double lowerPurpleS = 100;
+    public static double lowerPurpleV = 50;
+
+    public static double upperGreenH = 75;
+    public static double upperGreenS = 255;
+    public static double upperGreenV = 255;
+
+    public static double upperYellowH = 30;
+    public static double upperYellowS = 255;
+    public static double upperYellowV = 255;
+
+    public static double upperPurpleH = 165;
+    public static double upperPurpleS = 255;
+    public static double upperPurpleV = 255;
 
 
+    ColorDetectionPipelineV2 pipeline = new ColorDetectionPipelineV2();
+
+
+    private final FtcDashboard dash = FtcDashboard.getInstance();
 
 
     @Override
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(telemetry, dash.getTelemetry());
 
+        @SuppressLint("DiscouragedApi")
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera2(OpenCvInternalCamera2.CameraDirection.BACK, cameraMonitorViewId);
 
-        int[] viewportContainerIds = OpenCvCameraFactory.getInstance()
-                .splitLayoutForMultipleViewports(cameraMonitorViewId, 2, OpenCvCameraFactory.ViewportSplitMethod.VERTICALLY);
-
-        blueCam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), viewportContainerIds[0]);
-        blackCam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 2"), viewportContainerIds[1]);
-
-        blueCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+        //Allows the camera to turn on
+        phoneCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
-                blueCam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
-                blueCam.setPipeline(new UselessGreenBoxDrawingPipeline());
+                phoneCam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+                phoneCam.setPipeline(pipeline);
             }
 
             @Override
             public void onError(int errorCode) {
-                blueCam.closeCameraDevice();
-                telemetry.addLine("AA1");
-                telemetry.addData("error", errorCode);
-
-                telemetry.update();
-            }
-        });
-
-        blackCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-            @Override
-            public void onOpened() {
-                blackCam.startStreaming(320, 240, OpenCvCameraRotation.UPSIDE_DOWN);
-            }
-
-            @Override
-            public void onError(int errorCode) {
-                blackCam.closeCameraDevice();
+                phoneCam.closeCameraDevice();
                 telemetry.addLine("AA2");
                 telemetry.addData("error", errorCode);
                 telemetry.update();
             }
         });
 
-
-        dash.startCameraStream(blueCam, 15);
+        FtcDashboard.getInstance().startCameraStream(phoneCam, 30);
+        telemetry.setMsTransmissionInterval(100);
         waitForStart();
 
         while (opModeIsActive() && !isStopRequested()) {
-            if (gamepad1.a) {
-                telemetry.clearAll();
-                dash.stopCameraStream();
-                dash.startCameraStream(blueCam, 15);
-                telemetry.addLine("BlueCam");
-            } else if (gamepad1.b) {
-                telemetry.clearAll();
-                dash.stopCameraStream();
-                dash.startCameraStream(blackCam, 15);
-                telemetry.addLine("BlackCam");
+            if (isStopRequested()) {
+                return;
             }
-            telemetry.update();
         }
     }
 
-    class UselessGreenBoxDrawingPipeline extends OpenCvPipeline {
-        Mat HSV = new Mat();
-        Mat outPut = new Mat();
-        Mat rect = new Mat();
+    public static class ColorDetectionPipelineV2 extends OpenCvPipeline {
+        Mat hsv = new Mat();
+        Mat mask = new Mat();
 
-        Scalar lowerGreen = new Scalar(lowerH, lowerS, lowerV);
-        Scalar upperGreen = new Scalar(upperH, upperS, upperV);
+        Scalar greenLower = new Scalar(lowerGreenH, lowerGreenS, lowerGreenV);
+        Scalar greenUpper = new Scalar(upperGreenH, upperGreenS, upperGreenV);
 
-        Scalar lowerYellow = new Scalar(25.5, 122, 0);
-        Scalar upperYellow = new Scalar(51, 241, 255);
+        Scalar yellowLower = new Scalar(lowerYellowH, lowerYellowS, lowerYellowV);
+        Scalar yellowUpper = new Scalar(upperYellowH, upperYellowS, upperYellowV);
 
-        Scalar lowerPurple = new Scalar(123, 101, 72);
-        Scalar upperPurple = new Scalar(147, 171, 151);
-
+        Scalar purpleLower = new Scalar(lowerPurpleH, lowerPurpleS, lowerPurpleV);
+        Scalar purpleUpper = new Scalar(upperPurpleH, upperPurpleS, upperPurpleV);
 
         @Override
         public Mat processFrame(Mat input) {
-            Imgproc.cvtColor(input, HSV, Imgproc.COLOR_RGB2HSV);
+            // Convert the input image to the HSV color space
+            Imgproc.cvtColor(input, hsv, Imgproc.COLOR_RGB2HSV);
 
-            HSV.copyTo(outPut);
+            greenLower = new Scalar(lowerGreenH, lowerGreenS, lowerGreenV);
+            greenUpper = new Scalar(upperGreenH, upperGreenS, upperGreenV);
 
-            Rect rectangle = new Rect(rectX, rectY, rectWidth, rectHeight);
+            yellowLower = new Scalar(lowerYellowH, lowerYellowS, lowerYellowV);
+            yellowUpper = new Scalar(upperYellowH, upperYellowS, upperYellowV);
 
-            Scalar rectColor = new Scalar(0, 0, 255);
+            purpleLower = new Scalar(lowerPurpleH, lowerPurpleS, lowerPurpleV);
+            purpleUpper = new Scalar(upperPurpleH, upperPurpleS, upperPurpleV);
 
-            Core.inRange(input, lowerGreen, upperGreen, HSV);
+            // Create a mask for each of the colors we want to detect
+            Core.inRange(hsv, greenLower, greenUpper, mask);
+            Mat greenMask = mask.clone();
 
-            return HSV;
+            Core.inRange(hsv, yellowLower, yellowUpper, mask);
+            Mat yellowMask = mask.clone();
 
+            Core.inRange(hsv, purpleLower, purpleUpper, mask);
+            Mat purpleMask = mask.clone();
+
+            // Set all pixels in the mask to white and all other pixels to black
+            Core.bitwise_or(greenMask, yellowMask, mask);
+            Core.bitwise_or(purpleMask, mask, mask);
+            Core.bitwise_not(mask, mask);
+            input.setTo(new Scalar(0, 0, 0), mask);
+
+            // Count the number of non-zero pixels in each of the masks
+            int greenCount = Core.countNonZero(greenMask);
+            int yellowCount = Core.countNonZero(yellowMask);
+            int purpleCount = Core.countNonZero(purpleMask);
+
+
+            if (greenCount > yellowCount && greenCount > purpleCount) {
+                color = colors.green;
+            }
+            else if (yellowCount > greenCount && yellowCount > purpleCount) {
+                color = colors.yellow;
+            }
+            else if (purpleCount > greenCount && purpleCount > yellowCount) {
+                color = colors.purple;
+            }
+            else {
+                color = colors.None;
+            }
+
+            // Return the input image
+            mask.release();
+            hsv.release();
+            return input;
         }
     }
+
+    public enum colors {
+        green,
+        purple,
+        yellow,
+        None
+    }
 }
+
+
