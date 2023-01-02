@@ -32,19 +32,19 @@ public class cameraPositonTest extends LinearOpMode {
     public static int rectHeight = 0;
     public static int rectWidth = 0;
 
-    public static double lowerGreenH = 45;
-    public static double lowerGreenS = 100;
-    public static double lowerGreenV = 50;
+    public static double lowerGreenH = 50;
+    public static double lowerGreenS = 50;
+    public static double lowerGreenV = 25;
 
     public static double lowerYellowH = 20;
-    public static double lowerYellowS = 100;
+    public static double lowerYellowS = 180;
     public static double lowerYellowV = 50;
 
     public static double lowerPurpleH = 135;
-    public static double lowerPurpleS = 100;
-    public static double lowerPurpleV = 50;
+    public static double lowerPurpleS = 50;
+    public static double lowerPurpleV = 25;
 
-    public static double upperGreenH = 75;
+    public static double upperGreenH = 90;
     public static double upperGreenS = 255;
     public static double upperGreenV = 255;
 
@@ -52,7 +52,7 @@ public class cameraPositonTest extends LinearOpMode {
     public static double upperYellowS = 255;
     public static double upperYellowV = 255;
 
-    public static double upperPurpleH = 165;
+    public static double upperPurpleH = 170;
     public static double upperPurpleS = 255;
     public static double upperPurpleV = 255;
 
@@ -99,7 +99,7 @@ public class cameraPositonTest extends LinearOpMode {
         }
     }
 
-    public static class ColorDetectionPipelineV2 extends OpenCvPipeline {
+    public class ColorDetectionPipelineV2 extends OpenCvPipeline {
         Mat hsv = new Mat();
         Mat mask = new Mat();
 
@@ -150,20 +150,31 @@ public class cameraPositonTest extends LinearOpMode {
 
             if (greenCount > yellowCount && greenCount > purpleCount) {
                 color = colors.green;
+                telemetry.addData("Color", color);
+                telemetry.update();
             }
             else if (yellowCount > greenCount && yellowCount > purpleCount) {
                 color = colors.yellow;
+                telemetry.addData("Color", color);
+                telemetry.update();
             }
             else if (purpleCount > greenCount && purpleCount > yellowCount) {
                 color = colors.purple;
+                telemetry.addData("Color", color);
+                telemetry.update();
             }
             else {
                 color = colors.None;
+                telemetry.addData("Color", color);
+                telemetry.update();
             }
 
             // Return the input image
             mask.release();
             hsv.release();
+            yellowMask.release();
+            purpleMask.release();
+            greenMask.release();
             return input;
         }
     }
