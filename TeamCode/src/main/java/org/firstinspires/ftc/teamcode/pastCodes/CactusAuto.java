@@ -1,18 +1,20 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.pastCodes;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.teamcode.ConfigPos;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
-
+@Disabled
 @Autonomous
-public class MainAuto extends LinearOpMode {
+public class CactusAuto extends LinearOpMode {
     private final FtcDashboard dashboard = FtcDashboard.getInstance();
     SampleMecanumDrive d;
     ConfigPos.side side = ConfigPos.side.tbd;
@@ -39,11 +41,11 @@ public class MainAuto extends LinearOpMode {
         telemetry.update();
         while (true) {
             if (gamepad1.dpad_left) {
-                d.setPoseEstimate(PoseStorage.leftAutoRed);
+                d.setPoseEstimate(CactusPoseStorage.leftAutoRed);
                 side = ConfigPos.side.left;
                 break;
             } else if (gamepad1.dpad_right) {
-                d.setPoseEstimate(PoseStorage.rightAutoRed);
+                d.setPoseEstimate(CactusPoseStorage.rightAutoRed);
                 side = ConfigPos.side.right;
                 break;
             }

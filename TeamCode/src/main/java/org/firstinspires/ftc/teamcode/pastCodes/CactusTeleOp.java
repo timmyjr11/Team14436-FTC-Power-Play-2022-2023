@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.pastCodes;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -10,13 +10,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.teamcode.ConfigPos;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 import java.util.ArrayList;
 
 @Config
 @TeleOp
-public class MainTeleOp extends LinearOpMode {
+public class CactusTeleOp extends LinearOpMode {
     SampleMecanumDrive d;
 
     int lowerLimit = 0;
@@ -61,11 +62,11 @@ public class MainTeleOp extends LinearOpMode {
         telemetry.update();
         while (true) {
             if (gamepad1.dpad_left) {
-                d.setPoseEstimate(PoseStorage.telePowerLeft);
+                d.setPoseEstimate(CactusPoseStorage.telePowerLeft);
                 pos = ConfigPos.side.left;
                 break;
             } else if (gamepad1.dpad_right) {
-                d.setPoseEstimate(PoseStorage.telePowerRight);
+                d.setPoseEstimate(CactusPoseStorage.telePowerRight);
                 pos = ConfigPos.side.right;
                 break;
             }
@@ -128,9 +129,9 @@ public class MainTeleOp extends LinearOpMode {
 
             if (a1Pressed) {
                 if (pos == ConfigPos.side.left) {
-                    d.setPoseEstimate(PoseStorage.telePowerLeft);
+                    d.setPoseEstimate(CactusPoseStorage.telePowerLeft);
                 } else if (pos == ConfigPos.side.right) {
-                    d.setPoseEstimate(PoseStorage.telePowerRight);
+                    d.setPoseEstimate(CactusPoseStorage.telePowerRight);
                 }
             }
 

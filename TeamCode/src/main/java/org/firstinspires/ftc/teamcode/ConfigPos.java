@@ -16,4 +16,11 @@ public class ConfigPos {
         yes,
         no
     }
+
+    public enum colors {
+        green,
+        purple,
+        yellow,
+        None
+    }
 }
