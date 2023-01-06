@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
 
+import org.firstinspires.ftc.robotcore.external.Func;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
@@ -25,18 +27,18 @@ public class CompVisionForAuto extends OpenCvPipeline {
     public static double lowerGreenV = 25;
 
     public static double lowerYellowH = 20;
-    public static double lowerYellowS = 180;
+    public static double lowerYellowS = 200;
     public static double lowerYellowV = 50;
 
-    public static double lowerPurpleH = 135;
-    public static double lowerPurpleS = 50;
-    public static double lowerPurpleV = 25;
+    public static double lowerPurpleH = 120;
+    public static double lowerPurpleS = 0;
+    public static double lowerPurpleV = 0;
 
     public static double upperGreenH = 90;
     public static double upperGreenS = 255;
     public static double upperGreenV = 255;
 
-    public static double upperYellowH = 30;
+    public static double upperYellowH = 35;
     public static double upperYellowS = 255;
     public static double upperYellowV = 255;
 
