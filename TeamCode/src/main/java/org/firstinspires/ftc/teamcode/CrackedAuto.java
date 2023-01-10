@@ -43,6 +43,7 @@ public class CrackedAuto extends LinearOpMode {
     int coneCounter;
 
     ConfigPos.side side = ConfigPos.side.tbd;
+    update up = update.yes;
 
     ArrayList<Boolean> booleanArray = new ArrayList<>();
     int booleanIncrementer = 0;
@@ -54,8 +55,9 @@ public class CrackedAuto extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-
         d = new SampleMecanumDrive(hardwareMap);
+
+        telemetry.setMsTransmissionInterval(1000);
 
         d.blueLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         d.blackLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -70,58 +72,69 @@ public class CrackedAuto extends LinearOpMode {
         d.blackServo.setPosition(0);
 
         telemetry = new MultipleTelemetry(telemetry, dash.getTelemetry());
-        telemetry.setMsTransmissionInterval(250);
 
         @SuppressLint("DiscouragedApi") int cameraMonitorViewId = hardwareMap.appContext.getResources()
                 .getIdentifier("cameraMonitorViewId", "id",
                         hardwareMap.appContext.getPackageName());
 
 
-        int[] viewportContainerIds = OpenCvCameraFactory.getInstance()
+       /* int[] viewportContainerIds = OpenCvCameraFactory.getInstance()
                 .splitLayoutForMultipleViewports(cameraMonitorViewId,
                         2,
-                        OpenCvCameraFactory.ViewportSplitMethod.HORIZONTALLY);
+                        OpenCvCameraFactory.ViewportSplitMethod.HORIZONTALLY);*/
 
         telemetry.addLine("Opening Cameras...");
         telemetry.update();
-        dash.getTelemetry();
 
-        blueCam = OpenCvCameraFactory.getInstance()
-                .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), viewportContainerIds[0]);
+        //blueCam = OpenCvCameraFactory.getInstance()
+          //      .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         blackCam = OpenCvCameraFactory.getInstance()
-                .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 2"), viewportContainerIds[1]);
+              .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 2"), cameraMonitorViewId);
 
-        blueCam.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
-        blackCam.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
+       /* blueCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {}
 
+            @Override
+            public void onError(int errorCode) {
+                telemetry.addData("Blue Cam error Code", errorCode);
+                telemetry.update();
+            }
+        });*/
 
+        blackCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {}
+
+            @Override
+            public void onError(int errorCode) {
+                telemetry.addData("Black Cam error Code", errorCode);
+                telemetry.update();
+            }
+        });
+
+        telemetry.addLine("Cameras opened");
         telemetry.addLine("Press left on D-pad for left side, press right on D-pad for right side");
         telemetry.update();
-        dash.getTelemetry();
+
         while (true) {
             if (gamepad1.dpad_left) {
-                telemetry.addLine("Opening Cameras...");
-                telemetry.update();
-                dash.getTelemetry();
                 d.setPoseEstimate(PoseStorage.leftAuto);
                 side = ConfigPos.side.left;
-                blackCam.openCameraDevice();
+                //blackCam.setPipeline(new CompVisionForAuto());
                 blackCam.startStreaming(320, 240, OpenCvCameraRotation.UPSIDE_DOWN);
-              //  blackCam.setPipeline(new CompVisionForAuto());
                 dash.startCameraStream(blackCam, 30);
                 break;
             } else if (gamepad1.dpad_right) {
-                telemetry.addLine("Opening Cameras...");
-                telemetry.update();
-                dash.getTelemetry();
                 d.setPoseEstimate(PoseStorage.rightAuto);
                 side = ConfigPos.side.right;
-                blueCam.openCameraDevice();
-                blueCam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
-               // blueCam.setPipeline(new CompVisionForAuto());
-                dash.startCameraStream(blueCam, 30);
+                //blueCam.setPipeline(new CompVisionForAuto());
+                //blueCam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+                //dash.startCameraStream(blueCam, 30);
                 break;
             }
+
+            if (isStopRequested()) return;
         }
 
 
@@ -129,8 +142,6 @@ public class CrackedAuto extends LinearOpMode {
             telemetry.addData("Number of cones: ", coneCounter);
             telemetry.addLine("Press up on D-pad to add a cone, press down on D-pad to remove a cone");
             telemetry.addLine("Press A to move on to the next step");
-            telemetry.update();
-            dash.getTelemetry();
             if (D1UpPressed) {
                 coneCounter++;
             }
@@ -140,12 +151,13 @@ public class CrackedAuto extends LinearOpMode {
             D1UpPressed = ifPressed(gamepad1.dpad_up);
             D1DownPressed = ifPressed(gamepad1.dpad_down);
             booleanIncrementer = 0;
+            telemetry.update();
         }
 
         telemetry.addLine("Creating OpMode, please wait...");
         telemetry.addLine("Somebody once told me the world was gonna roll me, that I ain't the sharpest tool in the shed. - Abraham Lincoln");
         telemetry.update();
-        dash.getTelemetry();
+
 
         TrajectorySequence leftSide = d.trajectorySequenceBuilder(d.getPoseEstimate())
                 .waitSeconds(0.3)
@@ -259,8 +271,20 @@ public class CrackedAuto extends LinearOpMode {
 
             telemetry.addData("Side", side);
             telemetry.addData("Cone count", coneCounter);
-            telemetry.update();
-            dash.getTelemetry();
+
+            for(int i = 0; i < 3; i++) {
+
+            }
+
+            if (up == update.no) {
+                up = update.yes;
+                telemetry.update();
+            } else {
+                up = update.no;
+            }
+
+
+
             if (isStopRequested()) return;
             if (isStarted()) break;
         }
@@ -279,8 +303,6 @@ public class CrackedAuto extends LinearOpMode {
                 d.followTrajectorySequence(LeftParkingPosTwo);
             }
         }
-
-
     }
 
     private boolean ifPressed(boolean button) {
@@ -402,5 +424,10 @@ public class CrackedAuto extends LinearOpMode {
             greenMask.release();
             return input;
         }
+    }
+
+    private enum update {
+        yes,
+        no
     }
 }
