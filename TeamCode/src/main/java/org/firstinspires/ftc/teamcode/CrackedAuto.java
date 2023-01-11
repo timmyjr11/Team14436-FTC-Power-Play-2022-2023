@@ -51,13 +51,11 @@ public class CrackedAuto extends LinearOpMode {
     boolean D1DownPressed;
 
 
-    @SuppressWarnings("deprecation")
     @Override
     public void runOpMode() throws InterruptedException {
 
         d = new SampleMecanumDrive(hardwareMap);
 
-        telemetry.setMsTransmissionInterval(1000);
 
         d.blueLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         d.blackLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -73,25 +71,25 @@ public class CrackedAuto extends LinearOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, dash.getTelemetry());
 
-        @SuppressLint("DiscouragedApi") int cameraMonitorViewId = hardwareMap.appContext.getResources()
+        int cameraMonitorViewId = hardwareMap.appContext.getResources()
                 .getIdentifier("cameraMonitorViewId", "id",
                         hardwareMap.appContext.getPackageName());
 
 
-       /* int[] viewportContainerIds = OpenCvCameraFactory.getInstance()
+       int[] viewportContainerIds = OpenCvCameraFactory.getInstance()
                 .splitLayoutForMultipleViewports(cameraMonitorViewId,
                         2,
-                        OpenCvCameraFactory.ViewportSplitMethod.HORIZONTALLY);*/
+                        OpenCvCameraFactory.ViewportSplitMethod.HORIZONTALLY);
 
         telemetry.addLine("Opening Cameras...");
         telemetry.update();
 
-        //blueCam = OpenCvCameraFactory.getInstance()
-          //      .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        blueCam = OpenCvCameraFactory.getInstance()
+               .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), viewportContainerIds[0]);
         blackCam = OpenCvCameraFactory.getInstance()
-              .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 2"), cameraMonitorViewId);
+              .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 2"), viewportContainerIds[1]);
 
-       /* blueCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+       blueCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {}
 
@@ -100,7 +98,7 @@ public class CrackedAuto extends LinearOpMode {
                 telemetry.addData("Blue Cam error Code", errorCode);
                 telemetry.update();
             }
-        });*/
+        });
 
         blackCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
@@ -121,16 +119,16 @@ public class CrackedAuto extends LinearOpMode {
             if (gamepad1.dpad_left) {
                 d.setPoseEstimate(PoseStorage.leftAuto);
                 side = ConfigPos.side.left;
-                //blackCam.setPipeline(new CompVisionForAuto());
+                blackCam.setPipeline(new CompVisionForAuto());
                 blackCam.startStreaming(320, 240, OpenCvCameraRotation.UPSIDE_DOWN);
                 dash.startCameraStream(blackCam, 30);
                 break;
             } else if (gamepad1.dpad_right) {
                 d.setPoseEstimate(PoseStorage.rightAuto);
                 side = ConfigPos.side.right;
-                //blueCam.setPipeline(new CompVisionForAuto());
-                //blueCam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
-                //dash.startCameraStream(blueCam, 30);
+                blueCam.setPipeline(new CompVisionForAuto());
+                blueCam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+                dash.startCameraStream(blueCam, 30);
                 break;
             }
 
@@ -271,17 +269,8 @@ public class CrackedAuto extends LinearOpMode {
 
             telemetry.addData("Side", side);
             telemetry.addData("Cone count", coneCounter);
+            telemetry.addLine("Press A to update the telemetry");
 
-            for(int i = 0; i < 3; i++) {
-
-            }
-
-            if (up == update.no) {
-                up = update.yes;
-                telemetry.update();
-            } else {
-                up = update.no;
-            }
 
 
 

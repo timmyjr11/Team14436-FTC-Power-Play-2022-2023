@@ -136,7 +136,7 @@ public class cameraPositonTest extends LinearOpMode {
             Core.inRange(hsv, purpleLower, purpleUpper, mask);
             Mat purpleMask = mask.clone();
 
-            // Set all pixels in the mask to white and all other pixels to black
+            // Set all pixels in the mask to their respective colors and all other pixels to black
             Core.bitwise_or(greenMask, yellowMask, mask);
             Core.bitwise_or(purpleMask, mask, mask);
             Core.bitwise_not(mask, mask);
