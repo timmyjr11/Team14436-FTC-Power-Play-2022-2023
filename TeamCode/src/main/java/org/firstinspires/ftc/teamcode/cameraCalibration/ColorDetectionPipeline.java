@@ -8,17 +8,17 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 public class ColorDetectionPipeline extends OpenCvPipeline
 {
-    private Mat hsv = new Mat();
-    private Mat mask = new Mat();
+    private final Mat hsv = new Mat();
+    private final Mat mask = new Mat();
 
-    private Scalar greenLower = new Scalar(45, 100, 50);
-    private Scalar greenUpper = new Scalar(75, 255, 255);
+    private final Scalar greenLower = new Scalar(45, 100, 50);
+    private final Scalar greenUpper = new Scalar(75, 255, 255);
 
-    private Scalar yellowLower = new Scalar(20, 100, 50);
-    private Scalar yellowUpper = new Scalar(30, 255, 255);
+    private final Scalar yellowLower = new Scalar(20, 100, 50);
+    private final Scalar yellowUpper = new Scalar(30, 255, 255);
 
-    private Scalar purpleLower = new Scalar(135, 100, 50);
-    private Scalar purpleUpper = new Scalar(165, 255, 255);
+    private final Scalar purpleLower = new Scalar(135, 100, 50);
+    private final Scalar purpleUpper = new Scalar(165, 255, 255);
 
     @Override
     public Mat processFrame(Mat input)
