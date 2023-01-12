@@ -8,5 +8,5 @@ public class PoseStorage {
 
 
     public static Pose2d rightAuto = new Pose2d(37.5, -61.3, Math.toRadians(90));
-    public static Pose2d leftAuto = new Pose2d(-37.5, -61.3, Math.toRadians(90));
+    public static Pose2d leftAuto = new Pose2d(-45.5, -61.3, Math.toRadians(90));
 }

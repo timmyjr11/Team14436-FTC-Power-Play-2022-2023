@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.opencv.core.Core;
@@ -33,6 +34,7 @@ public class CrackedAuto extends LinearOpMode {
     private final FtcDashboard dash = FtcDashboard.getInstance();
 
     static ConfigPos.colors color = ConfigPos.colors.None;
+    static ConfigPos.colors previousColor = ConfigPos.colors.None;
 
 
     SampleMecanumDrive d;
@@ -40,10 +42,11 @@ public class CrackedAuto extends LinearOpMode {
     OpenCvWebcam blueCam;
     OpenCvWebcam blackCam;
 
+    int liftLevel = 650;
+
     int coneCounter;
 
     ConfigPos.side side = ConfigPos.side.tbd;
-    update up = update.yes;
 
     ArrayList<Boolean> booleanArray = new ArrayList<>();
     int booleanIncrementer = 0;
@@ -89,27 +92,8 @@ public class CrackedAuto extends LinearOpMode {
         blackCam = OpenCvCameraFactory.getInstance()
               .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 2"), viewportContainerIds[1]);
 
-       blueCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-            @Override
-            public void onOpened() {}
-
-            @Override
-            public void onError(int errorCode) {
-                telemetry.addData("Blue Cam error Code", errorCode);
-                telemetry.update();
-            }
-        });
-
-        blackCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-            @Override
-            public void onOpened() {}
-
-            @Override
-            public void onError(int errorCode) {
-                telemetry.addData("Black Cam error Code", errorCode);
-                telemetry.update();
-            }
-        });
+       blueCam.openCameraDevice();
+       blackCam.openCameraDevice();
 
         telemetry.addLine("Cameras opened");
         telemetry.addLine("Press left on D-pad for left side, press right on D-pad for right side");
@@ -134,6 +118,7 @@ public class CrackedAuto extends LinearOpMode {
 
             if (isStopRequested()) return;
         }
+
 
 
         while(!gamepad1.a) {
@@ -163,7 +148,7 @@ public class CrackedAuto extends LinearOpMode {
                     d.blueServo.setPosition(0.8);
                     d.blackServo.setPosition(0.8);
                 })
-                .lineToConstantHeading(new Vector2d(-37.5, -60))
+                .lineToConstantHeading(new Vector2d(-12, -60))
                 .lineToConstantHeading(new Vector2d(-12, -34))
                 .UNSTABLE_addTemporalMarkerOffset(-1, () -> {
                     d.blackLift.setTargetPosition(4000);
@@ -173,8 +158,8 @@ public class CrackedAuto extends LinearOpMode {
                     d.blackLift.setPower(0.8);
                     d.blueLift.setPower(0.8);
                 })
-                .turn(Math.toRadians(-45))
-                .forward(6)
+                .turn(Math.toRadians(-37))
+                .forward(7)
                 .waitSeconds(0.5)
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                     d.blueServo.setPosition(0);
@@ -193,16 +178,17 @@ public class CrackedAuto extends LinearOpMode {
                 .turn(Math.toRadians(90))
                 .lineToConstantHeading(new Vector2d(-35, -12))
                 .build();
+
         TrajectorySequence leftGrabCones = d.trajectorySequenceBuilder(leftSide.end())
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    d.blackLift.setTargetPosition(800);
-                    d.blueLift.setTargetPosition(800);
+                    d.blackLift.setTargetPosition(liftLevel);
+                    d.blueLift.setTargetPosition(liftLevel);
                     d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     d.blackLift.setPower(0.8);
                     d.blueLift.setPower(0.8);
                 })
-                .lineToConstantHeading(new Vector2d(-55, -12))
+                .lineToConstantHeading(new Vector2d(-62, -11.5))
                 .waitSeconds(0.5)
                 .UNSTABLE_addTemporalMarkerOffset(-0.3, () -> {
                     d.blackServo.setPosition(0.8);
@@ -217,17 +203,19 @@ public class CrackedAuto extends LinearOpMode {
                     d.blueLift.setPower(0.8);
                 })
                 .lineToConstantHeading(new Vector2d(-35, -12))
-                .turn(Math.toRadians(-135))
-                .forward(6)
+                .turn(Math.toRadians(-120))
+                .forward(7)
                 .waitSeconds(0.5)
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                     d.blueServo.setPosition(0);
                     d.blackServo.setPosition(0);
                 })
-                .lineToLinearHeading(new Pose2d(-35, -12, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(-35, -12, Math.toRadians(180)),
+                        SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .UNSTABLE_addTemporalMarkerOffset(-0.75, () -> {
-                    d.blackLift.setTargetPosition(800);
-                    d.blueLift.setTargetPosition(800);
+                    d.blackLift.setTargetPosition(liftLevel);
+                    d.blueLift.setTargetPosition(liftLevel);
                     d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     d.blackLift.setPower(0.8);
@@ -235,7 +223,7 @@ public class CrackedAuto extends LinearOpMode {
                 })
                 .build();
 
-        TrajectorySequence LeftParking = d.trajectorySequenceBuilder(d.getPoseEstimate())
+        TrajectorySequence LeftParking = d.trajectorySequenceBuilder(leftGrabCones.end())
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     d.blackLift.setTargetPosition(0);
                     d.blueLift.setTargetPosition(0);
@@ -244,7 +232,7 @@ public class CrackedAuto extends LinearOpMode {
                     d.blackLift.setPower(0.8);
                     d.blueLift.setPower(0.8);
                 })
-                .turn(90)
+                .turn(Math.toRadians(90))
                 .lineToLinearHeading(new Pose2d(-35, -35, Math.toRadians(270)))
                 .build();
 
@@ -252,27 +240,30 @@ public class CrackedAuto extends LinearOpMode {
                 .lineToConstantHeading(new Vector2d(-60, -35))
                 .build();
         TrajectorySequence LeftParkingPosTwo = d.trajectorySequenceBuilder(LeftParking.end())
-                .lineToConstantHeading(new Vector2d(-12, -35))
+                .lineToConstantHeading(new Vector2d(-9, -35))
                 .build();
 
         while (!isStarted()) {
             telemetry.addData("Color" , color);
-            if (color == ConfigPos.colors.green) {
-                telemetry.addLine("Color is green");
-            } else if (color == ConfigPos.colors.purple) {
-                telemetry.addLine("Color is purple");
-            } else if (color == ConfigPos.colors.yellow) {
-                telemetry.addLine("Color is Yellow");
-            } else {
-                telemetry.addLine("There is no color");
-            }
+            telemetry.addData("Previous color", previousColor);
 
             telemetry.addData("Side", side);
             telemetry.addData("Cone count", coneCounter);
-            telemetry.addLine("Press A to update the telemetry");
 
-
-
+            if (color != previousColor) {
+                switch (color) {
+                    case green:
+                        previousColor = ConfigPos.colors.green;
+                        break;
+                    case purple:
+                        previousColor = ConfigPos.colors.purple;
+                        break;
+                    case yellow:
+                        previousColor = ConfigPos.colors.yellow;
+                        break;
+                }
+                telemetry.update();
+            }
 
             if (isStopRequested()) return;
             if (isStarted()) break;
@@ -283,6 +274,7 @@ public class CrackedAuto extends LinearOpMode {
             if (coneCounter > 0) {
                 for (int i = 0; i < coneCounter; i++) {
                     d.followTrajectorySequence(leftGrabCones);
+                    liftLevel -= 200;
                 }
             }
             d.followTrajectorySequence(LeftParking);
@@ -292,6 +284,8 @@ public class CrackedAuto extends LinearOpMode {
                 d.followTrajectorySequence(LeftParkingPosTwo);
             }
         }
+
+        // Make a variable that changes the lift height for each loop
     }
 
     private boolean ifPressed(boolean button) {
@@ -312,11 +306,11 @@ public class CrackedAuto extends LinearOpMode {
         return output;
     }
 
+    @Config
     static class CompVisionForAuto extends OpenCvPipeline {
+
         Mat hsv = new Mat();
         Mat mask = new Mat();
-
-
 
         public int rectX = 0;
         public int rectY = 0;
@@ -413,10 +407,5 @@ public class CrackedAuto extends LinearOpMode {
             greenMask.release();
             return input;
         }
-    }
-
-    private enum update {
-        yes,
-        no
     }
 }
