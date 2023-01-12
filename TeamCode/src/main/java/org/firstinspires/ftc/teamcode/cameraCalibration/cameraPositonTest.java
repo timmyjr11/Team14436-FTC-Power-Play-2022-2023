@@ -8,10 +8,12 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -27,28 +29,28 @@ public class cameraPositonTest extends LinearOpMode {
     private static colors color = colors.None;
 
 
-    public static int rectX = 0;
-    public static int rectY = 0;
-    public static int rectHeight = 0;
-    public static int rectWidth = 0;
+    public static int rectX = 50;
+    public static int rectY = 50;
+    public static int rectHeight = 25;
+    public static int rectWidth = 25;
 
     public static double lowerGreenH = 50;
     public static double lowerGreenS = 50;
     public static double lowerGreenV = 25;
 
     public static double lowerYellowH = 20;
-    public static double lowerYellowS = 180;
+    public static double lowerYellowS = 200;
     public static double lowerYellowV = 50;
 
-    public static double lowerPurpleH = 135;
-    public static double lowerPurpleS = 50;
-    public static double lowerPurpleV = 25;
+    public static double lowerPurpleH = 120;
+    public static double lowerPurpleS = 0;
+    public static double lowerPurpleV = 0;
 
     public static double upperGreenH = 90;
     public static double upperGreenS = 255;
     public static double upperGreenV = 255;
 
-    public static double upperYellowH = 30;
+    public static double upperYellowH = 35;
     public static double upperYellowS = 255;
     public static double upperYellowV = 255;
 
@@ -100,54 +102,64 @@ public class cameraPositonTest extends LinearOpMode {
     }
 
     public class ColorDetectionPipelineV2 extends OpenCvPipeline {
-        Mat hsv = new Mat();
-        Mat mask = new Mat();
+        //Mat objects to hold the original image,
+        // the filtered image, and the region of interest
+        private final Mat hsvMat = new Mat();
+        private final Mat mask = new Mat();
+        private final Mat filtered = new Mat();
 
-        Scalar greenLower = new Scalar(lowerGreenH, lowerGreenS, lowerGreenV);
-        Scalar greenUpper = new Scalar(upperGreenH, upperGreenS, upperGreenV);
+        // Declare the rectangle to be used for processing
+        Rect rect  = new Rect(rectX, rectY, rectWidth, rectHeight);
 
-        Scalar yellowLower = new Scalar(lowerYellowH, lowerYellowS, lowerYellowV);
-        Scalar yellowUpper = new Scalar(upperYellowH, upperYellowS, upperYellowV);
+        // Declare the limits and colors needed for processing
+        Scalar lowerGreen = new Scalar(lowerGreenH, lowerGreenS, lowerGreenV);
+        Scalar upperGreen = new Scalar(upperGreenH, upperGreenS, upperGreenV);
 
-        Scalar purpleLower = new Scalar(lowerPurpleH, lowerPurpleS, lowerPurpleV);
-        Scalar purpleUpper = new Scalar(upperPurpleH, upperPurpleS, upperPurpleV);
+        Scalar lowerYellow = new Scalar(lowerYellowH, lowerYellowS, lowerYellowV);
+        Scalar upperYellow = new Scalar(upperYellowH, upperYellowS, upperYellowV);
+
+        Scalar lowerPurple = new Scalar(lowerPurpleH, lowerPurpleS, lowerPurpleV);
+        Scalar upperPurple = new Scalar(upperPurpleH, upperPurpleS, upperPurpleV);
+
+        private final Scalar black = new Scalar(0, 0, 0);
+
+
 
         @Override
         public Mat processFrame(Mat input) {
-            // Convert the input image to the HSV color space
-            Imgproc.cvtColor(input, hsv, Imgproc.COLOR_RGB2HSV);
 
-            greenLower = new Scalar(lowerGreenH, lowerGreenS, lowerGreenV);
-            greenUpper = new Scalar(upperGreenH, upperGreenS, upperGreenV);
+            //Create the rectangle
+            int x = (input.width() - 320) / 2;
+            int y = (input.height() - 240) / 2;
+            rect = new Rect(new Point(x + 135, y + 95), new Size(100, 100));
 
-            yellowLower = new Scalar(lowerYellowH, lowerYellowS, lowerYellowV);
-            yellowUpper = new Scalar(upperYellowH, upperYellowS, upperYellowV);
+            // Convert the color to HSV and create a submat for
+            // Region of interest
+            Imgproc.cvtColor(input, hsvMat, Imgproc.COLOR_RGB2HSV);
+            Mat roi = new Mat(hsvMat, rect);
 
-            purpleLower = new Scalar(lowerPurpleH, lowerPurpleS, lowerPurpleV);
-            purpleUpper = new Scalar(upperPurpleH, upperPurpleS, upperPurpleV);
+            // Filter for yellow
+            Core.inRange(roi, lowerYellow, upperYellow, mask);
+            int yellowCount = Core.countNonZero(mask);
 
-            // Create a mask for each of the colors we want to detect
-            Core.inRange(hsv, greenLower, greenUpper, mask);
-            Mat greenMask = mask.clone();
+            // Filter for green
+            Core.inRange(roi, lowerGreen, upperGreen, filtered);
+            int greenCount = Core.countNonZero(filtered);
 
-            Core.inRange(hsv, yellowLower, yellowUpper, mask);
-            Mat yellowMask = mask.clone();
+            // Filter for purple
+            Core.inRange(roi, lowerPurple, upperPurple, filtered);
+            int purpleCount = Core.countNonZero(filtered);
 
-            Core.inRange(hsv, purpleLower, purpleUpper, mask);
-            Mat purpleMask = mask.clone();
-
-            // Set all pixels in the mask to their respective colors and all other pixels to black
-            Core.bitwise_or(greenMask, yellowMask, mask);
-            Core.bitwise_or(purpleMask, mask, mask);
+            // Combine the filters together and set extra colors to black
+            Core.bitwise_or(mask, filtered, mask);
             Core.bitwise_not(mask, mask);
-            input.setTo(new Scalar(0, 0, 0), mask);
+            roi.setTo(black, mask);
+
+            // Convert back to RGB and place the rectangle
+            Imgproc.cvtColor(hsvMat, input, Imgproc.COLOR_HSV2RGB);
+            Imgproc.rectangle(input, rect.tl(), rect.br(), new Scalar(0, 255, 0), 2);
 
             // Count the number of non-zero pixels in each of the masks
-            int greenCount = Core.countNonZero(greenMask);
-            int yellowCount = Core.countNonZero(yellowMask);
-            int purpleCount = Core.countNonZero(purpleMask);
-
-
             if (greenCount > yellowCount && greenCount > purpleCount) {
                 color = colors.green;
                 telemetry.addData("Color", color);
@@ -168,13 +180,6 @@ public class cameraPositonTest extends LinearOpMode {
                 telemetry.addData("Color", color);
                 telemetry.update();
             }
-
-            // Return the input image
-            mask.release();
-            hsv.release();
-            yellowMask.release();
-            purpleMask.release();
-            greenMask.release();
             return input;
         }
     }
