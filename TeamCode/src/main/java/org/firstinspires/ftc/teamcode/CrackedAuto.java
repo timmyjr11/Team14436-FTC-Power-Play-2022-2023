@@ -344,7 +344,7 @@ public class CrackedAuto extends LinearOpMode {
                 })
                 .lineToConstantHeading(new Vector2d(35, -8))
                 .turn(Math.toRadians(120))
-                .forward(7)
+                .forward(6)
                 .waitSeconds(0.5)
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                     d.blueServo.setPosition(0);
