@@ -145,7 +145,6 @@ public class CrackedTeleOp extends LinearOpMode {
         d.update();
     }
 
-
     //Function used to allow toggling
     private boolean ifPressed(boolean button) {
         boolean output = false;
