@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.opencv.core.Core;
@@ -20,7 +21,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera2;
 import org.openftc.easyopencv.OpenCvPipeline;
-
+@Disabled
 @Config
 @Autonomous
 public class cameraPositonTest extends LinearOpMode {
@@ -29,21 +30,21 @@ public class cameraPositonTest extends LinearOpMode {
     private static colors color = colors.None;
 
 
-    public static int rectX = 50;
-    public static int rectY = 50;
-    public static int rectHeight = 25;
-    public static int rectWidth = 25;
+    public static int rectX = 127;
+    public static int rectY = 45;
+    public static int rectHeight = 100;
+    public static int rectWidth = 75;
 
     public static double lowerGreenH = 50;
     public static double lowerGreenS = 50;
     public static double lowerGreenV = 25;
 
     public static double lowerYellowH = 20;
-    public static double lowerYellowS = 200;
+    public static double lowerYellowS = 75;
     public static double lowerYellowV = 50;
 
     public static double lowerPurpleH = 120;
-    public static double lowerPurpleS = 0;
+    public static double lowerPurpleS = 50;
     public static double lowerPurpleV = 0;
 
     public static double upperGreenH = 90;
@@ -107,6 +108,8 @@ public class cameraPositonTest extends LinearOpMode {
         private final Mat hsvMat = new Mat();
         private final Mat mask = new Mat();
         private final Mat filtered = new Mat();
+        private final Mat filteredG = new Mat();
+
 
         // Declare the rectangle to be used for processing
         Rect rect  = new Rect(rectX, rectY, rectWidth, rectHeight);
@@ -143,14 +146,15 @@ public class cameraPositonTest extends LinearOpMode {
             int yellowCount = Core.countNonZero(mask);
 
             // Filter for green
-            Core.inRange(roi, lowerGreen, upperGreen, filtered);
-            int greenCount = Core.countNonZero(filtered);
+            Core.inRange(roi, lowerGreen, upperGreen, filteredG);
+            int greenCount = Core.countNonZero(filteredG);
 
             // Filter for purple
             Core.inRange(roi, lowerPurple, upperPurple, filtered);
             int purpleCount = Core.countNonZero(filtered);
 
             // Combine the filters together and set extra colors to black
+            Core.bitwise_or(mask, filteredG, mask);
             Core.bitwise_or(mask, filtered, mask);
             Core.bitwise_not(mask, mask);
             roi.setTo(black, mask);

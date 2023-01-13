@@ -10,12 +10,16 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.cameraCalibration.cameraPositonTest;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -49,6 +53,35 @@ public class CrackedAuto extends LinearOpMode {
     int booleanIncrementer = 0;
     boolean D1UpPressed;
     boolean D1DownPressed;
+
+    public static int rectX = 127;
+    public static int rectY = 45; //95 If right
+    public static int rectHeight = 100;
+    public static int rectWidth = 75;
+
+    public static double lowerGreenH = 50;
+    public static double lowerGreenS = 50;
+    public static double lowerGreenV = 25;
+
+    public static double lowerYellowH = 20;
+    public static double lowerYellowS = 75;
+    public static double lowerYellowV = 50;
+
+    public static double lowerPurpleH = 120;
+    public static double lowerPurpleS = 50;
+    public static double lowerPurpleV = 0;
+
+    public static double upperGreenH = 90;
+    public static double upperGreenS = 255;
+    public static double upperGreenV = 255;
+
+    public static double upperYellowH = 35;
+    public static double upperYellowS = 255;
+    public static double upperYellowV = 255;
+
+    public static double upperPurpleH = 170;
+    public static double upperPurpleS = 255;
+    public static double upperPurpleV = 255;
 
 
     @SuppressWarnings("deprecation")
@@ -101,14 +134,15 @@ public class CrackedAuto extends LinearOpMode {
             if (gamepad1.dpad_left) {
                 d.setPoseEstimate(PoseStorage.leftAuto);
                 side = ConfigPos.side.left;
-                blackCam.setPipeline(new CompVisionForAuto());
+                blackCam.setPipeline(new ColorDetectionPipelineV2());
                 blackCam.startStreaming(320, 240, OpenCvCameraRotation.UPSIDE_DOWN);
                 dash.startCameraStream(blackCam, 30);
                 break;
             } else if (gamepad1.dpad_right) {
                 d.setPoseEstimate(PoseStorage.rightAuto);
+                rectY = 95;
                 side = ConfigPos.side.right;
-                blueCam.setPipeline(new CompVisionForAuto());
+                blueCam.setPipeline(new ColorDetectionPipelineV2());
                 blueCam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
                 dash.startCameraStream(blueCam, 30);
                 break;
@@ -146,8 +180,10 @@ public class CrackedAuto extends LinearOpMode {
                     d.blueServo.setPosition(0.8);
                     d.blackServo.setPosition(0.8);
                 })
-                .lineToConstantHeading(new Vector2d(-12, -60))
-                .lineToConstantHeading(new Vector2d(-12, -34))
+                .splineToConstantHeading(new Vector2d(-35, -59), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(-25, -59), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(-14, -55), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(-14, -30), Math.toRadians(90))
                 .UNSTABLE_addTemporalMarkerOffset(-1, () -> {
                     d.blackLift.setTargetPosition(4000);
                     d.blueLift.setTargetPosition(4000);
@@ -156,14 +192,14 @@ public class CrackedAuto extends LinearOpMode {
                     d.blackLift.setPower(0.8);
                     d.blueLift.setPower(0.8);
                 })
-                .turn(Math.toRadians(-37))
-                .forward(7)
+                .turn(Math.toRadians(-40))
+                .forward(6)
                 .waitSeconds(0.5)
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                     d.blueServo.setPosition(0);
                     d.blackServo.setPosition(0);
                 })
-                .lineToLinearHeading(new Pose2d(-12, -34, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(-14, -30, Math.toRadians(90)))
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                     d.blackLift.setTargetPosition(0);
                     d.blueLift.setTargetPosition(0);
@@ -172,9 +208,9 @@ public class CrackedAuto extends LinearOpMode {
                     d.blackLift.setPower(0.8);
                     d.blueLift.setPower(0.8);
                 })
-                .lineToConstantHeading(new Vector2d(-12, -12))
+                .lineToConstantHeading(new Vector2d(-14, -8))
                 .turn(Math.toRadians(90))
-                .lineToConstantHeading(new Vector2d(-35, -12))
+                .lineToConstantHeading(new Vector2d(-38, -8))
                 .build();
 
         TrajectorySequence leftGrabCones = d.trajectorySequenceBuilder(leftSide.end())
@@ -186,9 +222,9 @@ public class CrackedAuto extends LinearOpMode {
                     d.blackLift.setPower(0.8);
                     d.blueLift.setPower(0.8);
                 })
-                .lineToConstantHeading(new Vector2d(-62, -11.5))
-                .waitSeconds(0.5)
-                .UNSTABLE_addTemporalMarkerOffset(-0.3, () -> {
+                .lineToConstantHeading(new Vector2d(-65, -8))
+                .waitSeconds(0.2)
+                .UNSTABLE_addTemporalMarkerOffset(-0.2, () -> {
                     d.blackServo.setPosition(0.8);
                     d.blueServo.setPosition(0.8);
                 })
@@ -200,17 +236,17 @@ public class CrackedAuto extends LinearOpMode {
                     d.blackLift.setPower(0.8);
                     d.blueLift.setPower(0.8);
                 })
-                .lineToConstantHeading(new Vector2d(-35, -12))
-                .turn(Math.toRadians(-120))
-                .forward(7)
+                .lineToConstantHeading(new Vector2d(-35, -8))
+                .turn(Math.toRadians(-115))
+                .forward(6)
                 .waitSeconds(0.5)
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                     d.blueServo.setPosition(0);
                     d.blackServo.setPosition(0);
                 })
-                .lineToSplineHeading(new Pose2d(-35, -12, Math.toRadians(180)),
+                .lineToSplineHeading(new Pose2d(-38, -8, Math.toRadians(180)),
                         SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                        SampleMecanumDrive.getAccelerationConstraint(Math.toRadians(250)))
                 .UNSTABLE_addTemporalMarkerOffset(-0.75, () -> {
                     d.blackLift.setTargetPosition(liftLevel);
                     d.blueLift.setTargetPosition(liftLevel);
@@ -231,22 +267,125 @@ public class CrackedAuto extends LinearOpMode {
                     d.blueLift.setPower(0.8);
                 })
                 .turn(Math.toRadians(90))
-                .lineToLinearHeading(new Pose2d(-35, -35, Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(-38, -30, Math.toRadians(270)))
                 .build();
 
         TrajectorySequence LeftParkingPosOne = d.trajectorySequenceBuilder(LeftParking.end())
-                .lineToConstantHeading(new Vector2d(-60, -35))
+                .lineToConstantHeading(new Vector2d(-68, -30))
                 .build();
         TrajectorySequence LeftParkingPosTwo = d.trajectorySequenceBuilder(LeftParking.end())
-                .lineToConstantHeading(new Vector2d(-9, -35))
+                .lineToConstantHeading(new Vector2d(-9, -30))
+                .build();
+
+
+
+
+
+        TrajectorySequence rightSide = d.trajectorySequenceBuilder(d.getPoseEstimate())
+                .waitSeconds(0.3)
+                .UNSTABLE_addTemporalMarkerOffset(-0.3, () -> {
+                    d.blueServo.setPosition(0.8);
+                    d.blackServo.setPosition(0.8);
+                })
+                .splineToConstantHeading(new Vector2d(35, -59), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(25, -59), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(15, -55), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(15, -30), Math.toRadians(90))
+                .UNSTABLE_addTemporalMarkerOffset(-1, () -> {
+                    d.blackLift.setTargetPosition(4000);
+                    d.blueLift.setTargetPosition(4000);
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setPower(0.8);
+                    d.blueLift.setPower(0.8);
+                })
+                .turn(Math.toRadians(45))
+                .forward(7.5)
+                .waitSeconds(0.5)
+                .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
+                    d.blueServo.setPosition(0);
+                    d.blackServo.setPosition(0);
+                })
+                .lineToLinearHeading(new Pose2d(15, -30, Math.toRadians(90)))
+                .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
+                    d.blackLift.setTargetPosition(0);
+                    d.blueLift.setTargetPosition(0);
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setPower(0.8);
+                    d.blueLift.setPower(0.8);
+                })
+                .lineToConstantHeading(new Vector2d(15, -8))
+                .turn(Math.toRadians(-90))
+                .lineToConstantHeading(new Vector2d(38, -8))
+                .build();
+
+        TrajectorySequence rightGrabCones = d.trajectorySequenceBuilder(rightSide.end())
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    d.blackLift.setTargetPosition(liftLevel);
+                    d.blueLift.setTargetPosition(liftLevel);
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setPower(0.8);
+                    d.blueLift.setPower(0.8);
+                })
+                .lineToConstantHeading(new Vector2d(65, -8))
+                .waitSeconds(0.2)
+                .UNSTABLE_addTemporalMarkerOffset(-0.2, () -> {
+                    d.blackServo.setPosition(0.8);
+                    d.blueServo.setPosition(0.8);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    d.blackLift.setTargetPosition(4000);
+                    d.blueLift.setTargetPosition(4000);
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setPower(0.8);
+                    d.blueLift.setPower(0.8);
+                })
+                .lineToConstantHeading(new Vector2d(35, -8))
+                .turn(Math.toRadians(120))
+                .forward(7)
+                .waitSeconds(0.5)
+                .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
+                    d.blueServo.setPosition(0);
+                    d.blackServo.setPosition(0);
+                })
+                .lineToSplineHeading(new Pose2d(38, -8, Math.toRadians(0)),
+                        SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(Math.toRadians(250)))
+                .UNSTABLE_addTemporalMarkerOffset(-0.75, () -> {
+                    d.blackLift.setTargetPosition(liftLevel);
+                    d.blueLift.setTargetPosition(liftLevel);
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setPower(0.8);
+                    d.blueLift.setPower(0.8);
+                })
+                .build();
+
+        TrajectorySequence RightParking = d.trajectorySequenceBuilder(rightGrabCones.end())
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    d.blackLift.setTargetPosition(0);
+                    d.blueLift.setTargetPosition(0);
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setPower(0.8);
+                    d.blueLift.setPower(0.8);
+                })
+                .turn(Math.toRadians(-90))
+                .lineToLinearHeading(new Pose2d(38, -30, Math.toRadians(270)))
+                .build();
+
+        TrajectorySequence RightParkingPosOne = d.trajectorySequenceBuilder(RightParking.end())
+                .lineToConstantHeading(new Vector2d(11, -30))
+                .build();
+        TrajectorySequence RightParkingPosTwo = d.trajectorySequenceBuilder(RightParking.end())
+                .lineToConstantHeading(new Vector2d(68, -30))
                 .build();
 
         while (!isStarted()) {
-            telemetry.addData("Color" , color);
-            telemetry.addData("Previous color", previousColor);
 
-            telemetry.addData("Side", side);
-            telemetry.addData("Cone count", coneCounter);
 
             if (color != previousColor) {
                 switch (color) {
@@ -260,11 +399,17 @@ public class CrackedAuto extends LinearOpMode {
                         previousColor = ConfigPos.colors.yellow;
                         break;
                 }
-                telemetry.update();
             }
 
             if (isStopRequested()) return;
             if (isStarted()) break;
+        }
+
+
+        if (side == ConfigPos.side.left) {
+            blackCam.stopStreaming();
+        } else if (side == ConfigPos.side.right) {
+            blueCam.stopStreaming();
         }
 
         if (side == ConfigPos.side.left) {
@@ -280,6 +425,20 @@ public class CrackedAuto extends LinearOpMode {
                 d.followTrajectorySequence(LeftParkingPosOne);
             } else if (color == ConfigPos.colors.purple) {
                 d.followTrajectorySequence(LeftParkingPosTwo);
+            }
+        } else if (side == ConfigPos.side.right) {
+            d.followTrajectorySequence(rightSide);
+            if (coneCounter > 0) {
+                for (int i = 0; i < coneCounter; i++) {
+                    d.followTrajectorySequence(rightGrabCones);
+                    liftLevel -= 200;
+                }
+            }
+            d.followTrajectorySequence(RightParking);
+            if (color == ConfigPos.colors.green) {
+                d.followTrajectorySequence(RightParkingPosOne);
+            } else if (color == ConfigPos.colors.purple) {
+                d.followTrajectorySequence(RightParkingPosTwo);
             }
         }
 
@@ -305,104 +464,85 @@ public class CrackedAuto extends LinearOpMode {
     }
 
     @Config
-    static class CompVisionForAuto extends OpenCvPipeline {
+    public class ColorDetectionPipelineV2 extends OpenCvPipeline {
+        //Mat objects to hold the original image,
+        // the filtered image, and the region of interest
+        private final Mat hsvMat = new Mat();
+        private final Mat mask = new Mat();
+        private final Mat filtered = new Mat();
+        private final Mat filteredG = new Mat();
 
-        Mat hsv = new Mat();
-        Mat mask = new Mat();
+        // Declare the rectangle to be used for processing
+        Rect rect  = new Rect(rectX, rectY, rectWidth, rectHeight);
 
-        public int rectX = 0;
-        public int rectY = 0;
-        public int rectHeight = 0;
-        public int rectWidth = 0;
+        // Declare the limits and colors needed for processing
 
-        public double lowerGreenH = 50;
-        public double lowerGreenS = 50;
-        public double lowerGreenV = 25;
+        private final Scalar black = new Scalar(0, 0, 0);
 
-        public double lowerYellowH = 20;
-        public double lowerYellowS = 200;
-        public double lowerYellowV = 50;
 
-        public double lowerPurpleH = 120;
-        public double lowerPurpleS = 0;
-        public double lowerPurpleV = 0;
-
-        public double upperGreenH = 90;
-        public double upperGreenS = 255;
-        public double upperGreenV = 255;
-
-        public double upperYellowH = 35;
-        public double upperYellowS = 255;
-        public double upperYellowV = 255;
-
-        public double upperPurpleH = 170;
-        public double upperPurpleS = 255;
-        public double upperPurpleV = 255;
-
-        Scalar greenLower = new Scalar(lowerGreenH, lowerGreenS, lowerGreenV);
-        Scalar greenUpper = new Scalar(upperGreenH, upperGreenS, upperGreenV);
-
-        Scalar yellowLower = new Scalar(lowerYellowH, lowerYellowS, lowerYellowV);
-        Scalar yellowUpper = new Scalar(upperYellowH, upperYellowS, upperYellowV);
-
-        Scalar purpleLower = new Scalar(lowerPurpleH, lowerPurpleS, lowerPurpleV);
-        Scalar purpleUpper = new Scalar(upperPurpleH, upperPurpleS, upperPurpleV);
 
         @Override
         public Mat processFrame(Mat input) {
-            // Convert the input image to the HSV color space
-            Imgproc.cvtColor(input, hsv, Imgproc.COLOR_RGB2HSV);
 
-            greenLower = new Scalar(lowerGreenH, lowerGreenS, lowerGreenV);
-            greenUpper = new Scalar(upperGreenH, upperGreenS, upperGreenV);
+            Scalar lowerGreen = new Scalar(lowerGreenH, lowerGreenS, lowerGreenV);
+            Scalar upperGreen = new Scalar(upperGreenH, upperGreenS, upperGreenV);
 
-            yellowLower = new Scalar(lowerYellowH, lowerYellowS, lowerYellowV);
-            yellowUpper = new Scalar(upperYellowH, upperYellowS, upperYellowV);
+            Scalar lowerYellow = new Scalar(lowerYellowH, lowerYellowS, lowerYellowV);
+            Scalar upperYellow = new Scalar(upperYellowH, upperYellowS, upperYellowV);
 
-            purpleLower = new Scalar(lowerPurpleH, lowerPurpleS, lowerPurpleV);
-            purpleUpper = new Scalar(upperPurpleH, upperPurpleS, upperPurpleV);
+            Scalar lowerPurple = new Scalar(lowerPurpleH, lowerPurpleS, lowerPurpleV);
+            Scalar upperPurple = new Scalar(upperPurpleH, upperPurpleS, upperPurpleV);
 
-            // Create a mask for each of the colors we want to detect
-            Core.inRange(hsv, greenLower, greenUpper, mask);
-            Mat greenMask = mask.clone();
+            rect = new Rect(new Point(rectX, rectY), new Size(rectWidth, rectHeight));
 
-            Core.inRange(hsv, yellowLower, yellowUpper, mask);
-            Mat yellowMask = mask.clone();
+            // Convert the color to HSV and create a submat for
+            // Region of interest
+            Imgproc.cvtColor(input, hsvMat, Imgproc.COLOR_RGB2HSV);
+            Mat roi = new Mat(hsvMat, rect);
 
-            Core.inRange(hsv, purpleLower, purpleUpper, mask);
-            Mat purpleMask = mask.clone();
+            // Filter for yellow
+            Core.inRange(roi, lowerYellow, upperYellow, mask);
+            int yellowCount = Core.countNonZero(mask);
 
-            // Set all pixels in the mask to white and all other pixels to black
-            Core.bitwise_or(greenMask, yellowMask, mask);
-            Core.bitwise_or(purpleMask, mask, mask);
+            // Filter for green
+            Core.inRange(roi, lowerGreen, upperGreen, filteredG);
+            int greenCount = Core.countNonZero(filteredG);
+
+            // Filter for purple
+            Core.inRange(roi, lowerPurple, upperPurple, filtered);
+            int purpleCount = Core.countNonZero(filtered);
+
+            // Combine the filters together and set extra colors to black
+            Core.bitwise_or(mask, filteredG, mask);
+            Core.bitwise_or(mask, filtered, mask);
             Core.bitwise_not(mask, mask);
-            input.setTo(new Scalar(0, 0, 0), mask);
+            roi.setTo(black, mask);
+
+            // Convert back to RGB and place the rectangle
+            Imgproc.cvtColor(hsvMat, input, Imgproc.COLOR_HSV2RGB);
+            Imgproc.rectangle(input, rect.tl(), rect.br(), new Scalar(0, 255, 0), 2);
 
             // Count the number of non-zero pixels in each of the masks
-            int greenCount = Core.countNonZero(greenMask);
-            int yellowCount = Core.countNonZero(yellowMask);
-            int purpleCount = Core.countNonZero(purpleMask);
-
-
             if (greenCount > yellowCount && greenCount > purpleCount) {
                 color = ConfigPos.colors.green;
+                telemetry.addData("Color", color);
             }
             else if (yellowCount > greenCount && yellowCount > purpleCount) {
                 color = ConfigPos.colors.yellow;
+                telemetry.addData("Color", color);
             }
             else if (purpleCount > greenCount && purpleCount > yellowCount) {
                 color = ConfigPos.colors.purple;
+                telemetry.addData("Color", color);
             }
             else {
                 color = ConfigPos.colors.None;
+                telemetry.addData("Color", color);
             }
 
-            // Return the input image
-            mask.release();
-            hsv.release();
-            yellowMask.release();
-            purpleMask.release();
-            greenMask.release();
+            telemetry.addData("Side", side);
+            telemetry.addData("Cone count", coneCounter);
+            telemetry.update();
             return input;
         }
     }
