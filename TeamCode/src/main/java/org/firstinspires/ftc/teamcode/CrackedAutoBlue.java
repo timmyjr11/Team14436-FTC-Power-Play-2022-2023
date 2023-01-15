@@ -29,7 +29,7 @@ import java.util.ArrayList;
 
 @Config
 @Autonomous
-public class CrackedAuto extends LinearOpMode {
+public class CrackedAutoBlue extends LinearOpMode {
 
     private final FtcDashboard dash = FtcDashboard.getInstance();
 
@@ -109,7 +109,7 @@ public class CrackedAuto extends LinearOpMode {
                         hardwareMap.appContext.getPackageName());
 
 
-       int[] viewportContainerIds = OpenCvCameraFactory.getInstance()
+        int[] viewportContainerIds = OpenCvCameraFactory.getInstance()
                 .splitLayoutForMultipleViewports(cameraMonitorViewId,
                         2,
                         OpenCvCameraFactory.ViewportSplitMethod.HORIZONTALLY);
@@ -118,12 +118,12 @@ public class CrackedAuto extends LinearOpMode {
         telemetry.update();
 
         blueCam = OpenCvCameraFactory.getInstance()
-               .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), viewportContainerIds[0]);
+                .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), viewportContainerIds[0]);
         blackCam = OpenCvCameraFactory.getInstance()
-              .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 2"), viewportContainerIds[1]);
+                .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 2"), viewportContainerIds[1]);
 
-       blueCam.openCameraDevice();
-       blackCam.openCameraDevice();
+        blueCam.openCameraDevice();
+        blackCam.openCameraDevice();
 
         telemetry.addLine("Cameras opened");
         telemetry.addLine("Press left on D-pad for left side, press right on D-pad for right side");
@@ -133,6 +133,7 @@ public class CrackedAuto extends LinearOpMode {
             if (gamepad1.dpad_left) {
                 d.setPoseEstimate(PoseStorage.leftAuto);
                 side = ConfigPos.side.left;
+                rectY = 45;
                 blackCam.setPipeline(new ColorDetectionPipelineV2());
                 blackCam.startStreaming(320, 240, OpenCvCameraRotation.UPSIDE_DOWN);
                 dash.startCameraStream(blackCam, 30);
@@ -237,13 +238,13 @@ public class CrackedAuto extends LinearOpMode {
                 })
                 .lineToConstantHeading(new Vector2d(-35, -8))
                 .turn(Math.toRadians(-115))
-                .forward(6)
+                .forward(5)
                 .waitSeconds(0.5)
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                     d.blueServo.setPosition(0);
                     d.blackServo.setPosition(0);
                 })
-                .lineToSplineHeading(new Pose2d(-38, -8, Math.toRadians(180)),
+                .lineToSplineHeading(new Pose2d(-40, -8, Math.toRadians(180)),
                         SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(Math.toRadians(250)))
                 .UNSTABLE_addTemporalMarkerOffset(-0.75, () -> {
@@ -266,14 +267,14 @@ public class CrackedAuto extends LinearOpMode {
                     d.blueLift.setPower(0.8);
                 })
                 .turn(Math.toRadians(90))
-                .lineToLinearHeading(new Pose2d(-38, -30, Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(-40, -30, Math.toRadians(270)))
                 .build();
 
         TrajectorySequence LeftParkingPosOne = d.trajectorySequenceBuilder(LeftParking.end())
                 .lineToConstantHeading(new Vector2d(-68, -30))
                 .build();
         TrajectorySequence LeftParkingPosTwo = d.trajectorySequenceBuilder(LeftParking.end())
-                .lineToConstantHeading(new Vector2d(-9, -30))
+                .lineToConstantHeading(new Vector2d(-11, -30))
                 .build();
 
 
@@ -299,7 +300,7 @@ public class CrackedAuto extends LinearOpMode {
                     d.blueLift.setPower(0.8);
                 })
                 .turn(Math.toRadians(45))
-                .forward(7.5)
+                .forward(6.5)
                 .waitSeconds(0.5)
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                     d.blueServo.setPosition(0);
@@ -344,12 +345,13 @@ public class CrackedAuto extends LinearOpMode {
                 })
                 .lineToConstantHeading(new Vector2d(35, -8))
                 .turn(Math.toRadians(120))
-                .forward(6)
+                .forward(5)
                 .waitSeconds(0.5)
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                     d.blueServo.setPosition(0);
                     d.blackServo.setPosition(0);
                 })
+                .back(5)
                 .lineToSplineHeading(new Pose2d(38, -8, Math.toRadians(0)),
                         SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(Math.toRadians(250)))
