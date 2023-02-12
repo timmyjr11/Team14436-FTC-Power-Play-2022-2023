@@ -57,7 +57,7 @@ public class SampleMecanumDrive extends MecanumDrive {
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(9.5, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(11.5, 0, 0);
 
-    public static double LATERAL_MULTIPLIER = 65/58; // yo fix this
+    public static double LATERAL_MULTIPLIER = 65.0/58.0; // yo fix this
 
     public static double VX_WEIGHT = 1;
     public static double VY_WEIGHT = 1;
@@ -78,7 +78,7 @@ public class SampleMecanumDrive extends MecanumDrive {
     private DcMotorEx frontLeft, backLeft, backRight, frontRight;
     private final List<DcMotorEx> motors;
 
-    private final BNO055IMU imu;
+    //private final BNO055IMU imu;
     private final VoltageSensor batteryVoltageSensor;
 
     public SampleMecanumDrive(HardwareMap hardwareMap) {
@@ -103,10 +103,10 @@ public class SampleMecanumDrive extends MecanumDrive {
         blueLift = hardwareMap.get(DcMotorEx.class, "blueLift");
         blackServo = hardwareMap.get(Servo.class, "blackServo");
         blueServo = hardwareMap.get(Servo.class, "blueServo");
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        /*imu = hardwareMap.get(BNO055IMU.class, "imu");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
-        imu.initialize(parameters);
+        imu.initialize(parameters);*/
 
         // TODO: If the hub containing the IMU you are using is mounted so that the "REV" logo does
         // not face up, remap the IMU axes so that the z-axis points upward (normal to the floor.)
@@ -313,12 +313,12 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     @Override
     public double getRawExternalHeading() {
-        return imu.getAngularOrientation().firstAngle;
+        return 0;
     }
 
     @Override
     public Double getExternalHeadingVelocity() {
-        return (double) imu.getAngularVelocity().yRotationRate;
+        return (double) 0;
     }
 
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {

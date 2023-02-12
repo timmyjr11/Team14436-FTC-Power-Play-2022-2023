@@ -33,6 +33,7 @@ public class odoPosTest extends LinearOpMode {
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        front.setDirection(Encoder.Direction.REVERSE);
 
 
         telemetry = new MultipleTelemetry(telemetry, dash.getTelemetry());
