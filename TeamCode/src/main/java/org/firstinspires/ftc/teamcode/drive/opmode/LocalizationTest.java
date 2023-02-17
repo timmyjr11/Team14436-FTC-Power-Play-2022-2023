@@ -18,6 +18,8 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 @TeleOp(group = "drive")
 public class LocalizationTest extends LinearOpMode {
+    double power = 1;
+
     @Override
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
@@ -27,11 +29,19 @@ public class LocalizationTest extends LinearOpMode {
         waitForStart();
 
         while (!isStopRequested()) {
+            if (gamepad1.right_bumper) {
+                power = 0.5;
+            } else if (gamepad1.left_bumper) {
+                power = 0.25;
+            } else {
+                power = 1;
+            }
+
             drive.setWeightedDrivePower(
                     new Pose2d(
-                            -gamepad1.left_stick_y *0.5,
-                            -gamepad1.left_stick_x*0.5,
-                            -gamepad1.right_stick_x*0.5
+                            -gamepad1.left_stick_y * power,
+                            -gamepad1.left_stick_x* power,
+                            -gamepad1.right_stick_x* power
                     )
             );
 
