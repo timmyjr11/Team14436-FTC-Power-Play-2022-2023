@@ -103,10 +103,10 @@ public class SampleMecanumDrive extends MecanumDrive {
         blueLift = hardwareMap.get(DcMotorEx.class, "blueLift");
         blackServo = hardwareMap.get(Servo.class, "blackServo");
         blueServo = hardwareMap.get(Servo.class, "blueServo");
-        /*imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
-        imu.initialize(parameters);*/
+        imu.initialize(parameters);
 
         // TODO: If the hub containing the IMU you are using is mounted so that the "REV" logo does
         // not face up, remap the IMU axes so that the z-axis points upward (normal to the floor.)

@@ -24,8 +24,8 @@ public class odoPosTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         left = new Encoder(hardwareMap.get(DcMotorEx.class, "leftEncoder"));
-        right = new Encoder(hardwareMap.get(DcMotorEx.class, "frontRight"));
-        front = new Encoder(hardwareMap.get(DcMotorEx.class, "backRight"));
+        right = new Encoder(hardwareMap.get(DcMotorEx.class, "backRight"));
+        front = new Encoder(hardwareMap.get(DcMotorEx.class, "frontRight"));
         frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
         backRight = hardwareMap.get(DcMotorEx.class, "backRight");
         leftEncoder = hardwareMap.get(DcMotorEx.class, "leftEncoder");
@@ -34,6 +34,7 @@ public class odoPosTest extends LinearOpMode {
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         front.setDirection(Encoder.Direction.REVERSE);
+        left.setDirection(Encoder.Direction.REVERSE);
 
 
         telemetry = new MultipleTelemetry(telemetry, dash.getTelemetry());

@@ -61,6 +61,10 @@ public class CrackedTeleOp extends LinearOpMode {
 
         while(opModeIsActive() && !isStopRequested()) {
             drive();
+            telemetry.addData("Up down", -gamepad1.left_stick_y);
+            telemetry.addData("left right", gamepad1.left_stick_x);
+            telemetry.update();
+
             if (gamepad2.right_trigger > 0.5) {
                 liftPower = 0.5;
             } else {
