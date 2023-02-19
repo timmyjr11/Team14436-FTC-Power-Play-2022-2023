@@ -39,7 +39,7 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
     public static double Y_MULTIPLIER = 1.081568; //1.081568 1.047
 
     private final Encoder leftEncoder;
-    private final Encoder rightEncoder;
+    private final Encoder rightEncoder; // TODO: Right wheel does not exist
     private final Encoder frontEncoder;
 
     public StandardTrackingWheelLocalizer(HardwareMap hardwareMap) {
