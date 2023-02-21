@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @Config
 @TeleOp
-@Disabled
+
 public class motorLiftTuner extends LinearOpMode {
     FtcDashboard dashboard = FtcDashboard.getInstance();
 
@@ -44,7 +44,9 @@ public class motorLiftTuner extends LinearOpMode {
         while(opModeIsActive() && !isStopRequested()) {
             blueLift.setPower(bluePower);
             blackLift.setPower(bluePower);
-            //.05
+            telemetry.addData("blue lift", blueLift.getCurrentPosition());
+            telemetry.addData("black lift", blackLift.getCurrentPosition());
+            telemetry.update();
         }
     }
 }
