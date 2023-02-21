@@ -13,7 +13,7 @@ public class MeepMeepTesting {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(720);
         // Red bot
-        RoadRunnerBotEntity redBot = new DefaultBotBuilder(meepMeep)
+        /*RoadRunnerBotEntity redBot = new DefaultBotBuilder(meepMeep)
                 .setColorScheme(new ColorSchemeRedDark())
                 .setConstraints(60, 30, Math.toRadians(275), Math.toRadians(60), 16.965)
                 .followTrajectorySequence(drive ->
@@ -37,7 +37,7 @@ public class MeepMeepTesting {
                                 .turn(Math.toRadians(-135))
                                 .lineToConstantHeading(new Vector2d(-35, -35))
                                 .build()
-                );
+                );*/
 
         // Blue bot
         RoadRunnerBotEntity blueBot = new DefaultBotBuilder(meepMeep)
@@ -56,10 +56,25 @@ public class MeepMeepTesting {
                                 .build()
                 );
 
+        RoadRunnerBotEntity rightBot = new DefaultBotBuilder(meepMeep)
+                .setColorScheme(new ColorSchemeRedDark())
+                .setConstraints(56, 30, Math.toRadians(270), Math.toRadians(180), 13.3)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(new Pose2d(37.5, -61.3, Math.toRadians(90)))
+                                .splineToLinearHeading(new Pose2d(35, -50, Math.toRadians(90)), Math.toRadians(90))
+                                .splineToLinearHeading(new Pose2d(35, -20, Math.toRadians(90)), Math.toRadians(90))
+                                .splineToLinearHeading(new Pose2d(35, -11, Math.toRadians(135)), Math.toRadians(90))
+                                .splineToLinearHeading(new Pose2d(47, -16, Math.toRadians(90)), Math.toRadians(225))
+                                .splineToLinearHeading(new Pose2d(57, -11.75, Math.toRadians(0)), Math.toRadians(180))
+                                .splineToLinearHeading(new Pose2d(47, -16, Math.toRadians(90)), Math.toRadians(75))
+                                .waitSeconds(0.25)
+                                .build()
+                );
+
         meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
-                //.addEntity(redBot)
+                .addEntity(rightBot)
                 .addEntity(blueBot)
                 .start();
 
