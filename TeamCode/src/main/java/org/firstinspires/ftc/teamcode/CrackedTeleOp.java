@@ -20,7 +20,7 @@ public class CrackedTeleOp extends LinearOpMode {
     SampleMecanumDrive d;
 
     int lowerLimit = 0;
-    int upperLimit = 1035;
+    int upperLimit = 1135;
     int slowLimit = 367;
 
     double power;
@@ -64,6 +64,8 @@ public class CrackedTeleOp extends LinearOpMode {
             drive();
             telemetry.addData("Blue lift", d.blueLift.getCurrentPosition());
             telemetry.addData("Black lift", d.blackLift.getCurrentPosition());
+            telemetry.addData("Blue lift power", d.blueLift.getPower());
+            telemetry.addData("Black lift power", d.blackLift.getPower());
             telemetry.update();
 
             if (gamepad2.right_trigger > 0.5) {

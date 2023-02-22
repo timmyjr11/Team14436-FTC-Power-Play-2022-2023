@@ -184,8 +184,8 @@ public class StateAutov0_5 extends LinearOpMode {
                 })
                 .splineToLinearHeading(new Pose2d(-35, -50, Math.toRadians(90)), Math.toRadians(90))
                 .UNSTABLE_addTemporalMarkerOffset(-0.25, () -> {
-                    d.blackLift.setTargetPosition(10000);
-                    d.blueLift.setTargetPosition(10000);
+                    d.blackLift.setTargetPosition(1135);
+                    d.blueLift.setTargetPosition(1135);
                     d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     d.blackLift.setPower(1);
