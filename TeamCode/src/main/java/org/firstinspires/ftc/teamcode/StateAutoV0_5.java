@@ -8,9 +8,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.opencv.core.Core;
@@ -29,7 +27,7 @@ import java.util.ArrayList;
 
 @Config
 @Autonomous
-public class StateAutov0_5 extends LinearOpMode {
+public class StateAutoV0_5 extends LinearOpMode {
 
     private final FtcDashboard dash = FtcDashboard.getInstance();
 
@@ -92,7 +90,6 @@ public class StateAutov0_5 extends LinearOpMode {
 
         d = new SampleMecanumDrive(hardwareMap);
 
-
         d.blueLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         d.blackLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -150,20 +147,16 @@ public class StateAutov0_5 extends LinearOpMode {
                 dash.startCameraStream(blueCam, 30);
                 break;
             }
-
             if (isStopRequested()) return;
         }
-
-
 
         while(!gamepad1.a) {
             telemetry.addData("Number of cones: ", coneCounter);
             telemetry.addLine("Press up on D-pad to add a cone, press down on D-pad to remove a cone");
             telemetry.addLine("Press A to move on to the next step");
-            if (D1UpPressed) {
+            if (D1UpPressed && coneCounter < 5) {
                 coneCounter++;
-            }
-            if (D1DownPressed) {
+            } else if (D1DownPressed && coneCounter > 0) {
                 coneCounter--;
             }
             D1UpPressed = ifPressed(gamepad1.dpad_up);
@@ -171,11 +164,6 @@ public class StateAutov0_5 extends LinearOpMode {
             booleanIncrementer = 0;
             telemetry.update();
         }
-
-        telemetry.addLine("Creating OpMode, please wait...");
-        telemetry.addLine("Somebody once told me the world was gonna roll me, that I ain't the sharpest tool in the shed. - Abraham Lincoln");
-        telemetry.update();
-
 
         TrajectorySequence leftSide = d.trajectorySequenceBuilder(d.getPoseEstimate())
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
@@ -196,7 +184,6 @@ public class StateAutov0_5 extends LinearOpMode {
                 .waitSeconds(100)
                 .build(); // 9 x 8 y
 
-
         TrajectorySequence leftSideCones = d.trajectorySequenceBuilder(leftSide.end())
                 .setReversed(true)
                 .splineToLinearHeading(new Pose2d(-47, -15, Math.toRadians(90)), Math.toRadians(180))
@@ -208,10 +195,63 @@ public class StateAutov0_5 extends LinearOpMode {
                 .splineToLinearHeading(new Pose2d(-35, -11, Math.toRadians(45)), Math.toRadians(45))
                 .build();
 
+        TrajectorySequence leftSideV2 = d.trajectorySequenceBuilder(d.getPoseEstimate())
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    d.blueServo.setPosition(1);
+                    d.blackServo.setPosition(1);
+                })
+                .splineToLinearHeading(new Pose2d(-34, -50, Math.toRadians(90)), Math.toRadians(90))
+                .UNSTABLE_addTemporalMarkerOffset(-0.25, () -> {
+                    d.blackLift.setTargetPosition(1135);
+                    d.blueLift.setTargetPosition(1135);
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setPower(1);
+                    d.blueLift.setPower(1);
+                })
+                .splineToConstantHeading(new Vector2d(-34, -20), Math.toRadians(90))
+                .splineToSplineHeading(new Pose2d(-28, -4, Math.toRadians(45)), Math.toRadians(45))
+                .UNSTABLE_addDisplacementMarkerOffset(0, () -> {
+                    d.blackServo.setPosition(0);
+                    d.blueServo.setPosition(0);
+                })
+                .build(); // 9 x 8 y
+
+
+
+        TrajectorySequence leftSideConesV2 = d.trajectorySequenceBuilder(leftSide.end())
+                .setReversed(true)
+                .splineToSplineHeading(new Pose2d(-47, -11.75, Math.toRadians(180)), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-56.5, -11.75), Math.toRadians(180))
+                .waitSeconds(0.25)
+                .splineToSplineHeading(new Pose2d(-47, -12, Math.toRadians(90)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(-28, -4, Math.toRadians(45)), Math.toRadians(45))
+                .build();
+
+        TrajectorySequence leftSideParkLeft = d.trajectorySequenceBuilder(leftSide.end())
+                .splineToSplineHeading(new Pose2d(-35, -20, Math.toRadians(270)), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(-35, -35), Math.toRadians(270)) // If middle
+                //.lineToConstantHeading(new Vector2d(-58, -35)) // If right
+                .lineToConstantHeading(new Vector2d(-12, -35))
+                .build(); // If left
+
+        TrajectorySequence leftSideParkMiddle = d.trajectorySequenceBuilder(leftSide.end())
+                .splineToSplineHeading(new Pose2d(-35, -20, Math.toRadians(270)), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(-35, -35), Math.toRadians(270)) // If middle
+                .build();
+
+        TrajectorySequence leftSideParkRight = d.trajectorySequenceBuilder(leftSide.end())
+                .splineToSplineHeading(new Pose2d(-35, -20, Math.toRadians(270)), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(-35, -35), Math.toRadians(270))
+                .lineToConstantHeading(new Vector2d(-58, -35)) // If right
+                .build();
+
+
+
         ready = true;
 
         while (!isStarted()) {
-            if (color != previousColor) {
+/*            if (color != previousColor) {
                 switch (color) {
                     case green:
                         previousColor = ConfigPos.colors.green;
@@ -223,17 +263,36 @@ public class StateAutov0_5 extends LinearOpMode {
                         previousColor = ConfigPos.colors.yellow;
                         break;
                 }
-            }
+            }*/
             if (isStopRequested()) return;
-            if (isStarted()) break;
         }
 
-        d.followTrajectorySequence(leftSide);
+        switch (side) {
+            case left:
+                blackCam.stopStreaming();
+                d.followTrajectorySequence(leftSideV2);
+                for (int i = 0; i < coneCounter; i++) {
+                    d.followTrajectorySequence(leftSideConesV2);
+                    liftLevel -= 50;
+                }
+                switch (color) {
+                    case green:
+                        d.followTrajectorySequence(leftSideParkLeft);
+                        break;
+                    case yellow:
+                        d.followTrajectorySequence(leftSideParkMiddle);
+                    case purple:
+                        d.followTrajectorySequence(leftSideParkRight);
+                }
+            case right:
+                blueCam.stopStreaming();
+        }
+
+/*        d.followTrajectorySequence(leftSide);
         for (int i = 0; i < coneCounter; i++) {
             //d.followTrajectorySequence(leftSideCones);
             //liftLevel -= 50;
-        }
-        // Make a variable that changes the lift height for each loop
+        }*/
     }
 
     private boolean ifPressed(boolean button) {
@@ -267,10 +326,7 @@ public class StateAutov0_5 extends LinearOpMode {
         Rect rect  = new Rect(rectX, rectY, rectWidth, rectHeight);
 
         // Declare the limits and colors needed for processing
-
         private final Scalar black = new Scalar(0, 0, 0);
-
-
 
         @Override
         public Mat processFrame(Mat input) {
@@ -317,16 +373,13 @@ public class StateAutov0_5 extends LinearOpMode {
             if (greenCount > yellowCount && greenCount > purpleCount) {
                 color = ConfigPos.colors.green;
                 telemetry.addData("Color", color);
-            }
-            else if (yellowCount > greenCount && yellowCount > purpleCount) {
+            } else if (yellowCount > greenCount && yellowCount > purpleCount) {
                 color = ConfigPos.colors.yellow;
                 telemetry.addData("Color", color);
-            }
-            else if (purpleCount > greenCount && purpleCount > yellowCount) {
+            } else if (purpleCount > greenCount && purpleCount > yellowCount) {
                 color = ConfigPos.colors.purple;
                 telemetry.addData("Color", color);
-            }
-            else {
+            } else {
                 color = ConfigPos.colors.None;
                 telemetry.addData("Color", color);
             }

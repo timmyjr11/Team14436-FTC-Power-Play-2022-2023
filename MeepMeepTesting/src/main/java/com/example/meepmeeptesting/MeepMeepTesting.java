@@ -13,7 +13,7 @@ public class MeepMeepTesting {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(720);
         // Red bot
-        /*RoadRunnerBotEntity redBot = new DefaultBotBuilder(meepMeep)
+/*        RoadRunnerBotEntity redBot = new DefaultBotBuilder(meepMeep)
                 .setColorScheme(new ColorSchemeRedDark())
                 .setConstraints(60, 30, Math.toRadians(275), Math.toRadians(60), 16.965)
                 .followTrajectorySequence(drive ->
@@ -42,20 +42,35 @@ public class MeepMeepTesting {
         // Blue bot
 
         RoadRunnerBotEntity redBotCool = new DefaultBotBuilder(meepMeep)
-                .setColorScheme(new ColorSchemeRedDark())
+                .setColorScheme(new ColorSchemeBlueDark())
                 .setConstraints(56, 30, Math.toRadians(270), Math.toRadians(180), 13.3)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-37.5, -61.3, Math.toRadians(90)))
                                 .splineToConstantHeading(new Vector2d(-34, -50), Math.toRadians(90))
                                 .splineToConstantHeading(new Vector2d(-34, -20), Math.toRadians(90))
-                                .splineToSplineHeading(new Pose2d(-28, -4, Math.toRadians(45)), Math.toRadians(90))
-                                .setReversed(true)
-                                .splineToSplineHeading(new Pose2d(-47, -15, Math.toRadians(90)), Math.toRadians(180))
-                                .setReversed(false)
-                                .splineToSplineHeading(new Pose2d(-56.5, -11.75, Math.toRadians(180)), Math.toRadians(180))
-                                .setReversed(true)
-                                .splineToSplineHeading(new Pose2d(-47, -11.75, Math.toRadians(90)), Math.toRadians(0))
                                 .splineToSplineHeading(new Pose2d(-28, -4, Math.toRadians(45)), Math.toRadians(45))
+                                .setReversed(true)
+                                .splineToSplineHeading(new Pose2d(-47, -11.75, Math.toRadians(180)), Math.toRadians(180))
+                                .splineToConstantHeading(new Vector2d(-56.5, -11.75), Math.toRadians(180))
+                                .waitSeconds(0.25)
+                                .splineToSplineHeading(new Pose2d(-47, -12, Math.toRadians(90)), Math.toRadians(0))
+                                .splineToSplineHeading(new Pose2d(-28, -4, Math.toRadians(45)), Math.toRadians(45))
+                                .build()
+                );
+
+        RoadRunnerBotEntity redBotPark = new DefaultBotBuilder(meepMeep)
+                .setColorScheme(new ColorSchemeBlueDark())
+                .setConstraints(56, 30, Math.toRadians(270), Math.toRadians(180), 13.3)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(new Pose2d(-37.5, -61.3, Math.toRadians(90)))
+                                .splineToConstantHeading(new Vector2d(-34, -50), Math.toRadians(90))
+                                .splineToConstantHeading(new Vector2d(-34, -20), Math.toRadians(90))
+                                .splineToSplineHeading(new Pose2d(-28, -4, Math.toRadians(45)), Math.toRadians(45))
+                                .setReversed(true)
+                                .splineToSplineHeading(new Pose2d(-35, -20, Math.toRadians(270)), Math.toRadians(270))
+                                .splineToConstantHeading(new Vector2d(-35, -35), Math.toRadians(270)) // If middle
+                                //.lineToConstantHeading(new Vector2d(-58, -35)) // If right
+                                .lineToConstantHeading(new Vector2d(-12, -35)) // If left
                                 .build()
                 );
 
@@ -75,8 +90,6 @@ public class MeepMeepTesting {
                                 .splineToLinearHeading(new Pose2d(-47, -15, Math.toRadians(90)), Math.toRadians(270))
                                 .setReversed(false)
                                 .splineToLinearHeading(new Pose2d(-28, -4, Math.toRadians(45)), Math.toRadians(45))
-
-
                                 .build()
                 );
 
@@ -98,9 +111,10 @@ public class MeepMeepTesting {
         meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
+                //.addEntity(redBotPark)
                 //.addEntity(rightBot)
                 .addEntity(redBotCool)
-                .addEntity(blueBot)
+                //.addEntity(blueBot)
                 .start();
 
     }
