@@ -48,11 +48,16 @@ public class MeepMeepTesting {
                                 .splineToLinearHeading(new Pose2d(-35, -50, Math.toRadians(90)), Math.toRadians(90))
                                 .splineToLinearHeading(new Pose2d(-35, -20, Math.toRadians(90)), Math.toRadians(90))
                                 .splineToLinearHeading(new Pose2d(-35, -11, Math.toRadians(45)), Math.toRadians(90))
-                                .splineToLinearHeading(new Pose2d(-47, -16, Math.toRadians(90)), Math.toRadians(225))
-                                .splineToLinearHeading(new Pose2d(-57, -11.75, Math.toRadians(180)), Math.toRadians(180))
-                                .splineToLinearHeading(new Pose2d(-47, -16, Math.toRadians(90)), Math.toRadians(75))
+                                .setReversed(true)
+                                .splineToLinearHeading(new Pose2d(-47, -15, Math.toRadians(90)), Math.toRadians(180))
+                                .setReversed(false)
+                                .splineToLinearHeading(new Pose2d(-56.5, -11.75, Math.toRadians(180)), Math.toRadians(180))
+                                .setReversed(true)
+                                .splineToLinearHeading(new Pose2d(-47, -15, Math.toRadians(90)), Math.toRadians(270))
+                                .setReversed(false)
+                                .splineToLinearHeading(new Pose2d(-35, -11, Math.toRadians(45)), Math.toRadians(45))
 
-                                .waitSeconds(0.25)
+
                                 .build()
                 );
 
