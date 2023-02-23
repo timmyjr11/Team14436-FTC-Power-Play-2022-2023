@@ -58,6 +58,23 @@ public class MeepMeepTesting {
                                 .build()
                 );
 
+        RoadRunnerBotEntity redBotSideMove = new DefaultBotBuilder(meepMeep)
+                .setColorScheme(new ColorSchemeBlueDark())
+                .setConstraints(56, 30, Math.toRadians(270), Math.toRadians(180), 13.3)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(new Pose2d(-37.5, -61.3, Math.toRadians(90)))
+                                .splineToConstantHeading(new Vector2d(-37, -61.3), Math.toRadians(0))
+                                .splineToConstantHeading(new Vector2d(-13, -53), Math.toRadians(90))
+                                .splineToConstantHeading(new Vector2d(-13, -20), Math.toRadians(90))
+                                .splineToSplineHeading(new Pose2d(-20, -4, Math.toRadians(135)), Math.toRadians(135))
+                                .setReversed(true)
+                                .splineToConstantHeading(new Vector2d(-16, -7), Math.toRadians(315))
+                                .splineToSplineHeading(new Pose2d(-13, -11.75, Math.toRadians(180)), Math.toRadians(180))
+                                .splineToConstantHeading(new Vector2d(-25, -11.75), Math.toRadians(180))
+                                .splineToConstantHeading(new Vector2d(-56.5, -11.75), Math.toRadians(180))
+                                .build()
+                );
+
         RoadRunnerBotEntity redBotPark = new DefaultBotBuilder(meepMeep)
                 .setColorScheme(new ColorSchemeBlueDark())
                 .setConstraints(56, 30, Math.toRadians(270), Math.toRadians(180), 13.3)
@@ -111,7 +128,7 @@ public class MeepMeepTesting {
         meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
-                .addEntity(redBotPark)
+                .addEntity(redBotSideMove)
                 //.addEntity(rightBot)
                 //.addEntity(redBotCool)
                 //.addEntity(blueBot)

@@ -46,6 +46,8 @@ public class StateAutoV0_5 extends LinearOpMode {
     int forward = 0;
     int side_level = 0;
 
+    int forward2 = 0;
+
     int coneCounter;
 
     ConfigPos.side side = ConfigPos.side.tbd;
@@ -417,8 +419,6 @@ public class StateAutoV0_5 extends LinearOpMode {
                 .splineToConstantHeading(new Vector2d(-38, -30), Math.toRadians(270))
                 .lineToConstantHeading(new Vector2d(-58, -30)) // If right
                 .build();
-
-
 
         ready = true;
 
