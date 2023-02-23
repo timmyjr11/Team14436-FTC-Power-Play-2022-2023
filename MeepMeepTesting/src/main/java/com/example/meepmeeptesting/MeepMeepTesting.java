@@ -50,7 +50,7 @@ public class MeepMeepTesting {
                                 .splineToConstantHeading(new Vector2d(-34, -20), Math.toRadians(90))
                                 .splineToSplineHeading(new Pose2d(-28, -4, Math.toRadians(45)), Math.toRadians(45))
                                 .setReversed(true)
-                                .splineToSplineHeading(new Pose2d(-47, -11.75, Math.toRadians(180)), Math.toRadians(180))
+                                .splineToSplineHeading(new Pose2d(-47, -13, Math.toRadians(180)), Math.toRadians(180))
                                 .splineToConstantHeading(new Vector2d(-56.5, -11.75), Math.toRadians(180))
                                 .waitSeconds(0.25)
                                 .splineToSplineHeading(new Pose2d(-47, -12, Math.toRadians(90)), Math.toRadians(0))
@@ -111,9 +111,9 @@ public class MeepMeepTesting {
         meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
-                //.addEntity(redBotPark)
+                .addEntity(redBotPark)
                 //.addEntity(rightBot)
-                .addEntity(redBotCool)
+                //.addEntity(redBotCool)
                 //.addEntity(blueBot)
                 .start();
 

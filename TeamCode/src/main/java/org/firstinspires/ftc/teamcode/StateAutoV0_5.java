@@ -29,6 +29,8 @@ import java.util.ArrayList;
 @Autonomous
 public class StateAutoV0_5 extends LinearOpMode {
 
+    //Cone 2 and 3 need side move
+
     private final FtcDashboard dash = FtcDashboard.getInstance();
 
     static ConfigPos.colors color = ConfigPos.colors.None;
@@ -41,6 +43,8 @@ public class StateAutoV0_5 extends LinearOpMode {
     OpenCvWebcam blackCam;
 
     int liftLevel = 170;
+    int forward = 0;
+    int side_level = 0;
 
     int coneCounter;
 
@@ -165,45 +169,15 @@ public class StateAutoV0_5 extends LinearOpMode {
             telemetry.update();
         }
 
-        TrajectorySequence leftSide = d.trajectorySequenceBuilder(d.getPoseEstimate())
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    d.blueServo.setPosition(1);
-                    d.blackServo.setPosition(1);
-                })
-                .splineToLinearHeading(new Pose2d(-35, -50, Math.toRadians(90)), Math.toRadians(90))
-                .UNSTABLE_addTemporalMarkerOffset(-0.25, () -> {
-                    d.blackLift.setTargetPosition(1135);
-                    d.blueLift.setTargetPosition(1135);
-                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    d.blackLift.setPower(1);
-                    d.blueLift.setPower(1);
-                })
-                .splineToLinearHeading(new Pose2d(-35, -20, Math.toRadians(90)), Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(-28, -4, Math.toRadians(45)), Math.toRadians(90))
-                .waitSeconds(100)
-                .build(); // 9 x 8 y
-
-        TrajectorySequence leftSideCones = d.trajectorySequenceBuilder(leftSide.end())
-                .setReversed(true)
-                .splineToLinearHeading(new Pose2d(-47, -15, Math.toRadians(90)), Math.toRadians(180))
-                .setReversed(false)
-                .splineToLinearHeading(new Pose2d(-56.5, -11.75, Math.toRadians(180)), Math.toRadians(180))
-                .setReversed(true)
-                .splineToLinearHeading(new Pose2d(-47, -15, Math.toRadians(90)), Math.toRadians(270))
-                .setReversed(false)
-                .splineToLinearHeading(new Pose2d(-35, -11, Math.toRadians(45)), Math.toRadians(45))
-                .build();
-
         TrajectorySequence leftSideV2 = d.trajectorySequenceBuilder(d.getPoseEstimate())
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    d.blueServo.setPosition(1);
-                    d.blackServo.setPosition(1);
-                })
                 .splineToLinearHeading(new Pose2d(-34, -50, Math.toRadians(90)), Math.toRadians(90))
-                .UNSTABLE_addTemporalMarkerOffset(-0.25, () -> {
-                    d.blackLift.setTargetPosition(1135);
-                    d.blueLift.setTargetPosition(1135);
+                .UNSTABLE_addTemporalMarkerOffset(-1.5, () -> {
+                    d.blueServo.setPosition(0.8);
+                    d.blackServo.setPosition(0.8);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(-0.12, () -> {
+                    d.blackLift.setTargetPosition(1120);
+                    d.blueLift.setTargetPosition(1120);
                     d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     d.blackLift.setPower(1);
@@ -211,39 +185,237 @@ public class StateAutoV0_5 extends LinearOpMode {
                 })
                 .splineToConstantHeading(new Vector2d(-34, -20), Math.toRadians(90))
                 .splineToSplineHeading(new Pose2d(-28, -4, Math.toRadians(45)), Math.toRadians(45))
-                .UNSTABLE_addDisplacementMarkerOffset(0, () -> {
+                .waitSeconds(0.2)
+                .UNSTABLE_addDisplacementMarkerOffset(-0.2, () -> {
                     d.blackServo.setPosition(0);
                     d.blueServo.setPosition(0);
                 })
                 .build(); // 9 x 8 y
 
 
-
-        TrajectorySequence leftSideConesV2 = d.trajectorySequenceBuilder(leftSide.end())
+        TrajectorySequence leftSideConesV2 = d.trajectorySequenceBuilder(leftSideV2.end())
                 .setReversed(true)
-                .splineToSplineHeading(new Pose2d(-47, -11.75, Math.toRadians(180)), Math.toRadians(180))
-                .splineToConstantHeading(new Vector2d(-56.5, -11.75), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-47, -11.25, Math.toRadians(180)), Math.toRadians(180))
+                .UNSTABLE_addTemporalMarkerOffset(-2, () -> {
+                    d.blackLift.setTargetPosition(liftLevel);
+                    d.blueLift.setTargetPosition(liftLevel);
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setPower(0.8);
+                    d.blueLift.setPower(0.8);
+                })
+                .splineToSplineHeading(new Pose2d(-59.5, -11.25, Math.toRadians(180)), Math.toRadians(180))
                 .waitSeconds(0.25)
-                .splineToSplineHeading(new Pose2d(-47, -12, Math.toRadians(90)), Math.toRadians(0))
+                .UNSTABLE_addTemporalMarkerOffset(-0.25, () -> {
+                    d.blackServo.setPosition(0.8);
+                    d.blueServo.setPosition(0.8);
+                })
+                .splineToSplineHeading(new Pose2d(-47, -11.25, Math.toRadians(90)), Math.toRadians(0))
+                .UNSTABLE_addTemporalMarkerOffset(-1.5, () -> {
+                    d.blackLift.setTargetPosition(1120);
+                    d.blueLift.setTargetPosition(1120);
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setPower(0.8);
+                    d.blueLift.setPower(0.8);
+                })
                 .splineToSplineHeading(new Pose2d(-28, -4, Math.toRadians(45)), Math.toRadians(45))
+                .waitSeconds(0.2)
+                .UNSTABLE_addDisplacementMarkerOffset(-0.2, () -> {
+                    d.blackServo.setPosition(0);
+                    d.blueServo.setPosition(0);
+                })
                 .build();
 
-        TrajectorySequence leftSideParkLeft = d.trajectorySequenceBuilder(leftSide.end())
-                .splineToSplineHeading(new Pose2d(-35, -20, Math.toRadians(270)), Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(-35, -35), Math.toRadians(270)) // If middle
-                //.lineToConstantHeading(new Vector2d(-58, -35)) // If right
-                .lineToConstantHeading(new Vector2d(-12, -35))
+        forward += 1;
+        side_level -= 0.5;
+
+        TrajectorySequence leftSideConesV2_2 = d.trajectorySequenceBuilder(leftSideConesV2.end())
+                .setReversed(true)
+                .splineToSplineHeading(new Pose2d(-47, -11.25 + forward, Math.toRadians(180)), Math.toRadians(180))
+                .UNSTABLE_addTemporalMarkerOffset(-2, () -> {
+                    d.blackLift.setTargetPosition(liftLevel);
+                    d.blueLift.setTargetPosition(liftLevel);
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setPower(0.8);
+                    d.blueLift.setPower(0.8);
+                })
+                .splineToSplineHeading(new Pose2d(-59.5, -11.25 + forward, Math.toRadians(180)), Math.toRadians(180))
+                .waitSeconds(0.25)
+                .UNSTABLE_addTemporalMarkerOffset(-0.25, () -> {
+                    d.blackServo.setPosition(0.8);
+                    d.blueServo.setPosition(0.8);
+                })
+                .splineToSplineHeading(new Pose2d(-47, -11.25 + forward, Math.toRadians(90)), Math.toRadians(0))
+                .UNSTABLE_addTemporalMarkerOffset(-1.5, () -> {
+                    d.blackLift.setTargetPosition(1120);
+                    d.blueLift.setTargetPosition(1120);
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setPower(0.8);
+                    d.blueLift.setPower(0.8);
+                })
+                .splineToSplineHeading(new Pose2d(-28 + side_level, -4 + forward, Math.toRadians(45)), Math.toRadians(45))
+                .waitSeconds(0.2)
+                .UNSTABLE_addDisplacementMarkerOffset(-0.2, () -> {
+                    d.blackServo.setPosition(0);
+                    d.blueServo.setPosition(0);
+                })
+                .build();
+
+        forward += 2.5;
+        side_level -= 0.5;
+
+        TrajectorySequence leftSideConesV2_3 = d.trajectorySequenceBuilder(leftSideConesV2_2.end())
+                .setReversed(true)
+                .splineToSplineHeading(new Pose2d(-47, -11.25 + forward, Math.toRadians(180)), Math.toRadians(180))
+                .UNSTABLE_addTemporalMarkerOffset(-2, () -> {
+                    d.blackLift.setTargetPosition(liftLevel);
+                    d.blueLift.setTargetPosition(liftLevel);
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setPower(0.8);
+                    d.blueLift.setPower(0.8);
+                })
+                .splineToSplineHeading(new Pose2d(-59.5, -11.25 + forward, Math.toRadians(180)), Math.toRadians(180))
+                .waitSeconds(0.25)
+                .UNSTABLE_addTemporalMarkerOffset(-0.25, () -> {
+                    d.blackServo.setPosition(0.8);
+                    d.blueServo.setPosition(0.8);
+                })
+                .splineToSplineHeading(new Pose2d(-47, -11.25 + forward, Math.toRadians(90)), Math.toRadians(0))
+                .UNSTABLE_addTemporalMarkerOffset(-1.5, () -> {
+                    d.blackLift.setTargetPosition(1135);
+                    d.blueLift.setTargetPosition(1135);
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setPower(0.8);
+                    d.blueLift.setPower(0.8);
+                })
+                .splineToSplineHeading(new Pose2d(-28 + side_level, -4 + forward, Math.toRadians(45)), Math.toRadians(45))
+                .waitSeconds(0.2)
+                .UNSTABLE_addDisplacementMarkerOffset(-0.2, () -> {
+                    d.blackServo.setPosition(0);
+                    d.blueServo.setPosition(0);
+                })
+                .build();
+
+        forward += 2;
+
+        TrajectorySequence leftSideConesV2_4 = d.trajectorySequenceBuilder(leftSideConesV2_3.end())
+                .setReversed(true)
+                .splineToSplineHeading(new Pose2d(-47, -11.25 + forward, Math.toRadians(180)), Math.toRadians(180))
+                .UNSTABLE_addTemporalMarkerOffset(-2, () -> {
+                    d.blackLift.setTargetPosition(liftLevel);
+                    d.blueLift.setTargetPosition(liftLevel);
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setPower(0.8);
+                    d.blueLift.setPower(0.8);
+                })
+                .splineToSplineHeading(new Pose2d(-59.5, -11.25 + forward, Math.toRadians(180)), Math.toRadians(180))
+                .waitSeconds(0.25)
+                .UNSTABLE_addTemporalMarkerOffset(-0.25, () -> {
+                    d.blackServo.setPosition(0.8);
+                    d.blueServo.setPosition(0.8);
+                })
+                .splineToSplineHeading(new Pose2d(-47, -11.25 + forward, Math.toRadians(90)), Math.toRadians(0))
+                .UNSTABLE_addTemporalMarkerOffset(-1.5, () -> {
+                    d.blackLift.setTargetPosition(1120);
+                    d.blueLift.setTargetPosition(1120);
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setPower(0.8);
+                    d.blueLift.setPower(0.8);
+                })
+                .splineToSplineHeading(new Pose2d(-28, -4 + forward, Math.toRadians(45)), Math.toRadians(45))
+                .waitSeconds(0.2)
+                .UNSTABLE_addDisplacementMarkerOffset(-0.2, () -> {
+                    d.blackServo.setPosition(0);
+                    d.blueServo.setPosition(0);
+                })
+                .build();
+
+        forward += 2;
+
+        TrajectorySequence leftSideConesV2_5 = d.trajectorySequenceBuilder(leftSideConesV2_4.end())
+                .setReversed(true)
+                .splineToSplineHeading(new Pose2d(-47, -11.25 + forward, Math.toRadians(180)), Math.toRadians(180))
+                .UNSTABLE_addTemporalMarkerOffset(-2, () -> {
+                    d.blackLift.setTargetPosition(liftLevel);
+                    d.blueLift.setTargetPosition(liftLevel);
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setPower(0.8);
+                    d.blueLift.setPower(0.8);
+                })
+                .splineToSplineHeading(new Pose2d(-59.5, -11.25 + forward, Math.toRadians(180)), Math.toRadians(180))
+                .waitSeconds(0.25)
+                .UNSTABLE_addTemporalMarkerOffset(-0.25, () -> {
+                    d.blackServo.setPosition(0.8);
+                    d.blueServo.setPosition(0.8);
+                })
+                .splineToSplineHeading(new Pose2d(-47, -11.25 + forward, Math.toRadians(90)), Math.toRadians(0))
+                .UNSTABLE_addTemporalMarkerOffset(-1.5, () -> {
+                    d.blackLift.setTargetPosition(1120);
+                    d.blueLift.setTargetPosition(1120);
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setPower(0.8);
+                    d.blueLift.setPower(0.8);
+                })
+                .splineToSplineHeading(new Pose2d(-28, -4 + forward, Math.toRadians(45)), Math.toRadians(45))
+                .waitSeconds(0.2)
+                .UNSTABLE_addDisplacementMarkerOffset(-0.2, () -> {
+                    d.blackServo.setPosition(0);
+                    d.blueServo.setPosition(0);
+                })
+                .build();
+
+
+        TrajectorySequence leftSideParkLeft = d.trajectorySequenceBuilder(leftSideV2.end())
+                .setReversed(true)
+                .splineToSplineHeading(new Pose2d(-38, -20, Math.toRadians(270)), Math.toRadians(270))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    d.blackLift.setTargetPosition(0);
+                    d.blueLift.setTargetPosition(0);
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setPower(0.8);
+                    d.blueLift.setPower(0.8);
+                })
+                .splineToConstantHeading(new Vector2d(-38, -30), Math.toRadians(270)) // If middle
+                .lineToConstantHeading(new Vector2d(-12, -30))
                 .build(); // If left
 
-        TrajectorySequence leftSideParkMiddle = d.trajectorySequenceBuilder(leftSide.end())
-                .splineToSplineHeading(new Pose2d(-35, -20, Math.toRadians(270)), Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(-35, -35), Math.toRadians(270)) // If middle
+        TrajectorySequence leftSideParkMiddle = d.trajectorySequenceBuilder(leftSideV2.end())
+                .setReversed(true)
+                .splineToSplineHeading(new Pose2d(-38, -20, Math.toRadians(270)), Math.toRadians(270))
+                .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
+                    d.blackLift.setTargetPosition(0);
+                    d.blueLift.setTargetPosition(0);
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setPower(0.8);
+                    d.blueLift.setPower(0.8);
+                })
+                .splineToConstantHeading(new Vector2d(-38, -30), Math.toRadians(270)) // If middle
                 .build();
 
-        TrajectorySequence leftSideParkRight = d.trajectorySequenceBuilder(leftSide.end())
-                .splineToSplineHeading(new Pose2d(-35, -20, Math.toRadians(270)), Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(-35, -35), Math.toRadians(270))
-                .lineToConstantHeading(new Vector2d(-58, -35)) // If right
+        TrajectorySequence leftSideParkRight = d.trajectorySequenceBuilder(leftSideConesV2.end())
+                .setReversed(true)
+                .splineToSplineHeading(new Pose2d(-38, -20, Math.toRadians(270)), Math.toRadians(270))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    d.blackLift.setTargetPosition(0);
+                    d.blueLift.setTargetPosition(0);
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setPower(0.8);
+                    d.blueLift.setPower(0.8);
+                })
+                .splineToConstantHeading(new Vector2d(-38, -30), Math.toRadians(270))
+                .lineToConstantHeading(new Vector2d(-58, -30)) // If right
                 .build();
 
 
@@ -251,19 +423,6 @@ public class StateAutoV0_5 extends LinearOpMode {
         ready = true;
 
         while (!isStarted()) {
-/*            if (color != previousColor) {
-                switch (color) {
-                    case green:
-                        previousColor = ConfigPos.colors.green;
-                        break;
-                    case purple:
-                        previousColor = ConfigPos.colors.purple;
-                        break;
-                    case yellow:
-                        previousColor = ConfigPos.colors.yellow;
-                        break;
-                }
-            }*/
             if (isStopRequested()) return;
         }
 
@@ -271,19 +430,46 @@ public class StateAutoV0_5 extends LinearOpMode {
             case left:
                 blackCam.stopStreaming();
                 d.followTrajectorySequence(leftSideV2);
-                for (int i = 0; i < coneCounter; i++) {
+                if (coneCounter >= 1 ) { d.followTrajectorySequence(leftSideConesV2); }
+
+                if (coneCounter >= 2) {
+                    liftLevel -= 30;
+                    d.followTrajectorySequence(leftSideConesV2_2);
+                }
+
+                if (coneCounter >= 3) {
+                    liftLevel -= 30;
+                    d.followTrajectorySequence(leftSideConesV2_3);
+                }
+
+                if (coneCounter >= 4) {
+                    liftLevel -= 30;
+                    d.followTrajectorySequence(leftSideConesV2_4);
+                }
+
+                if (coneCounter >= 5) {
+                    liftLevel -= 30;
+                    d.followTrajectorySequence(leftSideConesV2_5);
+                }
+
+/*                for (int i = 0; i < coneCounter; i++) {
                     d.followTrajectorySequence(leftSideConesV2);
                     liftLevel -= 50;
-                }
+                    ;
+                }*/
                 switch (color) {
                     case green:
-                        d.followTrajectorySequence(leftSideParkLeft);
+                        d.followTrajectorySequence(leftSideParkRight);
                         break;
                     case yellow:
                         d.followTrajectorySequence(leftSideParkMiddle);
+                        break;
                     case purple:
-                        d.followTrajectorySequence(leftSideParkRight);
+                        d.followTrajectorySequence(leftSideParkLeft);
+
+                        break;
                 }
+                break;
             case right:
                 blueCam.stopStreaming();
         }
