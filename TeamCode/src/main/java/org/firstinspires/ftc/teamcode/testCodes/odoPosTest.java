@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -11,6 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.teamcode.util.Encoder;
 @Config
 @Autonomous
+@Disabled
 public class odoPosTest extends LinearOpMode {
 
     private final FtcDashboard dash = FtcDashboard.getInstance();

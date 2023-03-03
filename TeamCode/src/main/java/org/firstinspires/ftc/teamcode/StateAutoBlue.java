@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 @Config
 @Autonomous
-public class StateAuto extends LinearOpMode {
+public class StateAutoBlue extends LinearOpMode {
 
     //Cone 2 and 3 need side move
 
@@ -191,7 +191,7 @@ public class StateAuto extends LinearOpMode {
                     d.blueLift.setPower(1);
                 })
                 .splineToConstantHeading(new Vector2d(-34, -20), Math.toRadians(90))
-                .splineToSplineHeading(new Pose2d(-28, -4, Math.toRadians(45)), Math.toRadians(45))
+                .splineToSplineHeading(new Pose2d(-29, -5, Math.toRadians(45)), Math.toRadians(45))
                 .waitSeconds(0.2)
                 .UNSTABLE_addDisplacementMarkerOffset(-0.1, () -> {
                     d.blackServo.setPosition(0);
@@ -203,7 +203,7 @@ public class StateAuto extends LinearOpMode {
         TrajectorySequence leftSideConesV2 = d.trajectorySequenceBuilder(leftSideV2.end())
                 .setReversed(true)
                 .splineToSplineHeading(new Pose2d(-47, -11.25, Math.toRadians(180)), Math.toRadians(180))
-                .UNSTABLE_addTemporalMarkerOffset(-2, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(-1.5, () -> {
                     d.blackLift.setTargetPosition(liftLevel);
                     d.blueLift.setTargetPosition(liftLevel);
                     d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -226,7 +226,7 @@ public class StateAuto extends LinearOpMode {
                     d.blackLift.setPower(1);
                     d.blueLift.setPower(1);
                 })
-                .splineToSplineHeading(new Pose2d(-28, -4, Math.toRadians(45)), Math.toRadians(45))
+                .splineToSplineHeading(new Pose2d(-28 + leftSideLevel, -4.5 + leftForward, Math.toRadians(45)), Math.toRadians(45))
                 .waitSeconds(0.2)
                 .UNSTABLE_addDisplacementMarkerOffset(-0.2, () -> {
                     d.blackServo.setPosition(0);
@@ -240,7 +240,7 @@ public class StateAuto extends LinearOpMode {
         TrajectorySequence leftSideConesV2_2 = d.trajectorySequenceBuilder(leftSideConesV2.end())
                 .setReversed(true)
                 .splineToSplineHeading(new Pose2d(-47, -11.25 + leftForward, Math.toRadians(180)), Math.toRadians(180))
-                .UNSTABLE_addTemporalMarkerOffset(-2, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(-1.5, () -> {
                     d.blackLift.setTargetPosition(liftLevel);
                     d.blueLift.setTargetPosition(liftLevel);
                     d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -263,7 +263,7 @@ public class StateAuto extends LinearOpMode {
                     d.blackLift.setPower(1);
                     d.blueLift.setPower(1);
                 })
-                .splineToSplineHeading(new Pose2d(-28 + leftSideLevel, -4 + leftForward, Math.toRadians(45)), Math.toRadians(45))
+                .splineToSplineHeading(new Pose2d(-28 + leftSideLevel, -4.5 + leftForward, Math.toRadians(45)), Math.toRadians(45))
                 .waitSeconds(0.2)
                 .UNSTABLE_addDisplacementMarkerOffset(-0.2, () -> {
                     d.blackServo.setPosition(0);
@@ -277,7 +277,7 @@ public class StateAuto extends LinearOpMode {
         TrajectorySequence leftSideConesV2_3 = d.trajectorySequenceBuilder(leftSideConesV2_2.end())
                 .setReversed(true)
                 .splineToSplineHeading(new Pose2d(-47, -11.25 + leftForward, Math.toRadians(180)), Math.toRadians(180))
-                .UNSTABLE_addTemporalMarkerOffset(-2, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(-1.5, () -> {
                     d.blackLift.setTargetPosition(liftLevel);
                     d.blueLift.setTargetPosition(liftLevel);
                     d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -300,79 +300,7 @@ public class StateAuto extends LinearOpMode {
                     d.blackLift.setPower(1);
                     d.blueLift.setPower(1);
                 })
-                .splineToSplineHeading(new Pose2d(-28 + leftSideLevel, -4 + leftForward, Math.toRadians(45)), Math.toRadians(45))
-                .waitSeconds(0.2)
-                .UNSTABLE_addDisplacementMarkerOffset(-0.2, () -> {
-                    d.blackServo.setPosition(0);
-                    d.blueServo.setPosition(0);
-                })
-                .build();
-
-        leftForward += 2;
-
-        TrajectorySequence leftSideConesV2_4 = d.trajectorySequenceBuilder(leftSideConesV2_3.end())
-                .setReversed(true)
-                .splineToSplineHeading(new Pose2d(-47, -11.25 + leftForward, Math.toRadians(180)), Math.toRadians(180))
-                .UNSTABLE_addTemporalMarkerOffset(-2, () -> {
-                    d.blackLift.setTargetPosition(liftLevel);
-                    d.blueLift.setTargetPosition(liftLevel);
-                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    d.blackLift.setPower(0.8);
-                    d.blueLift.setPower(0.8);
-                })
-                .splineToSplineHeading(new Pose2d(-59.5, -11.25 + leftForward, Math.toRadians(180)), Math.toRadians(180))
-                .waitSeconds(0.2)
-                .UNSTABLE_addTemporalMarkerOffset(-0.25, () -> {
-                    d.blackServo.setPosition(0.8);
-                    d.blueServo.setPosition(0.8);
-                })
-                .splineToSplineHeading(new Pose2d(-47, -11.25 + leftForward, Math.toRadians(90)), Math.toRadians(0))
-                .UNSTABLE_addTemporalMarkerOffset(-1.5, () -> {
-                    d.blackLift.setTargetPosition(1135);
-                    d.blueLift.setTargetPosition(1135);
-                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    d.blackLift.setPower(0.8);
-                    d.blueLift.setPower(0.8);
-                })
-                .splineToSplineHeading(new Pose2d(-28, -4 + leftForward, Math.toRadians(45)), Math.toRadians(45))
-                .waitSeconds(0.2)
-                .UNSTABLE_addDisplacementMarkerOffset(-0.2, () -> {
-                    d.blackServo.setPosition(0);
-                    d.blueServo.setPosition(0);
-                })
-                .build();
-
-        leftForward += 2;
-
-        TrajectorySequence leftSideConesV2_5 = d.trajectorySequenceBuilder(leftSideConesV2_4.end())
-                .setReversed(true)
-                .splineToSplineHeading(new Pose2d(-47, -11.25 + leftForward, Math.toRadians(180)), Math.toRadians(180))
-                .UNSTABLE_addTemporalMarkerOffset(-2, () -> {
-                    d.blackLift.setTargetPosition(liftLevel);
-                    d.blueLift.setTargetPosition(liftLevel);
-                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    d.blackLift.setPower(0.8);
-                    d.blueLift.setPower(0.8);
-                })
-                .splineToSplineHeading(new Pose2d(-59.5, -11.25 + leftForward, Math.toRadians(180)), Math.toRadians(180))
-                .waitSeconds(0.2)
-                .UNSTABLE_addTemporalMarkerOffset(-0.25, () -> {
-                    d.blackServo.setPosition(0.8);
-                    d.blueServo.setPosition(0.8);
-                })
-                .splineToSplineHeading(new Pose2d(-47, -11.25 + leftForward, Math.toRadians(90)), Math.toRadians(0))
-                .UNSTABLE_addTemporalMarkerOffset(-1.5, () -> {
-                    d.blackLift.setTargetPosition(1135);
-                    d.blueLift.setTargetPosition(1135);
-                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    d.blackLift.setPower(0.8);
-                    d.blueLift.setPower(0.8);
-                })
-                .splineToSplineHeading(new Pose2d(-28, -4 + leftForward, Math.toRadians(45)), Math.toRadians(45))
+                .splineToSplineHeading(new Pose2d(-28 + leftSideLevel, -4.5 + leftForward, Math.toRadians(45)), Math.toRadians(45))
                 .waitSeconds(0.2)
                 .UNSTABLE_addDisplacementMarkerOffset(-0.2, () -> {
                     d.blackServo.setPosition(0);
@@ -383,7 +311,7 @@ public class StateAuto extends LinearOpMode {
 
         TrajectorySequence leftSideParkLeft = d.trajectorySequenceBuilder(leftSideV2.end())
                 .setReversed(true)
-                .splineToSplineHeading(new Pose2d(-38, -20, Math.toRadians(270)), Math.toRadians(270))
+                .splineToSplineHeading(new Pose2d(-34, -20, Math.toRadians(270)), Math.toRadians(270))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     d.blackLift.setTargetPosition(0);
                     d.blueLift.setTargetPosition(0);
@@ -392,13 +320,13 @@ public class StateAuto extends LinearOpMode {
                     d.blackLift.setPower(0.8);
                     d.blueLift.setPower(0.8);
                 })
-                .splineToConstantHeading(new Vector2d(-38, -30), Math.toRadians(270)) // If middle
-                .lineToConstantHeading(new Vector2d(-12, -30))
+                .splineToConstantHeading(new Vector2d(-34, -32), Math.toRadians(270)) // If middle
+                .lineToConstantHeading(new Vector2d(-58, -32))
                 .build(); // If left
 
         TrajectorySequence leftSideParkMiddle = d.trajectorySequenceBuilder(leftSideV2.end())
                 .setReversed(true)
-                .splineToSplineHeading(new Pose2d(-38, -20, Math.toRadians(270)), Math.toRadians(270))
+                .splineToSplineHeading(new Pose2d(-34, -20, Math.toRadians(270)), Math.toRadians(270))
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                     d.blackLift.setTargetPosition(0);
                     d.blueLift.setTargetPosition(0);
@@ -407,12 +335,12 @@ public class StateAuto extends LinearOpMode {
                     d.blackLift.setPower(0.8);
                     d.blueLift.setPower(0.8);
                 })
-                .splineToConstantHeading(new Vector2d(-38, -30), Math.toRadians(270)) // If middle
+                .splineToConstantHeading(new Vector2d(-34, -32), Math.toRadians(270)) // If middle
                 .build();
 
         TrajectorySequence leftSideParkRight = d.trajectorySequenceBuilder(leftSideConesV2.end())
                 .setReversed(true)
-                .splineToSplineHeading(new Pose2d(-38, -20, Math.toRadians(270)), Math.toRadians(270))
+                .splineToSplineHeading(new Pose2d(-34, -20, Math.toRadians(270)), Math.toRadians(270))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     d.blackLift.setTargetPosition(0);
                     d.blueLift.setTargetPosition(0);
@@ -421,16 +349,9 @@ public class StateAuto extends LinearOpMode {
                     d.blackLift.setPower(0.8);
                     d.blueLift.setPower(0.8);
                 })
-                .splineToConstantHeading(new Vector2d(-38, -30), Math.toRadians(270))
-                .lineToConstantHeading(new Vector2d(-58, -30)) // If right
+                .splineToConstantHeading(new Vector2d(-34, -32), Math.toRadians(270))
+                .lineToConstantHeading(new Vector2d(-12, -32)) // If right
                 .build();
-
-
-
-
-
-
-
 
 
 
@@ -453,7 +374,7 @@ public class StateAuto extends LinearOpMode {
                     d.blueLift.setPower(1);
                 })
                 .splineToConstantHeading(new Vector2d(33.5, -20), Math.toRadians(90))
-                .splineToSplineHeading(new Pose2d(30, -5, Math.toRadians(135)), Math.toRadians(135))
+                .splineToSplineHeading(new Pose2d(29.25, -3.25, Math.toRadians(135)), Math.toRadians(135))
                 .waitSeconds(0.2)
                 .UNSTABLE_addDisplacementMarkerOffset(-0.1, () -> {
                     d.blackServo.setPosition(0);
@@ -488,7 +409,7 @@ public class StateAuto extends LinearOpMode {
                     d.blackLift.setPower(1);
                     d.blueLift.setPower(1);
                 })
-                .splineToSplineHeading(new Pose2d(29, -5, Math.toRadians(135)), Math.toRadians(135))
+                .splineToSplineHeading(new Pose2d(28.25, -4.25, Math.toRadians(135)), Math.toRadians(135))
                 .waitSeconds(0.2)
                 .UNSTABLE_addDisplacementMarkerOffset(-0.2, () -> {
                     d.blackServo.setPosition(0);
@@ -525,7 +446,7 @@ public class StateAuto extends LinearOpMode {
                     d.blackLift.setPower(1);
                     d.blueLift.setPower(1);
                 })
-                .splineToSplineHeading(new Pose2d(30 + rightSideLevel, -5.5 + rightForward, Math.toRadians(135)), Math.toRadians(135))
+                .splineToSplineHeading(new Pose2d(29.25 + rightSideLevel, -5.25 + rightForward, Math.toRadians(135)), Math.toRadians(135))
                 .waitSeconds(0.2)
                 .UNSTABLE_addDisplacementMarkerOffset(-0.2, () -> {
                     d.blackServo.setPosition(0);
@@ -562,80 +483,8 @@ public class StateAuto extends LinearOpMode {
                     d.blackLift.setPower(1);
                     d.blueLift.setPower(1);
                 })
-                .splineToSplineHeading(new Pose2d(29.75 + rightSideLevel, -4.25 + rightForward, Math.toRadians(135)), Math.toRadians(135))
+                .splineToSplineHeading(new Pose2d(28.75 + rightSideLevel, -4.5 + rightForward, Math.toRadians(135)), Math.toRadians(135))
                 .waitSeconds(0.3)
-                .UNSTABLE_addDisplacementMarkerOffset(-0.2, () -> {
-                    d.blackServo.setPosition(0);
-                    d.blueServo.setPosition(0);
-                })
-                .build();
-
-        rightForward += 2;
-
-        TrajectorySequence rightSideConesV2_4 = d.trajectorySequenceBuilder(rightSideConesV2_3.end())
-                .setReversed(true)
-                .splineToSplineHeading(new Pose2d(47, -11.5 + rightForward, Math.toRadians(0)), Math.toRadians(0))
-                .UNSTABLE_addTemporalMarkerOffset(-1.25, () -> {
-                    d.blackLift.setTargetPosition(liftLevel);
-                    d.blueLift.setTargetPosition(liftLevel);
-                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    d.blackLift.setPower(0.8);
-                    d.blueLift.setPower(0.8);
-                })
-                .splineToSplineHeading(new Pose2d(59.5, -11.5 + rightForward, Math.toRadians(0)), Math.toRadians(0))
-                .waitSeconds(0.2)
-                .UNSTABLE_addTemporalMarkerOffset(-0.25, () -> {
-                    d.blackServo.setPosition(0.8);
-                    d.blueServo.setPosition(0.8);
-                })
-                .splineToSplineHeading(new Pose2d(47, -11.5 + rightForward, Math.toRadians(90)), Math.toRadians(180))
-                .UNSTABLE_addTemporalMarkerOffset(-1.5, () -> {
-                    d.blackLift.setTargetPosition(1135);
-                    d.blueLift.setTargetPosition(1135);
-                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    d.blackLift.setPower(0.8);
-                    d.blueLift.setPower(0.8);
-                })
-                .splineToSplineHeading(new Pose2d(29.5, -5.5 + rightForward, Math.toRadians(135)), Math.toRadians(135))
-                .waitSeconds(0.2)
-                .UNSTABLE_addDisplacementMarkerOffset(-0.2, () -> {
-                    d.blackServo.setPosition(0);
-                    d.blueServo.setPosition(0);
-                })
-                .build();
-
-        rightForward += 2;
-
-        TrajectorySequence rightSideConesV2_5 = d.trajectorySequenceBuilder(rightSideConesV2_4.end())
-                .setReversed(true)
-                .splineToSplineHeading(new Pose2d(47, -11.5 + rightForward, Math.toRadians(0)), Math.toRadians(0))
-                .UNSTABLE_addTemporalMarkerOffset(-1.25, () -> {
-                    d.blackLift.setTargetPosition(liftLevel);
-                    d.blueLift.setTargetPosition(liftLevel);
-                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    d.blackLift.setPower(0.8);
-                    d.blueLift.setPower(0.8);
-                })
-                .splineToSplineHeading(new Pose2d(59.5, -11.5 + rightForward, Math.toRadians(0)), Math.toRadians(0))
-                .waitSeconds(0.2)
-                .UNSTABLE_addTemporalMarkerOffset(-0.25, () -> {
-                    d.blackServo.setPosition(0.8);
-                    d.blueServo.setPosition(0.8);
-                })
-                .splineToSplineHeading(new Pose2d(47, -11.5 + rightForward, Math.toRadians(90)), Math.toRadians(180))
-                .UNSTABLE_addTemporalMarkerOffset(-1.5, () -> {
-                    d.blackLift.setTargetPosition(1135);
-                    d.blueLift.setTargetPosition(1135);
-                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    d.blackLift.setPower(0.8);
-                    d.blueLift.setPower(0.8);
-                })
-                .splineToSplineHeading(new Pose2d(29.5, -5.5 + rightForward, Math.toRadians(135)), Math.toRadians(135))
-                .waitSeconds(0.2)
                 .UNSTABLE_addDisplacementMarkerOffset(-0.2, () -> {
                     d.blackServo.setPosition(0);
                     d.blueServo.setPosition(0);
@@ -645,7 +494,7 @@ public class StateAuto extends LinearOpMode {
 
         TrajectorySequence rightSideParkLeft = d.trajectorySequenceBuilder(rightSideV2.end())
                 .setReversed(true)
-                .splineToSplineHeading(new Pose2d(38, -20, Math.toRadians(270)), Math.toRadians(270))
+                .splineToSplineHeading(new Pose2d(36, -20, Math.toRadians(270)), Math.toRadians(270))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     d.blackLift.setTargetPosition(0);
                     d.blueLift.setTargetPosition(0);
@@ -654,13 +503,13 @@ public class StateAuto extends LinearOpMode {
                     d.blackLift.setPower(0.8);
                     d.blueLift.setPower(0.8);
                 })
-                .splineToConstantHeading(new Vector2d(38, -30), Math.toRadians(270)) // If middle
-                .lineToConstantHeading(new Vector2d(12, -30))
+                .splineToConstantHeading(new Vector2d(36, -32), Math.toRadians(270)) // If middle
+                .lineToConstantHeading(new Vector2d(12, -32))
                 .build(); // If left
 
         TrajectorySequence rightSideParkMiddle = d.trajectorySequenceBuilder(rightSideV2.end())
                 .setReversed(true)
-                .splineToSplineHeading(new Pose2d(38, -20, Math.toRadians(270)), Math.toRadians(270))
+                .splineToSplineHeading(new Pose2d(36, -20, Math.toRadians(270)), Math.toRadians(270))
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                     d.blackLift.setTargetPosition(0);
                     d.blueLift.setTargetPosition(0);
@@ -669,12 +518,12 @@ public class StateAuto extends LinearOpMode {
                     d.blackLift.setPower(0.8);
                     d.blueLift.setPower(0.8);
                 })
-                .splineToConstantHeading(new Vector2d(38, -30), Math.toRadians(270)) // If middle
+                .splineToConstantHeading(new Vector2d(36, -32), Math.toRadians(270)) // If middle
                 .build();
 
         TrajectorySequence rightSideParkRight = d.trajectorySequenceBuilder(rightSideV2.end())
                 .setReversed(true)
-                .splineToSplineHeading(new Pose2d(38, -20, Math.toRadians(270)), Math.toRadians(270))
+                .splineToSplineHeading(new Pose2d(36, -20, Math.toRadians(270)), Math.toRadians(270))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     d.blackLift.setTargetPosition(0);
                     d.blueLift.setTargetPosition(0);
@@ -683,8 +532,8 @@ public class StateAuto extends LinearOpMode {
                     d.blackLift.setPower(0.8);
                     d.blueLift.setPower(0.8);
                 })
-                .splineToConstantHeading(new Vector2d(38, -30), Math.toRadians(270))
-                .lineToConstantHeading(new Vector2d(58, -30)) // If right
+                .splineToConstantHeading(new Vector2d(36, -32), Math.toRadians(270))
+                .lineToConstantHeading(new Vector2d(58, -32)) // If right
                 .build();
 
         ready = true;
@@ -695,7 +544,7 @@ public class StateAuto extends LinearOpMode {
 
         switch (side) {
             case right:
-                blackCam.stopStreaming();
+                blueCam.stopStreaming();
                 d.followTrajectorySequence(rightSideV2);
                 if (coneCounter >= 1) { d.followTrajectorySequence(rightSideConesV2); }
 
@@ -707,16 +556,6 @@ public class StateAuto extends LinearOpMode {
                 if (coneCounter >= 3) {
                     liftLevel -= 30;
                     d.followTrajectorySequence(rightSideConesV2_3);
-                }
-
-                if (coneCounter >= 4) {
-                    liftLevel -= 30;
-                    d.followTrajectorySequence(rightSideConesV2_4);
-                }
-
-                if (coneCounter >= 5) {
-                    liftLevel -= 30;
-                    d.followTrajectorySequence(rightSideConesV2_5);
                 }
 
                 switch (color) {
@@ -732,7 +571,7 @@ public class StateAuto extends LinearOpMode {
                 }
                 break;
             case left:
-                blueCam.stopStreaming();
+                blackCam.stopStreaming();
                 d.followTrajectorySequence(leftSideV2);
                 if (coneCounter >= 1 ) { d.followTrajectorySequence(leftSideConesV2); }
 
@@ -744,16 +583,6 @@ public class StateAuto extends LinearOpMode {
                 if (coneCounter >= 3) {
                     liftLevel -= 30;
                     d.followTrajectorySequence(leftSideConesV2_3);
-                }
-
-                if (coneCounter >= 4) {
-                    liftLevel -= 30;
-                    d.followTrajectorySequence(leftSideConesV2_4);
-                }
-
-                if (coneCounter >= 5) {
-                    liftLevel -= 30;
-                    d.followTrajectorySequence(leftSideConesV2_5);
                 }
 
                 switch (color) {
@@ -864,6 +693,8 @@ public class StateAuto extends LinearOpMode {
             telemetry.addData("Side", side);
             telemetry.addData("Cone count", coneCounter);
             telemetry.addData("Robot ready? ", ready);
+            telemetry.addData("BLack cam FPS", blackCam.getFps());
+            telemetry.addData("Blue cam FPS", blueCam.getFps());
             telemetry.update();
             return input;
         }

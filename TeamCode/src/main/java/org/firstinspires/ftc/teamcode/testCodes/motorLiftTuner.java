@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @Config
 @TeleOp
-
+@Disabled
 public class motorLiftTuner extends LinearOpMode {
     FtcDashboard dashboard = FtcDashboard.getInstance();
 
