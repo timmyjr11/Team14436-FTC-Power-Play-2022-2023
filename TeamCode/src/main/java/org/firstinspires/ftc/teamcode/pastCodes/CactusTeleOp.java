@@ -82,8 +82,8 @@ public class CactusTeleOp extends LinearOpMode {
         }
         telemetry.update();
         waitForStart();
-        d.blueServo.setPosition(0);
-        d.blackServo.setPosition(0);
+        d.blueGripper.setPosition(0);
+        d.blackGripper.setPosition(0);
 
         while(opModeIsActive() && !isStopRequested()) {
             drive();
@@ -112,12 +112,12 @@ public class CactusTeleOp extends LinearOpMode {
 
             if (a2Pressed) {
                 if (gripper == ConfigPos.gripperPos.open) {
-                    d.blueServo.setPosition(0.8);
-                    d.blackServo.setPosition(0.8);
+                    d.blueGripper.setPosition(0.8);
+                    d.blackGripper.setPosition(0.8);
                     gripper = ConfigPos.gripperPos.closed;
                 } else if (gripper == ConfigPos.gripperPos.closed) {
-                    d.blueServo.setPosition(0);
-                    d.blackServo.setPosition(0);
+                    d.blueGripper.setPosition(0);
+                    d.blackGripper.setPosition(0);
                     gripper = ConfigPos.gripperPos.open;
                 }
             }

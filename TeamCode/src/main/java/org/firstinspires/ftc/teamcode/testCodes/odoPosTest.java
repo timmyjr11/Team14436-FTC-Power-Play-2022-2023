@@ -12,7 +12,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.teamcode.util.Encoder;
 @Config
 @Autonomous
-@Disabled
 public class odoPosTest extends LinearOpMode {
 
     private final FtcDashboard dash = FtcDashboard.getInstance();

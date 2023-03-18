@@ -70,11 +70,9 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     private final TrajectoryFollower follower;
 
-    public DcMotorEx blueLift;
-    public DcMotorEx blackLift;
-    public Servo blueServo;
-    public Servo blackServo;
+    public DcMotorEx blueLift, blackLift;
 
+    public Servo blackArm, blueArm, blackGripper, blueGripper, rotateServo;
     private DcMotorEx frontLeft, backLeft, backRight, frontRight;
     private final List<DcMotorEx> motors;
 
@@ -101,8 +99,11 @@ public class SampleMecanumDrive extends MecanumDrive {
         backRight = hardwareMap.get(DcMotorEx.class, "backRight");
         blackLift = hardwareMap.get(DcMotorEx.class, "blackLift");
         blueLift = hardwareMap.get(DcMotorEx.class, "blueLift");
-        blackServo = hardwareMap.get(Servo.class, "blackServo");
-        blueServo = hardwareMap.get(Servo.class, "blueServo");
+        blackArm = hardwareMap.get(Servo.class, "blackArm");
+        blueArm = hardwareMap.get(Servo.class, "blueArm");
+        blackGripper = hardwareMap.get(Servo.class, "blackGripper");
+        blueGripper = hardwareMap.get(Servo.class, "blueGripper");
+        rotateServo = hardwareMap.get(Servo.class, "rotateServo");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
@@ -156,14 +157,15 @@ public class SampleMecanumDrive extends MecanumDrive {
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         blackLift.setDirection(DcMotorSimple.Direction.REVERSE);
-        blueServo.setDirection(Servo.Direction.REVERSE);
+
+        blackGripper.setDirection(Servo.Direction.REVERSE);
+        blueArm.setDirection(Servo.Direction.REVERSE);
+        rotateServo.setDirection(Servo.Direction.REVERSE);
 
 
         // TODO: if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
-
-        setLocalizer(new TwoWheelTrackingLocalizer(hardwareMap, this));
-
+        setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
     }
 

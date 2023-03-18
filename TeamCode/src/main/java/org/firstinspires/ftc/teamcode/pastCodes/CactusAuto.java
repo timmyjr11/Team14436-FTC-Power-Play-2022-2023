@@ -34,8 +34,8 @@ public class CactusAuto extends LinearOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
-        d.blueServo.setPosition(0);
-        d.blackServo.setPosition(0);
+        d.blueGripper.setPosition(0);
+        d.blackGripper.setPosition(0);
 
         telemetry.addLine("Press left on D-pad for left side, press right on D-pad for right side");
         telemetry.update();
@@ -59,8 +59,8 @@ public class CactusAuto extends LinearOpMode {
 
             TrajectorySequence redSideRight = d.trajectorySequenceBuilder(d.getPoseEstimate())
                     .UNSTABLE_addTemporalMarkerOffset(-1, () -> {
-                        d.blueServo.setPosition(1);
-                        d.blackServo.setPosition(1);
+                        d.blueGripper.setPosition(1);
+                        d.blackGripper.setPosition(1);
                     })
                     .waitSeconds(0.3)
                     .strafeTo(new Vector2d(9, -59))
@@ -76,8 +76,8 @@ public class CactusAuto extends LinearOpMode {
                     .turn(Math.toRadians(-40))
                     .forward(8.5)
                     .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                        d.blueServo.setPosition(0);
-                        d.blackServo.setPosition(0);
+                        d.blueGripper.setPosition(0);
+                        d.blackGripper.setPosition(0);
                     })
                     .waitSeconds(1)
                     .back(8.5)
@@ -97,8 +97,8 @@ public class CactusAuto extends LinearOpMode {
 
         TrajectorySequence redSideLeft = d.trajectorySequenceBuilder(d.getPoseEstimate())
                 .UNSTABLE_addTemporalMarkerOffset(-1, () -> {
-                    d.blueServo.setPosition(1);
-                    d.blackServo.setPosition(1);
+                    d.blueGripper.setPosition(1);
+                    d.blackGripper.setPosition(1);
                 })
                 .waitSeconds(0.3)
                 .strafeTo(new Vector2d(-4, -59))
@@ -114,8 +114,8 @@ public class CactusAuto extends LinearOpMode {
                 .turn(Math.toRadians(47))
                 .forward(7)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    d.blueServo.setPosition(0);
-                    d.blackServo.setPosition(0);
+                    d.blueGripper.setPosition(0);
+                    d.blackGripper.setPosition(0);
                 })
                 .waitSeconds(1)
                 .back(7)

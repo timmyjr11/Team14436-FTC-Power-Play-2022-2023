@@ -12,34 +12,6 @@ import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 public class MeepMeepTesting {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(720);
-        // Red bot
-/*        RoadRunnerBotEntity redBot = new DefaultBotBuilder(meepMeep)
-                .setColorScheme(new ColorSchemeRedDark())
-                .setConstraints(60, 30, Math.toRadians(275), Math.toRadians(60), 16.965)
-                .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(-37.5, -61.3, Math.toRadians(90)))
-                                .lineToConstantHeading(new Vector2d(-12, -60))
-                                .lineToConstantHeading(new Vector2d(-12, -34))
-                                .turn(Math.toRadians(-45))
-                                .waitSeconds(0.5)
-                                .turn(Math.toRadians(45))
-                                .lineToConstantHeading(new Vector2d(-12, -12))
-                                .turn(Math.toRadians(90))
-                                .lineToConstantHeading(new Vector2d(-55, -12))
-                                .lineToConstantHeading(new Vector2d(-35, -12))
-                                .turn(Math.toRadians(-135))
-                                .waitSeconds(0.5)
-                                .turn(Math.toRadians(135))
-                                .lineToLinearHeading(new Pose2d(-55, -12, Math.toRadians(180)))
-                                .lineToConstantHeading(new Vector2d(-35, -12))
-                                .turn(Math.toRadians(-135))
-                                .waitSeconds(0.5)
-                                .turn(Math.toRadians(-135))
-                                .lineToConstantHeading(new Vector2d(-35, -35))
-                                .build()
-                );*/
-
-        // Blue bot
 
         RoadRunnerBotEntity redBotCool = new DefaultBotBuilder(meepMeep)
                 .setColorScheme(new ColorSchemeBlueDark())

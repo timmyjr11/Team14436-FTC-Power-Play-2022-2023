@@ -57,8 +57,8 @@ public class parallelThreadsTest extends LinearOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
-        d.blueServo.setPosition(0);
-        d.blackServo.setPosition(0);
+        d.blueGripper.setPosition(0);
+        d.blackGripper.setPosition(0);
 
 
         waitForStart();
@@ -84,12 +84,12 @@ public class parallelThreadsTest extends LinearOpMode {
 
             if (a2Pressed) {
                 if (gripper == ConfigPos.gripperPos.open) {
-                    d.blueServo.setPosition(0.75);
-                    d.blackServo.setPosition(0.75);
+                    d.blueGripper.setPosition(0.75);
+                    d.blackGripper.setPosition(0.75);
                     gripper = ConfigPos.gripperPos.closed;
                 } else if (gripper == ConfigPos.gripperPos.closed) {
-                    d.blueServo.setPosition(0);
-                    d.blackServo.setPosition(0);
+                    d.blueGripper.setPosition(0);
+                    d.blackGripper.setPosition(0);
                     gripper = ConfigPos.gripperPos.open;
                 }
             }

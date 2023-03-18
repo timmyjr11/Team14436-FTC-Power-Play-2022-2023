@@ -108,8 +108,8 @@ public class StateAutoBlue extends LinearOpMode {
         d.blueLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         d.blackLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        d.blueServo.setPosition(0);
-        d.blackServo.setPosition(0);
+        d.blueGripper.setPosition(0);
+        d.blackGripper.setPosition(0);
 
         telemetry = new MultipleTelemetry(telemetry, dash.getTelemetry());
 
@@ -179,8 +179,8 @@ public class StateAutoBlue extends LinearOpMode {
                 .splineToSplineHeading(new Pose2d(-34, -50, Math.toRadians(0)), Math.toRadians(90))
 
                 .UNSTABLE_addTemporalMarkerOffset(-1.5, () -> {
-                    d.blueServo.setPosition(0.8);
-                    d.blackServo.setPosition(0.8);
+                    d.blueGripper.setPosition(0.8);
+                    d.blackGripper.setPosition(0.8);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(-0.6, () -> {
                     d.blackLift.setTargetPosition(1120);
@@ -194,8 +194,8 @@ public class StateAutoBlue extends LinearOpMode {
                 .splineToSplineHeading(new Pose2d(-29, -5, Math.toRadians(45)), Math.toRadians(45))
                 .waitSeconds(0.2)
                 .UNSTABLE_addDisplacementMarkerOffset(-0.1, () -> {
-                    d.blackServo.setPosition(0);
-                    d.blueServo.setPosition(0);
+                    d.blackGripper.setPosition(0);
+                    d.blueGripper.setPosition(0);
                 })
                 .build(); // 9 x 8 y
 
@@ -214,8 +214,8 @@ public class StateAutoBlue extends LinearOpMode {
                 .splineToSplineHeading(new Pose2d(-59.5, -11.25, Math.toRadians(180)), Math.toRadians(180))
                 .waitSeconds(0.2)
                 .UNSTABLE_addTemporalMarkerOffset(-0.25, () -> {
-                    d.blackServo.setPosition(0.8);
-                    d.blueServo.setPosition(0.8);
+                    d.blackGripper.setPosition(0.8);
+                    d.blueGripper.setPosition(0.8);
                 })
                 .splineToSplineHeading(new Pose2d(-47, -11.25, Math.toRadians(90)), Math.toRadians(0))
                 .UNSTABLE_addTemporalMarkerOffset(-1.5, () -> {
@@ -229,8 +229,8 @@ public class StateAutoBlue extends LinearOpMode {
                 .splineToSplineHeading(new Pose2d(-28 + leftSideLevel, -4.5 + leftForward, Math.toRadians(45)), Math.toRadians(45))
                 .waitSeconds(0.2)
                 .UNSTABLE_addDisplacementMarkerOffset(-0.2, () -> {
-                    d.blackServo.setPosition(0);
-                    d.blueServo.setPosition(0);
+                    d.blackGripper.setPosition(0);
+                    d.blueGripper.setPosition(0);
                 })
                 .build();
 
@@ -251,8 +251,8 @@ public class StateAutoBlue extends LinearOpMode {
                 .splineToSplineHeading(new Pose2d(-59.5, -11.25 + leftForward, Math.toRadians(180)), Math.toRadians(180))
                 .waitSeconds(0.2)
                 .UNSTABLE_addTemporalMarkerOffset(-0.25, () -> {
-                    d.blackServo.setPosition(0.8);
-                    d.blueServo.setPosition(0.8);
+                    d.blackGripper.setPosition(0.8);
+                    d.blueGripper.setPosition(0.8);
                 })
                 .splineToSplineHeading(new Pose2d(-47, -11.25 + leftForward, Math.toRadians(90)), Math.toRadians(0))
                 .UNSTABLE_addTemporalMarkerOffset(-1.5, () -> {
@@ -266,8 +266,8 @@ public class StateAutoBlue extends LinearOpMode {
                 .splineToSplineHeading(new Pose2d(-28 + leftSideLevel, -4.5 + leftForward, Math.toRadians(45)), Math.toRadians(45))
                 .waitSeconds(0.2)
                 .UNSTABLE_addDisplacementMarkerOffset(-0.2, () -> {
-                    d.blackServo.setPosition(0);
-                    d.blueServo.setPosition(0);
+                    d.blackGripper.setPosition(0);
+                    d.blueGripper.setPosition(0);
                 })
                 .build();
 
@@ -288,8 +288,8 @@ public class StateAutoBlue extends LinearOpMode {
                 .splineToSplineHeading(new Pose2d(-59.5, -11.25 + leftForward, Math.toRadians(180)), Math.toRadians(180))
                 .waitSeconds(0.2)
                 .UNSTABLE_addTemporalMarkerOffset(-0.25, () -> {
-                    d.blackServo.setPosition(0.8);
-                    d.blueServo.setPosition(0.8);
+                    d.blackGripper.setPosition(0.8);
+                    d.blueGripper.setPosition(0.8);
                 })
                 .splineToSplineHeading(new Pose2d(-47, -11.25 + leftForward, Math.toRadians(90)), Math.toRadians(0))
                 .UNSTABLE_addTemporalMarkerOffset(-1.5, () -> {
@@ -303,8 +303,8 @@ public class StateAutoBlue extends LinearOpMode {
                 .splineToSplineHeading(new Pose2d(-28 + leftSideLevel, -4.5 + leftForward, Math.toRadians(45)), Math.toRadians(45))
                 .waitSeconds(0.2)
                 .UNSTABLE_addDisplacementMarkerOffset(-0.2, () -> {
-                    d.blackServo.setPosition(0);
-                    d.blueServo.setPosition(0);
+                    d.blackGripper.setPosition(0);
+                    d.blueGripper.setPosition(0);
                 })
                 .build();
 
@@ -362,8 +362,8 @@ public class StateAutoBlue extends LinearOpMode {
                 .splineToSplineHeading(new Pose2d(33.5, -50, Math.toRadians(180)), Math.toRadians(90))
 
                 .UNSTABLE_addTemporalMarkerOffset(-1.5, () -> {
-                    d.blueServo.setPosition(0.8);
-                    d.blackServo.setPosition(0.8);
+                    d.blueGripper.setPosition(0.8);
+                    d.blackGripper.setPosition(0.8);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(-0.8, () -> {
                     d.blackLift.setTargetPosition(1120);
@@ -377,8 +377,8 @@ public class StateAutoBlue extends LinearOpMode {
                 .splineToSplineHeading(new Pose2d(29.25, -3.25, Math.toRadians(135)), Math.toRadians(135))
                 .waitSeconds(0.2)
                 .UNSTABLE_addDisplacementMarkerOffset(-0.1, () -> {
-                    d.blackServo.setPosition(0);
-                    d.blueServo.setPosition(0);
+                    d.blackGripper.setPosition(0);
+                    d.blueGripper.setPosition(0);
                 })
                 .build(); // 9 x 8 y
 
@@ -397,8 +397,8 @@ public class StateAutoBlue extends LinearOpMode {
                 .splineToSplineHeading(new Pose2d(59.25, -11.5, Math.toRadians(0)), Math.toRadians(0))
                 .waitSeconds(0.2)
                 .UNSTABLE_addTemporalMarkerOffset(-0.25, () -> {
-                    d.blackServo.setPosition(0.8);
-                    d.blueServo.setPosition(0.8);
+                    d.blackGripper.setPosition(0.8);
+                    d.blueGripper.setPosition(0.8);
                 })
                 .splineToSplineHeading(new Pose2d(47, -11.5, Math.toRadians(90)), Math.toRadians(180))
                 .UNSTABLE_addTemporalMarkerOffset(-1.5, () -> {
@@ -412,8 +412,8 @@ public class StateAutoBlue extends LinearOpMode {
                 .splineToSplineHeading(new Pose2d(28.25, -4.25, Math.toRadians(135)), Math.toRadians(135))
                 .waitSeconds(0.2)
                 .UNSTABLE_addDisplacementMarkerOffset(-0.2, () -> {
-                    d.blackServo.setPosition(0);
-                    d.blueServo.setPosition(0);
+                    d.blackGripper.setPosition(0);
+                    d.blueGripper.setPosition(0);
                 })
                 .build();
 
@@ -434,8 +434,8 @@ public class StateAutoBlue extends LinearOpMode {
                 .splineToSplineHeading(new Pose2d(59.5, -11.5 + rightForward, Math.toRadians(0)), Math.toRadians(0))
                 .waitSeconds(0.2)
                 .UNSTABLE_addTemporalMarkerOffset(-0.25, () -> {
-                    d.blackServo.setPosition(0.8);
-                    d.blueServo.setPosition(0.8);
+                    d.blackGripper.setPosition(0.8);
+                    d.blueGripper.setPosition(0.8);
                 })
                 .splineToSplineHeading(new Pose2d(47, -11.5 + rightForward, Math.toRadians(90)), Math.toRadians(180))
                 .UNSTABLE_addTemporalMarkerOffset(-1.5, () -> {
@@ -449,8 +449,8 @@ public class StateAutoBlue extends LinearOpMode {
                 .splineToSplineHeading(new Pose2d(29.25 + rightSideLevel, -5.25 + rightForward, Math.toRadians(135)), Math.toRadians(135))
                 .waitSeconds(0.2)
                 .UNSTABLE_addDisplacementMarkerOffset(-0.2, () -> {
-                    d.blackServo.setPosition(0);
-                    d.blueServo.setPosition(0);
+                    d.blackGripper.setPosition(0);
+                    d.blueGripper.setPosition(0);
                 })
                 .build();
 
@@ -471,8 +471,8 @@ public class StateAutoBlue extends LinearOpMode {
                 .splineToSplineHeading(new Pose2d(59.5, -11.5 + rightForward, Math.toRadians(0)), Math.toRadians(0))
                 .waitSeconds(0.2)
                 .UNSTABLE_addTemporalMarkerOffset(-0.25, () -> {
-                    d.blackServo.setPosition(0.8);
-                    d.blueServo.setPosition(0.8);
+                    d.blackGripper.setPosition(0.8);
+                    d.blueGripper.setPosition(0.8);
                 })
                 .splineToSplineHeading(new Pose2d(47, -11.5 + rightForward, Math.toRadians(90)), Math.toRadians(180))
                 .UNSTABLE_addTemporalMarkerOffset(-1.5, () -> {
@@ -486,8 +486,8 @@ public class StateAutoBlue extends LinearOpMode {
                 .splineToSplineHeading(new Pose2d(28.75 + rightSideLevel, -4.5 + rightForward, Math.toRadians(135)), Math.toRadians(135))
                 .waitSeconds(0.3)
                 .UNSTABLE_addDisplacementMarkerOffset(-0.2, () -> {
-                    d.blackServo.setPosition(0);
-                    d.blueServo.setPosition(0);
+                    d.blackGripper.setPosition(0);
+                    d.blueGripper.setPosition(0);
                 })
                 .build();
 

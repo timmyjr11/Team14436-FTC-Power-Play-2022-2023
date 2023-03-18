@@ -101,8 +101,8 @@ public class CrackedAutoBlue extends LinearOpMode {
         d.blueLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         d.blackLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        d.blueServo.setPosition(0);
-        d.blackServo.setPosition(0);
+        d.blueGripper.setPosition(0);
+        d.blackGripper.setPosition(0);
 
         telemetry = new MultipleTelemetry(telemetry, dash.getTelemetry());
 
@@ -179,8 +179,8 @@ public class CrackedAutoBlue extends LinearOpMode {
         TrajectorySequence leftSide = d.trajectorySequenceBuilder(d.getPoseEstimate())
                 .waitSeconds(0.3)
                 .UNSTABLE_addTemporalMarkerOffset(-0.3, () -> {
-                    d.blueServo.setPosition(0.8);
-                    d.blackServo.setPosition(0.8);
+                    d.blueGripper.setPosition(0.8);
+                    d.blackGripper.setPosition(0.8);
                 })
                 .splineToConstantHeading(new Vector2d(-35, -59), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(-25, -59), Math.toRadians(0))
@@ -198,8 +198,8 @@ public class CrackedAutoBlue extends LinearOpMode {
                 .forward(6)
                 .waitSeconds(0.5)
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
-                    d.blueServo.setPosition(0);
-                    d.blackServo.setPosition(0);
+                    d.blueGripper.setPosition(0);
+                    d.blackGripper.setPosition(0);
                 })
                 .lineToLinearHeading(new Pose2d(-14, -30, Math.toRadians(90)))
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
@@ -227,8 +227,8 @@ public class CrackedAutoBlue extends LinearOpMode {
                 .lineToConstantHeading(new Vector2d(-65, -8))
                 .waitSeconds(0.2)
                 .UNSTABLE_addTemporalMarkerOffset(-0.2, () -> {
-                    d.blackServo.setPosition(0.8);
-                    d.blueServo.setPosition(0.8);
+                    d.blackGripper.setPosition(0.8);
+                    d.blueGripper.setPosition(0.8);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     d.blackLift.setTargetPosition(4000);
@@ -243,8 +243,8 @@ public class CrackedAutoBlue extends LinearOpMode {
                 .forward(5)
                 .waitSeconds(0.5)
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
-                    d.blueServo.setPosition(0);
-                    d.blackServo.setPosition(0);
+                    d.blueGripper.setPosition(0);
+                    d.blackGripper.setPosition(0);
                 })
                 .lineToSplineHeading(new Pose2d(-40, -8, Math.toRadians(180)),
                         SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
@@ -286,8 +286,8 @@ public class CrackedAutoBlue extends LinearOpMode {
         TrajectorySequence rightSide = d.trajectorySequenceBuilder(d.getPoseEstimate())
                 .waitSeconds(0.3)
                 .UNSTABLE_addTemporalMarkerOffset(-0.3, () -> {
-                    d.blueServo.setPosition(0.8);
-                    d.blackServo.setPosition(0.8);
+                    d.blueGripper.setPosition(0.8);
+                    d.blackGripper.setPosition(0.8);
                 })
                 .splineToConstantHeading(new Vector2d(35, -59), Math.toRadians(180))
                 .splineToConstantHeading(new Vector2d(25, -59), Math.toRadians(180))
@@ -305,8 +305,8 @@ public class CrackedAutoBlue extends LinearOpMode {
                 .forward(6.5)
                 .waitSeconds(0.5)
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
-                    d.blueServo.setPosition(0);
-                    d.blackServo.setPosition(0);
+                    d.blueGripper.setPosition(0);
+                    d.blackGripper.setPosition(0);
                 })
                 .lineToLinearHeading(new Pose2d(15, -30, Math.toRadians(90)))
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
@@ -334,8 +334,8 @@ public class CrackedAutoBlue extends LinearOpMode {
                 .lineToConstantHeading(new Vector2d(65, -8))
                 .waitSeconds(0.2)
                 .UNSTABLE_addTemporalMarkerOffset(-0.2, () -> {
-                    d.blackServo.setPosition(0.8);
-                    d.blueServo.setPosition(0.8);
+                    d.blackGripper.setPosition(0.8);
+                    d.blueGripper.setPosition(0.8);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     d.blackLift.setTargetPosition(4000);
@@ -350,8 +350,8 @@ public class CrackedAutoBlue extends LinearOpMode {
                 .forward(5)
                 .waitSeconds(0.5)
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
-                    d.blueServo.setPosition(0);
-                    d.blackServo.setPosition(0);
+                    d.blueGripper.setPosition(0);
+                    d.blackGripper.setPosition(0);
                 })
                 .back(5)
                 .lineToSplineHeading(new Pose2d(38, -8, Math.toRadians(0)),
