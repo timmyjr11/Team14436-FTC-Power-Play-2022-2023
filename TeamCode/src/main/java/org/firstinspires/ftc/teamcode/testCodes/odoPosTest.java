@@ -24,8 +24,8 @@ public class odoPosTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        left = new Encoder(hardwareMap.get(DcMotorEx.class, "leftEncoder"));
-        right = new Encoder(hardwareMap.get(DcMotorEx.class, "backRight"));
+        left = new Encoder(hardwareMap.get(DcMotorEx.class, "backRight"));
+        right = new Encoder(hardwareMap.get(DcMotorEx.class, "leftEncoder"));
         front = new Encoder(hardwareMap.get(DcMotorEx.class, "frontRight"));
         frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
         backRight = hardwareMap.get(DcMotorEx.class, "backRight");
