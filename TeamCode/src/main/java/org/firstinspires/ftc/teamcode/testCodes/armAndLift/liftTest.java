@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.testCodes;
+package org.firstinspires.ftc.teamcode.testCodes.armAndLift;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;

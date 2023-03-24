@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.testCodes.movementAndFullRobot;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -6,22 +6,23 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.teamcode.pastCodes.ConfigPos;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 import java.util.ArrayList;
-
+@Disabled
 @Config
 @TeleOp
-public class StateTeleOp extends LinearOpMode {
+public class noFieldCentericOpMode extends LinearOpMode {
     SampleMecanumDrive d;
 
     int lowerLimit = 0;
-    int upperLimit = 1135;
-    int slowLimit = 367;
+    int upperLimit = 4000;
 
     double power;
     double liftPower;
@@ -48,26 +49,20 @@ public class StateTeleOp extends LinearOpMode {
         d.blueLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         d.blackLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        d.blueLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        d.blackLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         d.blueLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         d.blackLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
-        d.setPoseEstimate(PoseStorage.telePower);
-
         waitForStart();
-
         d.blueGripper.setPosition(0);
         d.blackGripper.setPosition(0);
 
         while(opModeIsActive() && !isStopRequested()) {
             drive();
-            telemetry.addData("Blue lift", d.blueLift.getCurrentPosition());
-            telemetry.addData("Black lift", d.blackLift.getCurrentPosition());
-            telemetry.addData("Blue lift power", d.blueLift.getPower());
-            telemetry.addData("Black lift power", d.blackLift.getPower());
-            telemetry.update();
-
             if (gamepad2.right_trigger > 0.5) {
                 liftPower = 0.5;
             } else {
@@ -84,26 +79,17 @@ public class StateTeleOp extends LinearOpMode {
                 d.blackLift.setPower(1 * liftPower);
                 d.blueLift.setPower(1 * liftPower);
             } else if ((gamepad2.dpad_down && over == ConfigPos.override.yes) || (gamepad2.dpad_down && d.blueLift.getCurrentPosition() > lowerLimit && d.blackLift.getCurrentPosition() > lowerLimit)) {
-
-                if (d.blueLift.getCurrentPosition() <= slowLimit && d.blackLift.getCurrentPosition() <= slowLimit) {
-                    liftPower = 0.35;
-                } else if (gamepad2.right_trigger >= 0.5) {
-                    liftPower = 0.5;
-                } else {
-                    liftPower = 1;
-                }
-
-                d.blackLift.setPower(-1 * liftPower);
-                d.blueLift.setPower(-1 * liftPower);
+                d.blackLift.setPower(-1);
+                d.blueLift.setPower(-1);
             } else {
-                d.blueLift.setPower(0.15);
-                d.blackLift.setPower(0.15);
+                d.blueLift.setPower(0.05);
+                d.blackLift.setPower(0.05);
             }
 
             if (a2Pressed) {
                 if (gripper == ConfigPos.gripperPos.open) {
-                    d.blueGripper.setPosition(0.8);
-                    d.blackGripper.setPosition(0.8);
+                    d.blueGripper.setPosition(0.75);
+                    d.blackGripper.setPosition(0.75);
                     gripper = ConfigPos.gripperPos.closed;
                 } else if (gripper == ConfigPos.gripperPos.closed) {
                     d.blueGripper.setPosition(0);
@@ -119,10 +105,11 @@ public class StateTeleOp extends LinearOpMode {
                 d.blueLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             }
 
-            if (a1Pressed) {
-                d.setPoseEstimate(PoseStorage.telePower);
-            }
 
+            telemetry.addData("Arming State: ", PhotonCore.CONTROL_HUB.getArmingState());
+            telemetry.addData("Bulk Caching Mode", PhotonCore.CONTROL_HUB.getBulkCachingMode());
+            telemetry.addData("Blinker pattern length", PhotonCore.CONTROL_HUB.getBlinkerPatternMaxLength());
+            telemetry.update();
             a2Pressed = ifPressed(gamepad2.a);
             y2Pressed = ifPressed(gamepad2.y);
             a1Pressed = ifPressed(gamepad1.a);
@@ -146,7 +133,7 @@ public class StateTeleOp extends LinearOpMode {
         Vector2d input = new Vector2d(
                 -gamepad1.left_stick_y * power,
                 -gamepad1.left_stick_x * power
-        ).rotated(-poseEstimate.getHeading());
+        );
 
         // Pass in the rotated input + right stick value for rotation
         // Rotation is not part of the rotated input thus must be passed in separately
@@ -160,6 +147,7 @@ public class StateTeleOp extends LinearOpMode {
 
         d.update();
     }
+
 
     //Function used to allow toggling
     private boolean ifPressed(boolean button) {

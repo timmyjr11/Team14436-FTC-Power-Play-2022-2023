@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.testCodes;
+package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -6,20 +6,19 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.ConfigPos;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.pastCodes.ConfigPos;
+import org.firstinspires.ftc.teamcode.pastCodes.PoseStorage;
 
 import java.util.ArrayList;
 
 @Config
 @TeleOp
-@Disabled
-public class roadrunnerTeleopTest extends LinearOpMode {
+public class WorldsTeleop extends LinearOpMode {
     SampleMecanumDrive d;
 
     int lowerLimit = 0;
@@ -31,70 +30,91 @@ public class roadrunnerTeleopTest extends LinearOpMode {
     ArrayList<Boolean> booleanArray = new ArrayList<>();
     int booleanIncrementer = 0;
     boolean a2Pressed;
+    boolean y2Pressed;
+    boolean a1Pressed;
 
     FtcDashboard dashboard = FtcDashboard.getInstance();
 
-    ConfigPos.gripperPos gripper = ConfigPos.gripperPos.open;
+    WorldsConfig.gripper gripper = WorldsConfig.gripper.open;
+    WorldsConfig.override over = WorldsConfig.override.no;
+    WorldsConfig.rotation rotation = WorldsConfig.rotation.upright;
+    WorldsConfig.arm arm = WorldsConfig.arm.forward;
 
 
     @Override
     public void runOpMode() throws InterruptedException {
         PhotonCore.enable();
+        PhotonCore.experimental.setMaximumParallelCommands(6);
+        PhotonCore.disable();
+
         d = new SampleMecanumDrive(hardwareMap);
-        //d.setPoseEstimate(PoseStorage.telePowerRed);
 
         d.blueLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         d.blackLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        d.blueLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        d.blackLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         d.blueLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         d.blackLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
-        d.blueGripper.setPosition(0);
-        d.blackGripper.setPosition(0);
-
+        d.setPoseEstimate(PoseStorage.telePower);
 
         waitForStart();
 
+        d.blueGripper.setPosition(0);
+        d.blackGripper.setPosition(0);
+
         while(opModeIsActive() && !isStopRequested()) {
             drive();
-            if (gamepad2.right_trigger > 0.5) {
-                liftPower = 0.5;
-            } else {
-                liftPower = 1;
-            }
+            telemetry.addData("Blue lift", d.blueLift.getCurrentPosition());
+            telemetry.addData("Black lift", d.blackLift.getCurrentPosition());
+            telemetry.addData("Blue lift power", d.blueLift.getPower());
+            telemetry.addData("Black lift power", d.blackLift.getPower());
+            telemetry.update();
 
-            if (gamepad2.dpad_up && d.blackLift.getCurrentPosition() < upperLimit && d.blueLift.getCurrentPosition() < upperLimit) {
-                d.blackLift.setPower(1 * liftPower);
-                d.blueLift.setPower(1 * liftPower);
-            } else if (gamepad2.dpad_down && d.blueLift.getCurrentPosition() > lowerLimit && d.blackLift.getCurrentPosition() > lowerLimit) {
-                d.blackLift.setPower(-1);
-                d.blueLift.setPower(-1);
-            } else {
-                d.blueLift.setPower(0);
-                d.blackLift.setPower(0);
-            }
+            liftPower = (gamepad2.right_trigger >= 0.5) ? 0.5 : 1;
+            over = (gamepad2.left_trigger >= 0.5) ? WorldsConfig.override.yes : WorldsConfig.override.no;
+
 
             if (a2Pressed) {
-                if (gripper == ConfigPos.gripperPos.open) {
-                    d.blueGripper.setPosition(0.75);
-                    d.blackGripper.setPosition(0.75);
-                    gripper = ConfigPos.gripperPos.closed;
-                } else if (gripper == ConfigPos.gripperPos.closed) {
+                switch (gripper) {
+                    case open:
+                        d.blueGripper.setPosition(0.8);
+                        d.blackGripper.setPosition(0.8);
+                        gripper = WorldsConfig.gripper.closed;
+                        break;
+                    case closed:
+                        d.blueGripper.setPosition(0);
+                        d.blackGripper.setPosition(0);
+                        gripper = WorldsConfig.gripper.open;
+                        break;
+                }
+
+                /*if (gripper == WorldsConfig.gripper.open) {
+                    d.blueGripper.setPosition(0.8);
+                    d.blackGripper.setPosition(0.8);
+                    gripper = WorldsConfig.gripper.closed;
+                } else if (gripper == WorldsConfig.gripper.closed) {
                     d.blueGripper.setPosition(0);
                     d.blackGripper.setPosition(0);
-                    gripper = ConfigPos.gripperPos.open;
-                }
+                    gripper = WorldsConfig.gripper.open;
+                }*/
             }
-            telemetry.addData("Arming State: ", PhotonCore.CONTROL_HUB.getArmingState());
-            telemetry.addData("Bulk Caching Mode", PhotonCore.CONTROL_HUB.getBulkCachingMode());
-            telemetry.addData("Blinker pattern length", PhotonCore.CONTROL_HUB.getBlinkerPatternMaxLength());
-            telemetry.update();
+
+            if (y2Pressed) {
+                d.blackLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                d.blueLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                d.blueLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                d.blueLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            }
+
+            if (a1Pressed) {
+                d.setPoseEstimate(PoseStorage.telePower);
+            }
+
             a2Pressed = ifPressed(gamepad2.a);
+            y2Pressed = ifPressed(gamepad2.y);
+            a1Pressed = ifPressed(gamepad1.a);
             booleanIncrementer = 0;
         }
     }
@@ -108,6 +128,7 @@ public class roadrunnerTeleopTest extends LinearOpMode {
         } else {
             power = 1;
         }
+
         Pose2d poseEstimate = d.getPoseEstimate();
 
         // Create a vector from the gamepad x/y inputs
@@ -129,7 +150,6 @@ public class roadrunnerTeleopTest extends LinearOpMode {
 
         d.update();
     }
-
 
     //Function used to allow toggling
     private boolean ifPressed(boolean button) {

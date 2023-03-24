@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.pastCodes;
+package org.firstinspires.ftc.teamcode.pastCodes.Cactus;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.ConfigPos;
+import org.firstinspires.ftc.teamcode.pastCodes.ConfigPos;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 import java.util.ArrayList;

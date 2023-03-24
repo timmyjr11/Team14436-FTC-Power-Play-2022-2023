@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.pastCodes;
 
 public class ConfigPos {
     public enum gripperPos {

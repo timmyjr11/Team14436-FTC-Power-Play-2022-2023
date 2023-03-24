@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.testCodes;
+package org.firstinspires.ftc.teamcode.testCodes.armAndLift;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -25,7 +25,6 @@ public class armTest extends LinearOpMode {
 
         blackGripper.setDirection(Servo.Direction.REVERSE);
         blueArm.setDirection(Servo.Direction.REVERSE);
-        rotateServo.setDirection(Servo.Direction.REVERSE);
 
         waitForStart();
 
@@ -54,6 +53,8 @@ public class armTest extends LinearOpMode {
                 blackGripper.setPosition(1);
                 blueGripper.setPosition(1);
             }
+            telemetry.addData("Roate", rotateServo.getPosition());
+            telemetry.update();
         }
     }
 }

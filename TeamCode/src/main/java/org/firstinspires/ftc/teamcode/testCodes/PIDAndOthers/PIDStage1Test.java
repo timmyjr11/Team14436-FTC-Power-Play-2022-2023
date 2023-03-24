@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.testCodes;
+package org.firstinspires.ftc.teamcode.testCodes.PIDAndOthers;
 
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;

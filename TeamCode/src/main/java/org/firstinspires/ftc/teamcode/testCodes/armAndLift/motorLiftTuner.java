@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.testCodes;
+package org.firstinspires.ftc.teamcode.testCodes.armAndLift;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
