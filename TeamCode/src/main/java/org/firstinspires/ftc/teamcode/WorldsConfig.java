@@ -29,11 +29,6 @@ public class WorldsConfig {
         tbd
     }
 
-    public enum override {
-        yes,
-        no
-    }
-
     public enum colors {
         green,
         purple,

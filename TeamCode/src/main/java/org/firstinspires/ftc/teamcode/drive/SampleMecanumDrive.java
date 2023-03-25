@@ -160,7 +160,6 @@ public class SampleMecanumDrive extends MecanumDrive {
 
         blackGripper.setDirection(Servo.Direction.REVERSE);
         blueArm.setDirection(Servo.Direction.REVERSE);
-        rotateServo.setDirection(Servo.Direction.REVERSE);
 
 
         // TODO: if desired, use setLocalizer() to change the localization method

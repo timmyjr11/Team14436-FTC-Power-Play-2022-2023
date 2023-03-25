@@ -11,7 +11,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.pastCodes.ConfigPos;
 import org.firstinspires.ftc.teamcode.pastCodes.PoseStorage;
 
 import java.util.ArrayList;
@@ -23,6 +22,7 @@ public class WorldsTeleop extends LinearOpMode {
 
     int lowerLimit = 0;
     int upperLimit = 4000;
+    int position;
 
     double power;
     double liftPower;
@@ -32,13 +32,19 @@ public class WorldsTeleop extends LinearOpMode {
     boolean a2Pressed;
     boolean y2Pressed;
     boolean a1Pressed;
+    boolean x2Pressed;
+    boolean b2Pressed;
+    boolean dPadRight2Pressed;
+    boolean rightBumper2Pressed;
+    boolean leftBumper2Pressed;
 
     FtcDashboard dashboard = FtcDashboard.getInstance();
 
     WorldsConfig.gripper gripper = WorldsConfig.gripper.open;
-    WorldsConfig.override over = WorldsConfig.override.no;
     WorldsConfig.rotation rotation = WorldsConfig.rotation.upright;
     WorldsConfig.arm arm = WorldsConfig.arm.forward;
+
+    boolean override = false;
 
 
     @Override
@@ -64,18 +70,47 @@ public class WorldsTeleop extends LinearOpMode {
         d.blueGripper.setPosition(0);
         d.blackGripper.setPosition(0);
 
-        while(opModeIsActive() && !isStopRequested()) {
+        while (opModeIsActive() && !isStopRequested()) {
             drive();
-            telemetry.addData("Blue lift", d.blueLift.getCurrentPosition());
-            telemetry.addData("Black lift", d.blackLift.getCurrentPosition());
-            telemetry.addData("Blue lift power", d.blueLift.getPower());
-            telemetry.addData("Black lift power", d.blackLift.getPower());
-            telemetry.update();
 
             liftPower = (gamepad2.right_trigger >= 0.5) ? 0.5 : 1;
-            over = (gamepad2.left_trigger >= 0.5) ? WorldsConfig.override.yes : WorldsConfig.override.no;
+            override = gamepad2.left_trigger >= 0.5;
 
+            if ((gamepad2.dpad_up && d.blueLift.getCurrentPosition() <= upperLimit &&
+                    d.blackLift.getCurrentPosition() <= upperLimit) ||
+                    (gamepad2.dpad_up && override)) {
 
+                if (d.blueLift.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER ||
+                        d.blackLift.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                }
+                d.blackLift.setPower(1 * liftPower);
+                d.blueLift.setPower(1 * liftPower);
+            }
+
+            else if ((gamepad2.dpad_down && d.blueLift.getCurrentPosition() > lowerLimit &&
+                    d.blackLift.getCurrentPosition() > lowerLimit) ||
+                    (gamepad2.dpad_down && override)) {
+
+                if (d.blueLift.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER ||
+                        d.blackLift.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
+
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                }
+
+                d.blackLift.setPower(-1 * liftPower);
+                d.blueLift.setPower(-1 * liftPower);
+            }
+
+            else if (d.blueLift.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER ||
+                    d.blackLift.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
+
+                d.blueLift.setPower(0.05);
+                d.blackLift.setPower(0.05);
+            }
+            
             if (a2Pressed) {
                 switch (gripper) {
                     case open:
@@ -89,19 +124,67 @@ public class WorldsTeleop extends LinearOpMode {
                         gripper = WorldsConfig.gripper.open;
                         break;
                 }
+            }
 
-                /*if (gripper == WorldsConfig.gripper.open) {
-                    d.blueGripper.setPosition(0.8);
-                    d.blackGripper.setPosition(0.8);
-                    gripper = WorldsConfig.gripper.closed;
-                } else if (gripper == WorldsConfig.gripper.closed) {
-                    d.blueGripper.setPosition(0);
-                    d.blackGripper.setPosition(0);
-                    gripper = WorldsConfig.gripper.open;
-                }*/
+            if (dPadRight2Pressed) {
+                switch (rotation) {
+                    case upright:
+                        d.rotateServo.setPosition(1);
+                        rotation = WorldsConfig.rotation.upsidedown;
+                        break;
+                    case upsidedown:
+                        d.rotateServo.setPosition(0);
+                        rotation = WorldsConfig.rotation.upright;
+                        break;
+                }
             }
 
             if (y2Pressed) {
+                switch (arm) {
+                    case forward:
+                        d.blueArm.setPosition(1);
+                        d.blackArm.setPosition(1);
+                        d.rotateServo.setPosition(1);
+                        arm = WorldsConfig.arm.backward;
+                        break;
+                    case backward:
+                        d.blackArm.setPosition(0);
+                        d.blueArm.setPosition(0);
+                        d.rotateServo.setPosition(0);
+                        arm = WorldsConfig.arm.forward;
+                        break;
+
+                }
+            }
+
+            if (b2Pressed) {
+                position = 1200;
+                flipAndRotate(position);
+            }
+
+            if (x2Pressed) {
+                position = 3500;
+                flipAndRotate(position);
+            }
+
+            if (rightBumper2Pressed) {
+                position = 0;
+                d.blueLift.setTargetPosition(position);
+                d.blueLift.setTargetPosition(position);
+                d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                d.blueLift.setPower(0.8);
+                d.blackLift.setPower(0.8);
+
+                d.blueArm.setPosition(0);
+                d.blackArm.setPosition(0);
+                d.rotateServo.setPosition(0);
+
+                arm = WorldsConfig.arm.forward;
+                rotation = WorldsConfig.rotation.upright;
+            }
+
+            if (leftBumper2Pressed) {
                 d.blackLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 d.blueLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 d.blueLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -112,10 +195,8 @@ public class WorldsTeleop extends LinearOpMode {
                 d.setPoseEstimate(PoseStorage.telePower);
             }
 
-            a2Pressed = ifPressed(gamepad2.a);
-            y2Pressed = ifPressed(gamepad2.y);
-            a1Pressed = ifPressed(gamepad1.a);
-            booleanIncrementer = 0;
+            pressChecker();
+            telemetry();
         }
     }
 
@@ -147,13 +228,49 @@ public class WorldsTeleop extends LinearOpMode {
                         -gamepad1.right_stick_x * power
                 )
         );
-
         d.update();
+    }
+
+    private void flipAndRotate(int position) {
+        d.blueLift.setTargetPosition(position);
+        d.blueLift.setTargetPosition(position);
+        d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        d.blueLift.setPower(0.8);
+        d.blackLift.setPower(0.8);
+
+        d.blueArm.setPosition(1);
+        d.blackArm.setPosition(1);
+        d.rotateServo.setPosition(1);
+
+        arm = WorldsConfig.arm.backward;
+        rotation = WorldsConfig.rotation.upsidedown;
+    }
+
+    private void pressChecker() {
+        a2Pressed = ifPressed(gamepad2.a);
+        x2Pressed = ifPressed(gamepad2.x);
+        y2Pressed = ifPressed(gamepad2.y);
+        a1Pressed = ifPressed(gamepad1.a);
+        b2Pressed = ifPressed(gamepad2.b);
+        dPadRight2Pressed = ifPressed(gamepad2.dpad_right);
+        rightBumper2Pressed = ifPressed(gamepad2.right_bumper);
+        leftBumper2Pressed = ifPressed(gamepad2.left_bumper);
+        booleanIncrementer = 0;
+    }
+
+    private void telemetry() {
+        telemetry.addData("Blue lift", d.blueLift.getCurrentPosition());
+        telemetry.addData("Black lift", d.blackLift.getCurrentPosition());
+        telemetry.addData("Blue lift power", d.blueLift.getPower());
+        telemetry.addData("Black lift power", d.blackLift.getPower());
+        telemetry.update();
     }
 
     //Function used to allow toggling
     private boolean ifPressed(boolean button) {
         boolean output = false;
+
         if (booleanArray.size() == booleanIncrementer) {
             booleanArray.add(false);
         }
@@ -167,6 +284,7 @@ public class WorldsTeleop extends LinearOpMode {
         booleanArray.set(booleanIncrementer, button);
 
         booleanIncrementer = booleanIncrementer + 1;
+
         return output;
     }
 }
