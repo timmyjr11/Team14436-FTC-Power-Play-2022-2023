@@ -67,8 +67,11 @@ public class WorldsTeleop extends LinearOpMode {
 
         waitForStart();
 
-        d.blueGripper.setPosition(0);
+        d.blackArm.setPosition(0);
+        d.blueArm.setPosition(0);
+        d.rotateServo.setPosition(0);
         d.blackGripper.setPosition(0);
+        d.blueGripper.setPosition(0);
 
         while (opModeIsActive() && !isStopRequested()) {
             drive();
@@ -142,8 +145,8 @@ public class WorldsTeleop extends LinearOpMode {
             if (y2Pressed) {
                 switch (arm) {
                     case forward:
-                        d.blueArm.setPosition(1);
-                        d.blackArm.setPosition(1);
+                        d.blueArm.setPosition(0.83);
+                        d.blackArm.setPosition(0.83);
                         d.rotateServo.setPosition(1);
                         arm = WorldsConfig.arm.backward;
                         break;
@@ -239,8 +242,8 @@ public class WorldsTeleop extends LinearOpMode {
         d.blueLift.setPower(0.8);
         d.blackLift.setPower(0.8);
 
-        d.blueArm.setPosition(1);
-        d.blackArm.setPosition(1);
+        d.blueArm.setPosition(0.83);
+        d.blackArm.setPosition(0.83);
         d.rotateServo.setPosition(1);
 
         arm = WorldsConfig.arm.backward;

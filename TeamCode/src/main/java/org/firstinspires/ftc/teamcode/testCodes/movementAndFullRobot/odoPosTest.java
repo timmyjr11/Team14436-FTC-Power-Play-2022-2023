@@ -15,27 +15,21 @@ import org.firstinspires.ftc.teamcode.util.Encoder;
 public class odoPosTest extends LinearOpMode {
 
     private final FtcDashboard dash = FtcDashboard.getInstance();
-    Encoder left;
     Encoder right;
     Encoder front;
     DcMotorEx frontRight;
     DcMotorEx backRight;
-    DcMotorEx leftEncoder;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        left = new Encoder(hardwareMap.get(DcMotorEx.class, "backRight"));
-        right = new Encoder(hardwareMap.get(DcMotorEx.class, "leftEncoder"));
-        front = new Encoder(hardwareMap.get(DcMotorEx.class, "frontRight"));
+        right = new Encoder(hardwareMap.get(DcMotorEx.class, "parallelEncoder"));
+        front = new Encoder(hardwareMap.get(DcMotorEx.class, "perpendicularEncoder"));
         frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
         backRight = hardwareMap.get(DcMotorEx.class, "backRight");
-        leftEncoder = hardwareMap.get(DcMotorEx.class, "leftEncoder");
 
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         front.setDirection(Encoder.Direction.REVERSE);
-        left.setDirection(Encoder.Direction.REVERSE);
 
 
         telemetry = new MultipleTelemetry(telemetry, dash.getTelemetry());
@@ -44,10 +38,6 @@ public class odoPosTest extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive() && !isStopRequested()) {
-            telemetry.addData("Left encoder velo", left.getCorrectedVelocity());
-            telemetry.addData("Left encoder pos", left.getCurrentPosition());
-            telemetry.addData("Left encoder direction", left.getDirection());
-            telemetry.addLine("");
             telemetry.addData("Right encoder velo", right.getCorrectedVelocity());
             telemetry.addData("Right encoder pos", right.getCurrentPosition());
             telemetry.addData("Right encoder direction", right.getDirection());

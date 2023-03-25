@@ -23,10 +23,16 @@ public class armTest extends LinearOpMode {
         blueGripper = hardwareMap.get(Servo.class, "blueGripper");
         rotateServo = hardwareMap.get(Servo.class, "rotateServo");
 
-        blackGripper.setDirection(Servo.Direction.REVERSE);
+        blueGripper.setDirection(Servo.Direction.REVERSE);
         blueArm.setDirection(Servo.Direction.REVERSE);
 
         waitForStart();
+
+        blackArm.setPosition(0);
+        blueArm.setPosition(0);
+        rotateServo.setPosition(0);
+        blackGripper.setPosition(0);
+        blueGripper.setPosition(0);
 
         while (opModeIsActive() && !isStopRequested()) {
             if (gamepad1.b) {
@@ -35,8 +41,8 @@ public class armTest extends LinearOpMode {
                 rotateServo.setPosition(0);
             }
             if (gamepad1.a) {
-                blueArm.setPosition(1);
-                blackArm.setPosition(1);
+                blueArm.setPosition(0.83);
+                blackArm.setPosition(0.83);
                 rotateServo.setPosition(1);
             }
 
