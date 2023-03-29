@@ -103,6 +103,9 @@ public class WorldsAuto extends LinearOpMode {
         d.blueLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         d.blackLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        d.blueArm.setPosition(0);
+        d.blackArm.setPosition(0);
+        d.rotateServo.setPosition(0);
         d.blueGripper.setPosition(0);
         d.blackGripper.setPosition(0);
 
@@ -122,9 +125,9 @@ public class WorldsAuto extends LinearOpMode {
         telemetry.update();
 
         blueCam = OpenCvCameraFactory.getInstance()
-                .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), viewportContainerIds[0]);
+                .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 2"), viewportContainerIds[0]);
         blackCam = OpenCvCameraFactory.getInstance()
-                .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 2"), viewportContainerIds[1]);
+                .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), viewportContainerIds[1]);
 
         blueCam.openCameraDevice();
         blackCam.openCameraDevice();
