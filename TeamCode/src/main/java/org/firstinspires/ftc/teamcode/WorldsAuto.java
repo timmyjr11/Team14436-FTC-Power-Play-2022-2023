@@ -345,7 +345,7 @@ public class WorldsAuto extends LinearOpMode {
 
     private TrajectorySequence[] buildRightSide() {
         TrajectorySequence rightSide = d.trajectorySequenceBuilder(d.getPoseEstimate())
-                .splineToSplineHeading(new Pose2d(33, -47, Math.toRadians(0)), Math.toRadians(90))
+                .splineToSplineHeading(new Pose2d(34, -47, Math.toRadians(0)), Math.toRadians(90))
 
                 .UNSTABLE_addTemporalMarkerOffset(-1.5, () -> {
                     d.blueGripper.setPosition(0.8);
@@ -362,8 +362,8 @@ public class WorldsAuto extends LinearOpMode {
                     d.blackArm.setPosition(1);
                     d.rotateServo.setPosition(1);
                 })*/
-                .splineToSplineHeading(new Pose2d(33, -20, Math.toRadians(0)), Math.toRadians(90))
-                .splineToSplineHeading(new Pose2d(28, -4, Math.toRadians(315)), Math.toRadians(135))
+                .splineToSplineHeading(new Pose2d(34, -18, Math.toRadians(0)), Math.toRadians(90))
+                .splineToSplineHeading(new Pose2d(29, -5, Math.toRadians(315)), Math.toRadians(135))
                 .waitSeconds(0.2)
                 .UNSTABLE_addDisplacementMarkerOffset(-0.1, () -> {
                     d.blackGripper.setPosition(0);
@@ -385,7 +385,7 @@ public class WorldsAuto extends LinearOpMode {
                     d.blackLift.setPower(1);
                     d.blueLift.setPower(1);
                 })*/
-                .splineToSplineHeading(new Pose2d(56.5, -8, Math.toRadians(0)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(57, -8, Math.toRadians(0)), Math.toRadians(0))
                 .waitSeconds(0.2)
                 .UNSTABLE_addTemporalMarkerOffset(-0.25, () -> {
                     d.blackGripper.setPosition(0.8);
@@ -405,7 +405,7 @@ public class WorldsAuto extends LinearOpMode {
                     d.blackLift.setPower(1);
                     d.blueLift.setPower(1);
                 })*/
-                .splineToSplineHeading(new Pose2d(28, -4, Math.toRadians(315)), Math.toRadians(135))
+                .splineToSplineHeading(new Pose2d(29, -5, Math.toRadians(315)), Math.toRadians(135))
                 .waitSeconds(0.2)
                 .UNSTABLE_addDisplacementMarkerOffset(-0.2, () -> {
                     d.blackGripper.setPosition(0);
@@ -415,7 +415,7 @@ public class WorldsAuto extends LinearOpMode {
                 .build();
 
         TrajectorySequence rightSideParkRight = d.trajectorySequenceBuilder(rightSide.end())
-                .splineToSplineHeading(new Pose2d(33, -31, Math.toRadians(270)), Math.toRadians(270))
+                .splineToSplineHeading(new Pose2d(34, -31.5, Math.toRadians(270)), Math.toRadians(270))
 /*                .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                     d.blueArm.setPosition(0);
                     d.blackArm.setPosition(0);
@@ -427,11 +427,11 @@ public class WorldsAuto extends LinearOpMode {
                     d.blackLift.setPower(1);
                     d.blueLift.setPower(1);
                 })*/
-                .lineToConstantHeading(new Vector2d(56, -31))
+                .lineToLinearHeading(new Pose2d(58, -31.5, Math.toRadians(270)))
                 .build(); // If left
 
         TrajectorySequence rightSideParkMiddle = d.trajectorySequenceBuilder(rightSide.end())
-                .splineToSplineHeading(new Pose2d(33, -31, Math.toRadians(270)), Math.toRadians(270))
+                .splineToSplineHeading(new Pose2d(34, -31.5, Math.toRadians(270)), Math.toRadians(270))
 /*                .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                     d.blueArm.setPosition(0);
                     d.blackArm.setPosition(0);
@@ -446,7 +446,7 @@ public class WorldsAuto extends LinearOpMode {
                 .build(); // If middle
 
         TrajectorySequence rightSideParkLeft = d.trajectorySequenceBuilder(rightSide.end())
-                .splineToSplineHeading(new Pose2d(33, -31, Math.toRadians(270)), Math.toRadians(270))
+                .splineToSplineHeading(new Pose2d(34, -31.5, Math.toRadians(270)), Math.toRadians(270))
 /*                .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
                     d.blueArm.setPosition(0);
                     d.blackArm.setPosition(0);
@@ -458,10 +458,10 @@ public class WorldsAuto extends LinearOpMode {
                     d.blackLift.setPower(1);
                     d.blueLift.setPower(1);
                 })*/
-                .lineToConstantHeading(new Vector2d(9, -31))
+                .lineToLinearHeading(new Pose2d(12, -31.5, Math.toRadians(270)))
                 .build(); // If left
 
-        return new TrajectorySequence[]{rightSide, rightSideCones, rightSideParkLeft, rightSideParkMiddle, rightSideParkRight};
+        return new TrajectorySequence[] {rightSide, rightSideCones, rightSideParkLeft, rightSideParkMiddle, rightSideParkRight};
 
 
     }
