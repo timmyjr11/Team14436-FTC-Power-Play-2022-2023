@@ -13,6 +13,31 @@ public class MeepMeepTesting {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(720);
 
+        /*RoadRunnerBotEntity redBotV1 = new DefaultBotBuilder(meepMeep)
+                .setColorScheme(new ColorSchemeRedDark())
+                .setConstraints(56, 30, Math.toRadians(270), Math.toRadians(180), 13.3)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(new Pose2d(-37.5, -58, Math.toRadians(90)))
+                                .waitSeconds(0.3)
+                                .strafeTo(new Vector2d(-4, -59))
+                                .lineToLinearHeading(new Pose2d(-4, -30, Math.toRadians(90)))
+                                .UNSTABLE_addTemporalMarkerOffset(-3, () -> {
+                                })
+                                .turn(Math.toRadians(-47))
+                                .forward(7)
+                                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                                })
+                                .waitSeconds(1)
+                                .back(7)
+                                .turn(Math.toRadians(47))
+                                .lineToLinearHeading(new Pose2d(-4, -60, Math.toRadians(90)))
+                                .UNSTABLE_addTemporalMarkerOffset(-2.5, () -> {
+                                })
+                                .turn(Math.toRadians(-90))
+                                .build()
+                );
+*/
+
         RoadRunnerBotEntity redBotCool = new DefaultBotBuilder(meepMeep)
                 .setColorScheme(new ColorSchemeBlueDark())
                 .setConstraints(56, 30, Math.toRadians(270), Math.toRadians(180), 13.3)

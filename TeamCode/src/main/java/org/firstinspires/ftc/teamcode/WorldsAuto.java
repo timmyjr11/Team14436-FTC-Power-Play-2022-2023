@@ -37,7 +37,7 @@ public class WorldsAuto extends LinearOpMode {
     OpenCvWebcam blueCam;
     OpenCvWebcam blackCam;
 
-    int liftLevel = 400;
+    int liftLevel = 500;
     int topJunction = 1000;
 
     int leftForward = 0;
@@ -234,8 +234,8 @@ public class WorldsAuto extends LinearOpMode {
                     d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     d.blackLift.setPower(1);
                     d.blueLift.setPower(1);
-                    d.blueArm.setPosition(1);
-                    d.blackArm.setPosition(1);
+                    d.blueArm.setPosition(0.8);
+                    d.blackArm.setPosition(0.8);
                     d.rotateServo.setPosition(1);
                 })
                 .splineToSplineHeading(new Pose2d(-33, -20, Math.toRadians(180)), Math.toRadians(90))
@@ -271,9 +271,9 @@ public class WorldsAuto extends LinearOpMode {
                 // Place first cone
                 .setReversed(true)
                 .splineToSplineHeading(new Pose2d(-47, -8, Math.toRadians(180)), Math.toRadians(0))
-                .UNSTABLE_addTemporalMarkerOffset(-1.5, () -> {
-                    d.blueArm.setPosition(1);
-                    d.blackArm.setPosition(1);
+                .UNSTABLE_addTemporalMarkerOffset(-1, () -> {
+                    d.blueArm.setPosition(0.8);
+                    d.blackArm.setPosition(0.8);
                     d.rotateServo.setPosition(1);
                     d.blackLift.setTargetPosition(topJunction);
                     d.blueLift.setTargetPosition(topJunction);
