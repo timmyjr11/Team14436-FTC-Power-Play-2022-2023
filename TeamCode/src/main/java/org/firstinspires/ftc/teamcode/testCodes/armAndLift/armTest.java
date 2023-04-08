@@ -28,8 +28,8 @@ public class armTest extends LinearOpMode {
 
         waitForStart();
 
-        blackArm.setPosition(0);
-        blueArm.setPosition(0);
+        blackArm.setPosition(0.125);
+        blueArm.setPosition(0.125);
         rotateServo.setPosition(0);
         blackGripper.setPosition(0);
         blueGripper.setPosition(0);
@@ -60,6 +60,8 @@ public class armTest extends LinearOpMode {
                 blueGripper.setPosition(1);
             }
             telemetry.addData("Roate", rotateServo.getPosition());
+            telemetry.addData("black arm", blackArm.getPosition());
+            telemetry.addData("blue arm", blueArm.getPosition());
             telemetry.update();
         }
     }

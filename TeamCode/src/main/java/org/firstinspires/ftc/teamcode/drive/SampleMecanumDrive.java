@@ -54,8 +54,8 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
  */
 @Config
 public class SampleMecanumDrive extends MecanumDrive {
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(10, 0, 1); // 10.5, 0, 1
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(9, 0, 1); // 9, 0, 1
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8.5, 0, 1); // 10.5, 0, 1
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 1); // 9, 0, 1
 
     public static double LATERAL_MULTIPLIER = 1.44; // yo fix this
 
@@ -83,7 +83,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
-                new Pose2d(0.5, 0.5, Math.toRadians(1.5)), 0.5);
+                new Pose2d(0.5, 0.5, Math.toRadians(1.5)), 0.4);
 
         LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
 
@@ -158,7 +158,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         blackLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        blueGripper.setDirection(Servo.Direction.REVERSE);
+        blackGripper.setDirection(Servo.Direction.REVERSE);
         blueArm.setDirection(Servo.Direction.REVERSE);
 
 

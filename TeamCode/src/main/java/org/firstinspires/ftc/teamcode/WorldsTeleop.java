@@ -117,8 +117,8 @@ public class WorldsTeleop extends LinearOpMode {
             if (a2Pressed) {
                 switch (gripper) {
                     case open:
-                        d.blueGripper.setPosition(0.8);
-                        d.blackGripper.setPosition(0.8);
+                        d.blueGripper.setPosition(1);
+                        d.blackGripper.setPosition(1);
                         gripper = WorldsConfig.gripper.closed;
                         break;
                     case closed:
