@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.drive.TwoWheelTrackingLocalizer;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -51,9 +50,11 @@ public class WorldsAuto extends LinearOpMode {
     int coneCounter;
 
     WorldsConfig.side side = WorldsConfig.side.tbd;
+    WorldsConfig.type type = WorldsConfig.type.tbd;
 
     ArrayList<Boolean> booleanArray = new ArrayList<>();
-    TrajectorySequence[] array;
+    TrajectorySequence[] singleJunctionArray;
+    TrajectorySequence[] multiJunctionArray;
 
     int booleanIncrementer = 0;
     boolean D1UpPressed;
@@ -160,23 +161,42 @@ public class WorldsAuto extends LinearOpMode {
             if (isStopRequested()) return;
         }
 
-        while (!gamepad1.a) {
-            telemetry.addData("Number of cones: ", coneCounter);
-            telemetry.addLine("Press up on D-pad to add a cone, press down on D-pad to remove a cone");
-            telemetry.addLine("Press A to move on to the next step");
-            if (D1UpPressed && coneCounter < 5) {
-                coneCounter++;
-            } else if (D1DownPressed && coneCounter > 0) {
-                coneCounter--;
-            }
-            D1UpPressed = ifPressed(gamepad1.dpad_up);
-            D1DownPressed = ifPressed(gamepad1.dpad_down);
-            booleanIncrementer = 0;
+        while (true) {
+            telemetry.addLine("What type of auto would you like to run?");
+            telemetry.addLine("Press up on D-Pad for Single junction");
+            telemetry.addLine("Press down on D-Pad for multi-junction");
             telemetry.update();
+
+            if (gamepad1.dpad_up) {
+                type = WorldsConfig.type.singleJunction;
+                break;
+            } else if (gamepad1.dpad_down) {
+                type = WorldsConfig.type.multiJunction;
+                break;
+            }
             if (isStopRequested()) return;
         }
 
-        array = (side == WorldsConfig.side.left) ? buildLeftSide() : buildRightSide();
+        if (type == WorldsConfig.type.singleJunction) {
+            while (!gamepad1.a) {
+                telemetry.addData("Number of cones: ", coneCounter);
+                telemetry.addLine("Press up on D-pad to add a cone, press down on D-pad to remove a cone");
+                telemetry.addLine("Press A to move on to the next step");
+                if (D1UpPressed && coneCounter < 5) {
+                    coneCounter++;
+                } else if (D1DownPressed && coneCounter > 0) {
+                    coneCounter--;
+                }
+                D1UpPressed = ifPressed(gamepad1.dpad_up);
+                D1DownPressed = ifPressed(gamepad1.dpad_down);
+                booleanIncrementer = 0;
+                telemetry.update();
+                if (isStopRequested()) return;
+            }
+            singleJunctionArray = (side == WorldsConfig.side.left) ? buildLeftSideSingle() : buildRightSideSingle();
+        } else {
+            multiJunctionArray = buildLeftSideMulti();
+        }
 
         ready = true;
 
@@ -188,28 +208,32 @@ public class WorldsAuto extends LinearOpMode {
             blueCam.stopStreaming();
         }
 
-        d.followTrajectorySequence(array[0]);
+        if (type == WorldsConfig.type.singleJunction) {
+            d.followTrajectorySequence(singleJunctionArray[0]);
 
-        if (coneCounter >= 1) d.followTrajectorySequence(array[1]);
-        liftLevel -= 140;
-        if (coneCounter >= 2) d.followTrajectorySequence(array[2]);
-        liftLevel -= 140;
-        if (coneCounter >= 3) d.followTrajectorySequence(array[3]);
-        liftLevel -= 140;
-        if (coneCounter >= 4) d.followTrajectorySequence(array[4]);
-        liftLevel -= 140;
-        if (coneCounter == 5) d.followTrajectorySequence(array[5]);
+            if (coneCounter >= 1) d.followTrajectorySequence(singleJunctionArray[1]);
+            liftLevel -= 140;
+            if (coneCounter >= 2) d.followTrajectorySequence(singleJunctionArray[2]);
+            liftLevel -= 140;
+            if (coneCounter >= 3) d.followTrajectorySequence(singleJunctionArray[3]);
+            liftLevel -= 140;
+            if (coneCounter >= 4) d.followTrajectorySequence(singleJunctionArray[4]);
+            liftLevel -= 140;
+            if (coneCounter == 5) d.followTrajectorySequence(singleJunctionArray[5]);
 
-        switch (color) {
-            case green:
-                d.followTrajectorySequence(array[6]);
-                break;
-            case yellow:
-                d.followTrajectorySequence(array[7]);
-                break;
-            case purple:
-                d.followTrajectorySequence(array[8]);
-                break;
+            switch (color) {
+                case green:
+                    d.followTrajectorySequence(singleJunctionArray[6]);
+                    break;
+                case yellow:
+                    d.followTrajectorySequence(singleJunctionArray[7]);
+                    break;
+                case purple:
+                    d.followTrajectorySequence(singleJunctionArray[8]);
+                    break;
+            }
+        } else {
+            d.followTrajectorySequence(multiJunctionArray[0]);
         }
     }
 
@@ -231,7 +255,7 @@ public class WorldsAuto extends LinearOpMode {
         return output;
     }
 
-    private TrajectorySequence[] buildLeftSide() {
+    private TrajectorySequence[] buildLeftSideSingle() {
 
         TrajectorySequence leftSide = d.trajectorySequenceBuilder(d.getPoseEstimate())
                 .splineToSplineHeading(new Pose2d(-33, -47, Math.toRadians(180)), Math.toRadians(90))
@@ -550,7 +574,49 @@ public class WorldsAuto extends LinearOpMode {
                 leftSideParkLeft, leftSideParkMiddle, leftSideParkRight};
     }
 
-    private TrajectorySequence[] buildRightSide() {
+    private TrajectorySequence[] buildLeftSideMulti() {
+
+        TrajectorySequence leftSide = d.trajectorySequenceBuilder(d.getPoseEstimate())
+                .splineToSplineHeading(new Pose2d(-34, -42, Math.toRadians(90)), Math.toRadians(90))
+                .splineToSplineHeading(new Pose2d(-34, -32, Math.toRadians(135)), Math.toRadians(90))
+                .waitSeconds(0.5)
+                .splineToConstantHeading(new Vector2d(-34, -31), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(-34, -30), Math.toRadians(90))
+                .splineToSplineHeading(new Pose2d(-35, -13, Math.toRadians(180)), Math.toRadians(120))
+                .splineToConstantHeading(new Vector2d(-40, -8), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-56, -8), Math.toRadians(180))
+                .waitSeconds(0.5)
+                .setReversed(true)
+                .splineToSplineHeading(new Pose2d(-40, -8, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(-30, -10, Math.toRadians(135)), Math.toRadians(315))
+                .waitSeconds(0.5)
+                .setReversed(false)
+                .splineToSplineHeading(new Pose2d(-40, -8, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-56, -8, Math.toRadians(180)), Math.toRadians(180))
+                .waitSeconds(0.5)
+                .setReversed(true)
+                .splineToSplineHeading(new Pose2d(-20, -8, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(-8, -9, Math.toRadians(135)), Math.toRadians(315))
+                .waitSeconds(0.5)
+                .setReversed(false)
+                .splineToSplineHeading(new Pose2d(-20, -7, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-40, -7, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-56, -7, Math.toRadians(180)), Math.toRadians(180))
+                .waitSeconds(0.5)
+                .setReversed(true)
+                .splineToSplineHeading(new Pose2d(-42, -7, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(-35, -7, Math.toRadians(270)), Math.toRadians(0))
+                .waitSeconds(0.1)
+                .setReversed(false)
+                .splineToConstantHeading(new Vector2d(-34, -25), Math.toRadians(270))
+                .splineToSplineHeading(new Pose2d(-34, -27, Math.toRadians(270)), Math.toRadians(270))
+                .splineToSplineHeading(new Pose2d(-32, -31, Math.toRadians(315)), Math.toRadians(315))
+                .build();
+
+        return new TrajectorySequence[] {leftSide};
+    }
+
+    private TrajectorySequence[] buildRightSideSingle() {
 
         TrajectorySequence rightSide = d.trajectorySequenceBuilder(d.getPoseEstimate())
                 .splineToSplineHeading(new Pose2d(35, -47, Math.toRadians(0)), Math.toRadians(90))
@@ -867,6 +933,7 @@ public class WorldsAuto extends LinearOpMode {
          return new TrajectorySequence[] {rightSide, rightSideCones1 ,rightSideCones2, rightSideCones3, rightSideCones4, rightSideCones5,
                 rightSideParkLeft, rightSideParkMiddle, rightSideParkRight};
     }
+
 
     @Config
     public class ColorDetectionPipeline extends OpenCvPipeline {

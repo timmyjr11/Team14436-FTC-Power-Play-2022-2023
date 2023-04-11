@@ -29,6 +29,12 @@ public class WorldsConfig {
         tbd
     }
 
+    public enum type {
+        singleJunction,
+        multiJunction,
+        tbd
+    }
+
     public enum colors {
         green,
         purple,

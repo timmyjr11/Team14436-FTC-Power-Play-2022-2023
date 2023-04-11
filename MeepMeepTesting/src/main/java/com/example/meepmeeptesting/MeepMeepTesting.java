@@ -38,6 +38,52 @@ public class MeepMeepTesting {
                 );
 */
 
+        RoadRunnerBotEntity redBotMulti = new DefaultBotBuilder(meepMeep)
+                .setColorScheme(new ColorSchemeRedDark())
+                .setConstraints(50, 30, Math.toRadians(270), Math.toRadians(180), 13.3)
+                .followTrajectorySequence(drive ->
+                                drive.trajectorySequenceBuilder(new Pose2d(-37.5, -60, Math.toRadians(90)))
+                                        // Drive to place first cone
+                                        .splineToSplineHeading(new Pose2d(-34, -40, Math.toRadians(135)), Math.toRadians(90))
+                                        .splineToSplineHeading(new Pose2d(-34, -35, Math.toRadians(135)), Math.toRadians(90))
+                                        .waitSeconds(0.5)
+                                        .splineToConstantHeading(new Vector2d(-34, -34), Math.toRadians(90))
+                                        .splineToConstantHeading(new Vector2d(-34, -30), Math.toRadians(90))
+                                        .splineToSplineHeading(new Pose2d(-34, -15, Math.toRadians(180)), Math.toRadians(120))
+                                        .splineToConstantHeading(new Vector2d(-40, -11.5), Math.toRadians(180))
+                                        .splineToConstantHeading(new Vector2d(-59, -11.5), Math.toRadians(180))
+                                        .waitSeconds(0.5)
+                                        .setReversed(true)
+                                        .splineToSplineHeading(new Pose2d(-40, -11.5, Math.toRadians(180)), Math.toRadians(0))
+                                        .splineToSplineHeading(new Pose2d(-32, -15, Math.toRadians(135)), Math.toRadians(315))
+                                        .waitSeconds(0.5)
+                                        .setReversed(false)
+                                        .splineToSplineHeading(new Pose2d(-40, -11.5, Math.toRadians(180)), Math.toRadians(180))
+                                        .splineToSplineHeading(new Pose2d(-59, -11.5, Math.toRadians(180)), Math.toRadians(180))
+                                        .waitSeconds(0.5)
+                                        .setReversed(true)
+                                        .splineToSplineHeading(new Pose2d(-20, -11.5, Math.toRadians(180)), Math.toRadians(0))
+                                        .splineToSplineHeading(new Pose2d(-9, -15, Math.toRadians(135)), Math.toRadians(315))
+                                        .waitSeconds(0.5)
+                                        .setReversed(false)
+                                        .splineToSplineHeading(new Pose2d(-20, -11.5, Math.toRadians(180)), Math.toRadians(180))
+                                        .splineToSplineHeading(new Pose2d(-40, -11.5, Math.toRadians(180)), Math.toRadians(180))
+                                        .splineToSplineHeading(new Pose2d(-59, -11.5, Math.toRadians(180)), Math.toRadians(180))
+                                        .waitSeconds(0.5)
+                                        .setReversed(true)
+                                        .splineToSplineHeading(new Pose2d(-50, -11.5, Math.toRadians(180)), Math.toRadians(0))
+                                        .splineToSplineHeading(new Pose2d(-45, -11.5, Math.toRadians(270)), Math.toRadians(0))
+                                        .splineToConstantHeading(new Vector2d(-35, -25), Math.toRadians(270))
+                                        .splineToSplineHeading(new Pose2d(-35, -35, Math.toRadians(270)), Math.toRadians(270))
+                                        .splineToSplineHeading(new Pose2d(-31, -40, Math.toRadians(315)), Math.toRadians(315))
+
+
+                                        .build());
+
+
+
+
+
         RoadRunnerBotEntity redBotCool = new DefaultBotBuilder(meepMeep)
                 .setColorScheme(new ColorSchemeBlueDark())
                 .setConstraints(56, 30, Math.toRadians(270), Math.toRadians(180), 13.3)
@@ -63,7 +109,7 @@ public class MeepMeepTesting {
         meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
-                .addEntity(redBotCool)
+                .addEntity(redBotMulti)
                 .start();
 
     }
