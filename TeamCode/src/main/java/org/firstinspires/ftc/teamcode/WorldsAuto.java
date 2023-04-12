@@ -577,18 +577,71 @@ public class WorldsAuto extends LinearOpMode {
     private TrajectorySequence[] buildLeftSideMulti() {
 
         TrajectorySequence leftSide = d.trajectorySequenceBuilder(d.getPoseEstimate())
+                .UNSTABLE_addTemporalMarkerOffset(0.1, () ->{
+                    d.blueGripper.setPosition(1);
+                    d.blackGripper.setPosition(1);
+                })
                 .splineToSplineHeading(new Pose2d(-34, -42, Math.toRadians(90)), Math.toRadians(90))
-                .splineToSplineHeading(new Pose2d(-34, -32, Math.toRadians(135)), Math.toRadians(90))
+                .UNSTABLE_addTemporalMarkerOffset(-0.5, () -> {
+                    d.blackLift.setTargetPosition(1700);
+                    d.blueLift.setTargetPosition(1700);
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setPower(1);
+                    d.blueLift.setPower(1);
+                })
+                .splineToSplineHeading(new Pose2d(-38, -27, Math.toRadians(135)), Math.toRadians(90))
+                .UNSTABLE_addTemporalMarkerOffset(-0.2, () -> {
+                    d.blackGripper.setPosition(0);
+                    d.blueGripper.setPosition(0);
+                })
                 .waitSeconds(0.5)
-                .splineToConstantHeading(new Vector2d(-34, -31), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(-34, -30), Math.toRadians(90))
-                .splineToSplineHeading(new Pose2d(-35, -13, Math.toRadians(180)), Math.toRadians(120))
-                .splineToConstantHeading(new Vector2d(-40, -8), Math.toRadians(180))
-                .splineToConstantHeading(new Vector2d(-56, -8), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-34, -26), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(-34, -16), Math.toRadians(90))
+                .UNSTABLE_addTemporalMarkerOffset(-0.7, () -> {
+                    d.blackLift.setTargetPosition(liftLevel);
+                    d.blueLift.setTargetPosition(liftLevel);
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setPower(1);
+                    d.blueLift.setPower(1);
+                    d.blackArm.setPosition(lowerGripperPos);
+                    d.blueArm.setPosition(lowerGripperPos);
+                })
+                .splineToSplineHeading(new Pose2d(-35, -14, Math.toRadians(180)), Math.toRadians(120))
+                .splineToConstantHeading(new Vector2d(-40, -10.5), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-58.25, -10.5), Math.toRadians(180))
+                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
+                    d.blueGripper.setPosition(1);
+                    d.blackGripper.setPosition(1);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
+                    d.blackLift.setTargetPosition(topJunction);
+                    d.blueLift.setTargetPosition(topJunction);
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setPower(1);
+                    d.blueLift.setPower(1);
+                    d.blueArm.setPosition(0.83);
+                    d.blackArm.setPosition(0.83);
+                    d.rotateServo.setPosition(1);
+                })
                 .waitSeconds(0.5)
                 .setReversed(true)
                 .splineToSplineHeading(new Pose2d(-40, -8, Math.toRadians(180)), Math.toRadians(0))
-                .splineToSplineHeading(new Pose2d(-30, -10, Math.toRadians(135)), Math.toRadians(315))
+                .UNSTABLE_addTemporalMarkerOffset(-0.3, () -> {
+                    d.blackLift.setTargetPosition(250);
+                    d.blueLift.setTargetPosition(250);
+                    d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    d.blackLift.setPower(1);
+                    d.blueLift.setPower(1);
+                })
+                .splineToSplineHeading(new Pose2d(-34, -11, Math.toRadians(135)), Math.toRadians(315))
+                .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
+                    d.blueGripper.setPosition(0);
+                    d.blackGripper.setPosition(0);
+                })
                 .waitSeconds(0.5)
                 .setReversed(false)
                 .splineToSplineHeading(new Pose2d(-40, -8, Math.toRadians(180)), Math.toRadians(180))

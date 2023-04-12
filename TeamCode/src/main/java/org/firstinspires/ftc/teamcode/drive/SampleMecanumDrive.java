@@ -159,6 +159,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         blackLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
         blackGripper.setDirection(Servo.Direction.REVERSE);
+        rotateServo.setDirection(Servo.Direction.REVERSE);
         blueArm.setDirection(Servo.Direction.REVERSE);
 
 
