@@ -21,9 +21,7 @@ public class WorldsTeleop extends LinearOpMode {
     SampleMecanumDrive d;
 
     int lowerLimit = 0;
-    int upperLimit = 4000;
-    int position;
-
+    int upperLimit = 1700;
     double power;
     double liftPower;
 
@@ -32,10 +30,7 @@ public class WorldsTeleop extends LinearOpMode {
     boolean a2Pressed;
     boolean y2Pressed;
     boolean a1Pressed;
-    boolean x2Pressed;
     boolean b2Pressed;
-    boolean dPadRight2Pressed;
-    boolean rightBumper2Pressed;
     boolean leftBumper2Pressed;
 
     FtcDashboard dashboard = FtcDashboard.getInstance();
@@ -83,11 +78,6 @@ public class WorldsTeleop extends LinearOpMode {
                     d.blackLift.getCurrentPosition() <= upperLimit) ||
                     (gamepad2.dpad_up && override)) {
 
-                if (d.blueLift.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER ||
-                        d.blackLift.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
-                    d.blueLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    d.blackLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                }
                 d.blackLift.setPower(1 * liftPower);
                 d.blueLift.setPower(1 * liftPower);
             }
@@ -96,20 +86,11 @@ public class WorldsTeleop extends LinearOpMode {
                     d.blackLift.getCurrentPosition() > lowerLimit) ||
                     (gamepad2.dpad_down && override)) {
 
-                if (d.blueLift.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER ||
-                        d.blackLift.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
-
-                    d.blueLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    d.blackLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                }
-
                 d.blackLift.setPower(-1 * liftPower);
                 d.blueLift.setPower(-1 * liftPower);
             }
 
-            else if (d.blueLift.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER ||
-                    d.blackLift.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
-
+            else {
                 d.blueLift.setPower(0.05);
                 d.blackLift.setPower(0.05);
             }
@@ -129,7 +110,7 @@ public class WorldsTeleop extends LinearOpMode {
                 }
             }
 
-            if (dPadRight2Pressed) {
+            if (b2Pressed) {
                 switch (rotation) {
                     case upright:
                         d.rotateServo.setPosition(1);
@@ -158,33 +139,6 @@ public class WorldsTeleop extends LinearOpMode {
                         break;
 
                 }
-            }
-
-            if (b2Pressed) {
-                position = 1200;
-                flipAndRotate(position);
-            }
-
-            if (x2Pressed) {
-                position = 3500;
-                flipAndRotate(position);
-            }
-
-            if (rightBumper2Pressed) {
-                position = 0;
-                d.blueLift.setTargetPosition(position);
-                d.blueLift.setTargetPosition(position);
-                d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                d.blueLift.setPower(0.8);
-                d.blackLift.setPower(0.8);
-
-                d.blueArm.setPosition(0);
-                d.blackArm.setPosition(0);
-                d.rotateServo.setPosition(0);
-
-                arm = WorldsConfig.arm.forward;
-                rotation = WorldsConfig.rotation.upright;
             }
 
             if (leftBumper2Pressed) {
@@ -234,31 +188,11 @@ public class WorldsTeleop extends LinearOpMode {
         d.update();
     }
 
-    private void flipAndRotate(int position) {
-        d.blueLift.setTargetPosition(position);
-        d.blueLift.setTargetPosition(position);
-        d.blueLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        d.blackLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        d.blueLift.setPower(0.8);
-        d.blackLift.setPower(0.8);
-
-        d.blueArm.setPosition(0.83);
-        d.blackArm.setPosition(0.83);
-        d.rotateServo.setPosition(1);
-
-        arm = WorldsConfig.arm.backward;
-        rotation = WorldsConfig.rotation.upsidedown;
-    }
-
     private void pressChecker() {
         a2Pressed = ifPressed(gamepad2.a);
-        x2Pressed = ifPressed(gamepad2.x);
         y2Pressed = ifPressed(gamepad2.y);
         a1Pressed = ifPressed(gamepad1.a);
         b2Pressed = ifPressed(gamepad2.b);
-        dPadRight2Pressed = ifPressed(gamepad2.dpad_right);
-        rightBumper2Pressed = ifPressed(gamepad2.right_bumper);
-        leftBumper2Pressed = ifPressed(gamepad2.left_bumper);
         booleanIncrementer = 0;
     }
 
