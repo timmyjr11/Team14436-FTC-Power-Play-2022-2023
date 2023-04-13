@@ -28,6 +28,8 @@ public class cameraShinanigans extends LinearOpMode {
     int rect1x = 0;
     int rect1y = 0;
 
+    int ringCount;
+
     private final FtcDashboard dash = FtcDashboard.getInstance();
 
     @Override
@@ -108,7 +110,7 @@ public class cameraShinanigans extends LinearOpMode {
 
             //Comparing average values to calculate ring count
             //Needs to be adjusted through test runs
-            /*
+
             if (finalAverage > 109) {
                 ringCount = 0;
             } else if (finalAverage > 97) {
@@ -116,7 +118,7 @@ public class cameraShinanigans extends LinearOpMode {
             } else {
                 ringCount = 4;
             }
-            */
+
 
 
             //Outputs the average onto the driver station

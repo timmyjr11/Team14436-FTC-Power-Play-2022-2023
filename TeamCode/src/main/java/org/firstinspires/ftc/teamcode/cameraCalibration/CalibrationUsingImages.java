@@ -77,7 +77,7 @@ public class CalibrationUsingImages extends LinearOpMode {
         }
     }
 
-        class UselessGreenBoxDrawingPipeline extends OpenCvPipeline
+        static class UselessGreenBoxDrawingPipeline extends OpenCvPipeline
         {
             @Override
             public Mat processFrame(Mat input)

@@ -33,7 +33,7 @@ import java.util.ArrayList;
 @Config
 @Autonomous
 @Disabled
-public class CrackedAutoBlue extends LinearOpMode {
+public class CactusAutoBlue extends LinearOpMode {
 
     private final FtcDashboard dash = FtcDashboard.getInstance();
 

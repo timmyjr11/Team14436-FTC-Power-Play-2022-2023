@@ -58,7 +58,7 @@ public class WorldsTeleop extends LinearOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
-        d.setPoseEstimate(PoseStorage.telePower);
+        d.setPoseEstimate(WorldsConfig.telePower);
 
         waitForStart();
 
@@ -80,17 +80,13 @@ public class WorldsTeleop extends LinearOpMode {
 
                 d.blackLift.setPower(1 * liftPower);
                 d.blueLift.setPower(1 * liftPower);
-            }
-
-            else if ((gamepad2.dpad_down && d.blueLift.getCurrentPosition() > lowerLimit &&
+            } else if ((gamepad2.dpad_down && d.blueLift.getCurrentPosition() > lowerLimit &&
                     d.blackLift.getCurrentPosition() > lowerLimit) ||
                     (gamepad2.dpad_down && override)) {
 
                 d.blackLift.setPower(-1 * liftPower);
                 d.blueLift.setPower(-1 * liftPower);
-            }
-
-            else {
+            } else {
                 d.blueLift.setPower(0.05);
                 d.blackLift.setPower(0.05);
             }

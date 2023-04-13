@@ -43,8 +43,6 @@ public class robot extends LinearOpMode {
         telemetry.addLine("Ello");
         telemetry.addData("anything", frontLeft.getPower());
         telemetry.addData("rob",frontRight.getPower());
-        telemetry.addData("tim is a LOSER",backLeft.getPower());
-        telemetry.addData("tim is a poopy head",backRight.getPower());
         telemetry.update();
 
     }

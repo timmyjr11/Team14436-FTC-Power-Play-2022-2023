@@ -136,8 +136,6 @@ public class firstRobotTest extends LinearOpMode {
         backLeft.setPower(backLeftPower * power);
         backRight.setPower(backRightPower * power);
         telemetry.update();
-
-
     }
 
     //Function used to allow toggling
