@@ -220,7 +220,7 @@ public class WorldsAutoComments extends LinearOpMode {
             // If driver presses left on D-Pad
             if (gamepad1.dpad_left) {
                 // The robot's location is set the left side
-                d.setPoseEstimate(WorldsConfig.leftAuto);
+                d.setPoseEstimate(WorldsConfig.leftAutoMulti);
 
                 // The side is then set to left using the enum WorldsConfig
                 side = WorldsConfig.side.left;
@@ -242,7 +242,7 @@ public class WorldsAutoComments extends LinearOpMode {
                 break;
             } else if (gamepad1.dpad_right) {
                 // Same as the if statement above, just for the right side
-                d.setPoseEstimate(WorldsConfig.rightAuto);
+                d.setPoseEstimate(WorldsConfig.rightAutoMulti);
                 rectY = 95;
                 side = WorldsConfig.side.right;
                 blueCam.setPipeline(new ColorDetectionPipeline());

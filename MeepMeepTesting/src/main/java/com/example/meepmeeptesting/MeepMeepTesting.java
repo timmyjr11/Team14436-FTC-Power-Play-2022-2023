@@ -42,41 +42,42 @@ public class MeepMeepTesting {
                 .setColorScheme(new ColorSchemeRedDark())
                 .setConstraints(50, 30, Math.toRadians(270), Math.toRadians(180), 13.3)
                 .followTrajectorySequence(drive ->
-                                drive.trajectorySequenceBuilder(new Pose2d(-37.5, -60, Math.toRadians(90)))
-                                        // Drive to place first cone
-                                        .splineToSplineHeading(new Pose2d(-34, -40, Math.toRadians(135)), Math.toRadians(90))
-                                        .splineToSplineHeading(new Pose2d(-34, -35, Math.toRadians(135)), Math.toRadians(90))
-                                        .waitSeconds(0.5)
-                                        .splineToConstantHeading(new Vector2d(-34, -34), Math.toRadians(90))
-                                        .splineToConstantHeading(new Vector2d(-34, -30), Math.toRadians(90))
-                                        .splineToSplineHeading(new Pose2d(-34, -15, Math.toRadians(180)), Math.toRadians(120))
-                                        .splineToConstantHeading(new Vector2d(-40, -11.5), Math.toRadians(180))
-                                        .splineToConstantHeading(new Vector2d(-59, -11.5), Math.toRadians(180))
-                                        .waitSeconds(0.5)
-                                        .setReversed(true)
-                                        .splineToSplineHeading(new Pose2d(-40, -11.5, Math.toRadians(180)), Math.toRadians(0))
-                                        .splineToSplineHeading(new Pose2d(-32, -15, Math.toRadians(135)), Math.toRadians(315))
-                                        .waitSeconds(0.5)
-                                        .setReversed(false)
-                                        .splineToSplineHeading(new Pose2d(-40, -11.5, Math.toRadians(180)), Math.toRadians(180))
-                                        .splineToSplineHeading(new Pose2d(-59, -11.5, Math.toRadians(180)), Math.toRadians(180))
-                                        .waitSeconds(0.5)
-                                        .setReversed(true)
-                                        .splineToSplineHeading(new Pose2d(-20, -11.5, Math.toRadians(180)), Math.toRadians(0))
-                                        .splineToSplineHeading(new Pose2d(-9, -15, Math.toRadians(135)), Math.toRadians(315))
-                                        .waitSeconds(0.5)
-                                        .setReversed(false)
-                                        .splineToSplineHeading(new Pose2d(-20, -11.5, Math.toRadians(180)), Math.toRadians(180))
-                                        .splineToSplineHeading(new Pose2d(-40, -11.5, Math.toRadians(180)), Math.toRadians(180))
-                                        .splineToSplineHeading(new Pose2d(-59, -11.5, Math.toRadians(180)), Math.toRadians(180))
-                                        .waitSeconds(0.5)
-                                        .setReversed(true)
-                                        .splineToSplineHeading(new Pose2d(-50, -11.5, Math.toRadians(180)), Math.toRadians(0))
-                                        .splineToSplineHeading(new Pose2d(-45, -11.5, Math.toRadians(270)), Math.toRadians(0))
-                                        .splineToConstantHeading(new Vector2d(-35, -25), Math.toRadians(270))
-                                        .splineToSplineHeading(new Pose2d(-35, -35, Math.toRadians(270)), Math.toRadians(270))
-                                        .splineToSplineHeading(new Pose2d(-31, -40, Math.toRadians(315)), Math.toRadians(315))
+                                drive.trajectorySequenceBuilder(new Pose2d(37.5, -60, Math.toRadians(90)))
+                                        // Place the first cone
+                                        .UNSTABLE_addTemporalMarkerOffset(0.05, () ->{
 
+                                        })
+                                        .splineToSplineHeading(new Pose2d(34, -40, Math.toRadians(90)), Math.toRadians(90))
+                                        .UNSTABLE_addTemporalMarkerOffset(-0.6, () -> {
+
+                                        })
+                                        .splineToSplineHeading(new Pose2d(38, -24, Math.toRadians(45)), Math.toRadians(90))
+                                        .UNSTABLE_addTemporalMarkerOffset(-0.2, () -> {
+                                                          })
+                                        .waitSeconds(0.3)
+
+                                        // Go to grab first cone
+                                        .lineToSplineHeading(new Pose2d(34, -35, Math.toRadians(0)))
+                                        .lineToSplineHeading(new Pose2d(34, -8, Math.toRadians(0)))
+                                        .UNSTABLE_addTemporalMarkerOffset(-0.7, () -> {
+                                                 })
+                                        .lineToSplineHeading(new Pose2d(57, -8, Math.toRadians(0)))
+                                        .UNSTABLE_addTemporalMarkerOffset(-0.1, () -> {
+                                           })
+                                        .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
+                                         })
+                                        .waitSeconds(0.2)
+
+                                        // Go place first cone
+                                        .setReversed(true)
+                                        .splineToSplineHeading(new Pose2d(40, -8, Math.toRadians(0)), Math.toRadians(180))
+                                        .UNSTABLE_addTemporalMarkerOffset(-0.3, () -> {
+                                               })
+                                        .splineToSplineHeading(new Pose2d(30, -11, Math.toRadians(45)), Math.toRadians(225)) //TODO: tangent
+                                        .UNSTABLE_addTemporalMarkerOffset(0.3, () -> {
+                                                 })                                        .UNSTABLE_addTemporalMarkerOffset(0.1, () -> {
+                                        })
+                                        .waitSeconds(0.5)
 
                                         .build());
 
